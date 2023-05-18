@@ -1,0 +1,150 @@
+﻿
+<div class="container-fluid">
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de AreaIntereses</a></li>
+
+        </ol>
+    </div>
+    <!-- row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Lista de AreaIntereses</h4>
+                </div>
+
+                <div class="card-body">
+                    <div class="basic-form">
+                        <form>
+
+                            <div class="row">
+                                <div class="mb-3 col-md-2">
+                                    <label class="form-label">ID</label>
+                                    <input name="id" id="id" type="text" class="form-control" placeholder="Id" disabled>
+                                </div>
+
+                                <div class="mb-3 col-md-10">
+                                    <label class="form-label">Descripción de la habilidad</label>
+                                    <input name="descripcion" id="descripcion" type="text" class="form-control" placeholder="Descrición AreaInteres">
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="mb-3">
+
+                            </div>
+                            <button type="submit" class="btn btn-primary" onclick="clearRegister()">Nuevo</button> <button type="submit" class="btn btn-success" onclick="guardarRegister()">Guardar</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-responsive-md">
+                        <thead>
+                            <tr>
+                                <th style="width:80px;"><strong>ID</strong></th>
+                                <th><strong>Descripción</strong></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.listAreaIntereses)
+                            {
+                                <tr>
+                                    <td><strong>@item.Id</strong></td>
+                                    <td>@item.Descripcion</td>
+
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
+                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" onclick="buscarAreaInteres(@item.Id)">Editar</a>
+                                                <a class="dropdown-item" onclick="eliminarAreaInteres(@item.Id)">Eliminar</a>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                          
+                          
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+
+
+   function buscarAreaInteres(id) {
+
+
+
+                    $.post("@Url.Action("ConsultarAreaInteres","Intereses")", { id: id}, function (datas) {
+
+                        if (datas.Id == null) {
+                            alert("El Registro No Existe")
+
+                        }  else {
+                            clearRegister();
+
+                            $("#id").val(datas.Id);
+                            $("#descripcion").val(datas.Descripcion);
+                        }
+
+                        });
+    };
+
+      function guardarRegister() {
+
+        var habilidad = JSON.stringify(
+        {
+               'Id': $('#id').val(),
+               'Descripcion': $('#descripcion').val()
+        });
+          $.ajax({
+              url: '/Intereses/SaveAreaInteres',
+              type: "post",
+              contentType: "application/json",
+              dataType: "json",
+              traditional: true,
+              data: habilidad,
+              success: function (results) {
+                  alert(results);
+              }
+          })
+
+
+    };
+
+   function eliminarAreaInteres(id) {
+
+
+
+                    $.post("@Url.Action("EliminarAreaInteres","Intereses")", { id: id}, function (datas) {
+
+                        alert(datas);
+
+
+                         window.location.href = '/Intereses';
+
+
+                        });
+    };
+
+
+    function clearRegister() {
+        $("#id").val("");
+        $("#descripcion").val("");
+    }
+
+</script>

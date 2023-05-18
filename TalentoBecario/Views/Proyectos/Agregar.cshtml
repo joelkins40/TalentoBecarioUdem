@@ -1,0 +1,77 @@
+﻿
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Mis Proyectos</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Agregar Nuevo Proyecto</a></li>
+            </ol>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Datos del nuevo proyecto</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="basic-form">
+                            <form>
+
+                                <div class="row">
+                                    <div class="mb-3 col-md-2">
+                                        <label class="form-label">ID</label>
+                                        <input type="text" class="form-control" placeholder="Id">
+                                    </div>
+                                    <div class="mb-3 col-md-3">
+                                        <label class="form-label">Departamento</label>
+                                        <select class="default-select  form-control wide">
+                                            <option selected>Selecciona una opción</option>
+                                            <option >Departamento 1</option>
+                                            <option>Departamento 2</option>
+                                            <option>Departamento 3</option>
+                                            <option>Departamento 4</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-7">
+                                        <label class="form-label">Nombre del Proyecto</label>
+                                        <input type="text" class="form-control" placeholder="Nombre del proyecto">
+                                    </div>
+
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label">Descripción del proyecto</label>
+                                        <textarea class="form-control" rows="4" id="comment"></textarea>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label">Areas de Interes</label>
+                                        <select class="form-select" id="multiple-select-field" data-placeholder="" multiple>
+                                             @foreach (var item in ViewBag.listAreaIntereses) {
+                                            <option>@item.Descripcion</option>
+                                                }
+
+
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label">Habilidades</label>
+                                        <select class="form-select" id="multiple-select-field2" data-placeholder="" multiple>
+                                            @foreach (var item in ViewBag.listHabilidades)
+                                            {
+                                                <option>@item.Descripcion</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                             
+                                <div class="mb-3">
+                                    
+                                </div>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
