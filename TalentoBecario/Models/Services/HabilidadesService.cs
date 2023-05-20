@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.OracleClient;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -10,46 +11,41 @@ namespace TalentoBecario.Models.Services
 {
     public class HabilidadesService
     {
-        private static readonly string _conString = ConfigurationManager.ConnectionStrings["CONNSQL"].ConnectionString;
+        private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
 
         public static List<Habilidad> ObtieneListHabilidades()
         {
             List<Habilidad> listHabilidades = new List<Habilidad>();
 
-            using (SqlConnection conn = new SqlConnection(_conString))
+            using (var conn = new OracleConnection(_conString))
             {
-                using (SqlCommand command = new SqlCommand("select * from HABILIDADES", conn)
+                var command = new OracleCommand("SELECT * FROM GCBHABI", conn);
+                conn.Open();
+
+
+
+                try
                 {
 
-                })
-                {
-                    conn.Open();
+                    command.ExecuteNonQuery();
 
-                 
+                    var lector = command.ExecuteReader();
 
-                    try
+                    while (lector.Read())
                     {
-
-                        command.ExecuteNonQuery();
-
-                        SqlDataReader lector = command.ExecuteReader();
-
-                        while (lector.Read())
+                        listHabilidades.Add(new Habilidad
                         {
-                            listHabilidades.Add(new Habilidad
-                            {
-                                Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                               
-                            });
-                        }
-                        conn.Close();
+                            Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
+                            Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
+
+                        });
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                    conn.Close();
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return listHabilidades;
         }
@@ -58,70 +54,58 @@ namespace TalentoBecario.Models.Services
         {
            Habilidad habilidad = new Habilidad();
 
-            using (SqlConnection conn = new SqlConnection(_conString))
+            using (var conn = new OracleConnection(_conString))
             {
-                using (SqlCommand command = new SqlCommand("select * from HABILIDADES where id=@id ", conn)
+                var command = new OracleCommand("SELECT * FROM GCBHABI WHERE IDHABILIDAD = @Id", conn);
+                command.Parameters.AddWithValue("@Id", id);
+
+                conn.Open();
+                try
                 {
+                    command.ExecuteNonQuery();
 
-                })
-                  
+                    var lector = command.ExecuteReader();
 
-                {
-                    command.Parameters.AddWithValue("@id", id);
-
-                    conn.Open();
-
-                    //command.Parameters.AddWithValue("@zip","india");
-
-
-                    try
+                    while (lector.Read())
                     {
-                        command.ExecuteNonQuery();
-
-                        SqlDataReader lector = command.ExecuteReader();
-
-                        while (lector.Read())
+                        habilidad = new Habilidad
                         {
-                            habilidad = new Habilidad
-                            {
 
 
-                                Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                            };
-                        }
-                        conn.Close();
+                            Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
+                            Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
+                        };
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                    conn.Close();
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return habilidad;
         }
         public static string guardarHabilidad(Habilidad registro)
         {
             DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            using (var conn = new OracleConnection(_conString))
             {
-                using (SqlCommand command = new SqlCommand("INSERT INTO HABILIDADES (descripcion) values(@descripcion)", conn)
+                var command = new OracleCommand("P_UDEM_ADD_HAB", conn)
                 {
-
-                })
-                                              {
-                    command.Parameters.AddWithValue("@descripcion", registro.Descripcion);
-                   // command.Parameters.AddWithValue("@fechasystem", dateSistem);
-                    conn.Open();
-                    try
-                    {
-                      command.ExecuteNonQuery();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
+                    CommandType = System.Data.CommandType.StoredProcedure,
                 };
+
+                command.Parameters.AddWithValue("P_Descripcion", registro.Descripcion);
+                // command.Parameters.AddWithValue("@fechasystem", dateSistem);
+                conn.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return "Registro Ingresado Con Exito";
         }
@@ -129,26 +113,24 @@ namespace TalentoBecario.Models.Services
         public static string ActualizarHabilidad(Habilidad registro)
         {
             DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            using (var conn = new OracleConnection(_conString))
             {
-                using (SqlCommand command = new SqlCommand("UPDATE HABILIDADES set descripcion=@descripcion where id=@id", conn)
+                var command = new OracleCommand("P_UDEM_UPDATE_HAB", conn)
                 {
-
-                })
-                {
-                    command.Parameters.AddWithValue("@descripcion", registro.Descripcion);
-                    command.Parameters.AddWithValue("@id", registro.Id);
-                    command.Parameters.AddWithValue("@fechasystem", dateSistem);
-                    conn.Open();
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
+                    CommandType = System.Data.CommandType.StoredProcedure,
                 };
+
+                command.Parameters.AddWithValue("P_Id", registro.Descripcion);
+                command.Parameters.AddWithValue("P_Descripcion", registro.Descripcion);
+                conn.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return "Registro Actualizado Con Exito";
         }
