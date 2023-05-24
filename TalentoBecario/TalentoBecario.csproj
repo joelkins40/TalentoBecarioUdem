@@ -157,6 +157,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AsignacionController.cs" />
     <Compile Include="Controllers\FormadorController.cs" />
+    <Compile Include="Controllers\DepartamentosController.cs" />
     <Compile Include="Controllers\ProyectosAlumnoController.cs" />
     <Compile Include="Controllers\PerfilController.cs" />
     <Compile Include="Controllers\OfertasController.cs" />
@@ -471,6 +472,7 @@
     <Content Include="Views\Ofertas\Index.cshtml" />
     <Content Include="Views\ProyectosAlumno\Index.cshtml" />
     <Content Include="Views\Formador\Index.cshtml" />
+    <Content Include="Views\Departamentos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

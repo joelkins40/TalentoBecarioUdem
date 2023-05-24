@@ -1,15 +1,12 @@
 ﻿using System;
 using Oracle.ManagedDataAccess.Client;
-using Oracle.ManagedDataAccess.Types;
 using System.Configuration;
 
-using System.Collections.Generic;
 
 using System.Data;
 
-using System.Threading.Tasks;
-using System.Web;
 using TalentoBecario.Models.Entity;
+using System.Collections.Generic;
 
 namespace TalentoBecario.Models.Services
 {
@@ -104,7 +101,7 @@ namespace TalentoBecario.Models.Services
                     {
                         comando.Connection = cnx;
                         comando.CommandText = "SZ_BMA_RTB.F_GET_HABILIDAD";
-                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.CommandType = CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                         {
