@@ -1,9 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using System.Configuration;
-using System.Data.OracleClient;
-using System.Data.SqlClient;
-using System.Linq;
+
+using System.Collections.Generic;
+
+using System.Data;
+
+using System.Threading.Tasks;
 using System.Web;
 using TalentoBecario.Models.Entity;
 
@@ -13,178 +17,266 @@ namespace TalentoBecario.Models.Services
     {
         private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
 
-        public static List<Habilidad> ObtieneListHabilidades()
+        public static   List<Habilidad> ObtieneListHabilidades()
         {
-            List<Habilidad> listHabilidades = new List<Habilidad>();
+            List<Habilidad> habilidades = new List<Habilidad>();
 
-            using (var conn = new OracleConnection(_conString))
+            try
             {
-                var command = new OracleCommand("SELECT * FROM GCBHABI", conn);
-                conn.Open();
-
-
-
-                try
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
 
-                    command.ExecuteNonQuery();
-
-                    var lector = command.ExecuteReader();
-
-                    while (lector.Read())
+                    using (OracleCommand comando = new OracleCommand())
                     {
-                        listHabilidades.Add(new Habilidad
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_HABILIDADES";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
                         {
-                            Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                            Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-
+                            Direction = ParameterDirection.ReturnValue
                         });
+
+                     
+
+
+                        // Revisamos si se pudo ejecutar la consulta
+                        cnx.Open();
+                      
+                        try
+                        {
+
+                            OracleDataReader lector = comando.ExecuteReader();
+
+                            // Revisamos cada contacto
+
+                            while (lector.Read())
+                            {
+
+
+
+                                habilidades.Add(new Habilidad()
+                                {
+                             
+                                    Id= lector.GetInt32(0),
+                                    Descripcion = lector.GetString(1),
+
+
+
+                                });
+                               
+
+
+
+                            }
+
+
+                        }
+                        finally
+                        {
+
+                            cnx.Close();
+                        }
+
                     }
-                    conn.Close();
-                }
-                finally
-                {
-                    conn.Close();
+
+                    //cnx.Close();
                 }
             }
-            return listHabilidades;
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+            return habilidades;
+
         }
+
 
         public static Habilidad ConsultarHabilidad(int id)
         {
-           Habilidad habilidad = new Habilidad();
-
-            using (var conn = new OracleConnection(_conString))
-            {
-                var command = new OracleCommand("SELECT * FROM GCBHABI WHERE IDHABILIDAD = @Id", conn);
-                command.Parameters.AddWithValue("@Id", id);
-
-                conn.Open();
-                try
+            Habilidad habilidad = new Habilidad();
+            try{
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
-                    command.ExecuteNonQuery();
-
-                    var lector = command.ExecuteReader();
-
-                    while (lector.Read())
+                    using (OracleCommand comando = new OracleCommand())
                     {
-                        habilidad = new Habilidad
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_HABILIDAD";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                         {
-
-
-                            Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                            Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                        };
+                            Value = id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                       cnx.Open();
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+                            while (lector.Read())
+                            {
+                                habilidad=new Habilidad()
+                                {
+                                    Id = lector.GetInt32(0),
+                                    Descripcion = lector.GetString(1)
+                                };
+                            }
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
                     }
-                    conn.Close();
                 }
-                finally
-                {
-                    conn.Close();
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return habilidad;
-        }
-        public static string guardarHabilidad(Habilidad registro)
-        {
-            DateTime dateSistem = DateTime.Now;
-            using (var conn = new OracleConnection(_conString))
-            {
-                var command = new OracleCommand("P_UDEM_ADD_HAB", conn)
-                {
-                    CommandType = System.Data.CommandType.StoredProcedure,
-                };
 
-                command.Parameters.AddWithValue("P_Descripcion", registro.Descripcion);
-                // command.Parameters.AddWithValue("@fechasystem", dateSistem);
-                conn.Open();
-                try
+        }
+        public static String guardarHabilidad(Habilidad registro)
+        {
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
-                    command.ExecuteNonQuery();
-                }
-                finally
-                {
-                    conn.Close();
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_HAB";
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.BindByName = true;
+
+                        comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                        {
+                            Value = registro.Descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                     
+                        try
+                        {
+                            cnx.Open();
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
                 }
             }
-            return "Registro Ingresado Con Exito";
-        }
-
-        public static string ActualizarHabilidad(Habilidad registro)
-        {
-            DateTime dateSistem = DateTime.Now;
-            using (var conn = new OracleConnection(_conString))
+            catch (Exception ex)
             {
-                var command = new OracleCommand("P_UDEM_UPDATE_HAB", conn)
-                {
-                    CommandType = System.Data.CommandType.StoredProcedure,
-                };
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Ingresado Con Éxito";
 
-                command.Parameters.AddWithValue("P_Id", registro.Descripcion);
-                command.Parameters.AddWithValue("P_Descripcion", registro.Descripcion);
-                conn.Open();
-                try
+        }
+        public static String ActualizarHabilidad(Habilidad registro)
+        {
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
-                    command.ExecuteNonQuery();
-                }
-                finally
-                {
-                    conn.Close();
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_HAB";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
+                        {
+                            Value = registro.Id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                        {
+                            Value = registro.Descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
                 }
             }
-            return "Registro Actualizado Con Exito";
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Actualizado Con Éxito";
+
         }
 
         public static string EliminarHabilidad(int id)
         {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            try
             {
-                using (SqlCommand command = new SqlCommand("DELETE FROM HABILIDADES where id=@id", conn)
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_HAB";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
 
-                })
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    
-                    conn.Open();
-                    try
-                    {
-                        command.ExecuteNonQuery();
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
+                        {
+                            Value = id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                }
             }
-            return "Registro Eliminado Con Exito";
-        }
-
-        public static string EliminarHabilidadProyecto(int id)
-        {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            catch (Exception ex)
             {
-                using (SqlCommand command = new SqlCommand("DELETE FROM PROYECHABIL where idProyecto=@id", conn)
-                {
-
-                })
-                {
-                    command.Parameters.AddWithValue("@id", id);
-
-                    conn.Open();
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                Console.WriteLine(ex.Message);
             }
-            return "Registro Eliminado Con Exito";
+            return "Registro Actualizado Con Éxito";
+
         }
+        
+
     }
 }

@@ -15,7 +15,7 @@ namespace TalentoBecario.Controllers
             Habilidad habilidad = new Habilidad();
 
 
-          
+
             ViewBag.listHabilidades = HabilidadesService.ObtieneListHabilidades();
 
             

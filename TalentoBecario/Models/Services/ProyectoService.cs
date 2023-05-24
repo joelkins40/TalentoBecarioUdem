@@ -223,8 +223,8 @@ namespace TalentoBecario.Models.Services
 
         public static void guardarHabilidadesInteresProyecto(Proyecto registro)
         {
-            HabilidadesService.EliminarHabilidadProyecto(registro.id);
-            AreaInteresService.EliminarAreaInteresProyecto(registro.id);
+            //HabilidadesService.EliminarHabilidadProyecto(registro.id);
+           // AreaInteresService.EliminarAreaInteresProyecto(registro.id);
             foreach (Habilidad item in registro.listHabilidades)
             {
                 HabilidadesService.guardarHabilidad(item);
@@ -288,8 +288,8 @@ namespace TalentoBecario.Models.Services
                     }
                 };
             }
-            HabilidadesService.EliminarHabilidadProyecto(registro.id);
-            AreaInteresService.EliminarAreaInteresProyecto(registro.id);
+            //HabilidadesService.EliminarHabilidadProyecto(registro.id);
+          //  AreaInteresService.EliminarAreaInteresProyecto(registro.id);
             return "Registro Eliminado Con Exito";
         }
 

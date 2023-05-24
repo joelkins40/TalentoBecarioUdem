@@ -1,207 +1,283 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
+
+using System.Collections.Generic;
+
+using System.Data;
+
+using System.Threading.Tasks;
 using System.Web;
 using TalentoBecario.Models.Entity;
+using System;
 
 namespace TalentoBecario.Models.Services
 {
     public class AreaInteresService
     {
-        private static readonly string _conString = ConfigurationManager.ConnectionStrings["CONNSQL"].ConnectionString;
+        private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
 
         public static List<AreaInteres> ObtieneListAreaIntereses()
         {
-            List<AreaInteres> listAreaIntereses = new List<AreaInteres>();
+            List<AreaInteres> areaIntereses = new List<AreaInteres>();
 
-            using (SqlConnection conn = new SqlConnection(_conString))
+            try
             {
-                using (SqlCommand command = new SqlCommand("select * from AREASINTERES", conn)
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
 
-                })
-                {
-                    conn.Open();
-
-                 
-
-                    try
+                    using (OracleCommand comando = new OracleCommand())
                     {
-
-                        command.ExecuteNonQuery();
-
-                        SqlDataReader lector = command.ExecuteReader();
-
-                        while (lector.Read())
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_AREASINTERES";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
                         {
-                            listAreaIntereses.Add(new AreaInteres
+                            Direction = ParameterDirection.ReturnValue
+                        });
+
+
+
+
+                        // Revisamos si se pudo ejecutar la consulta
+                        cnx.Open();
+
+                        try
+                        {
+
+                            OracleDataReader lector = comando.ExecuteReader();
+
+                            // Revisamos cada contacto
+
+                            while (lector.Read())
                             {
-                                Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                               
-                            });
+
+
+
+                                areaIntereses.Add(new AreaInteres()
+                                {
+
+                                    Id = lector.GetInt32(0),
+                                    Descripcion = lector.GetString(1),
+
+
+
+                                });
+
+
+
+
+                            }
+
+
                         }
-                        conn.Close();
+                        finally
+                        {
+
+                            cnx.Close();
+                        }
+
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+
+                    //cnx.Close();
+                }
             }
-            return listAreaIntereses;
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+            return areaIntereses;
+
         }
+
 
         public static AreaInteres ConsultarAreaInteres(int id)
         {
-           AreaInteres habilidad = new AreaInteres();
-
-            using (SqlConnection conn = new SqlConnection(_conString))
+            AreaInteres areaInteres = new AreaInteres();
+            try
             {
-                using (SqlCommand command = new SqlCommand("select * from AREASINTERES where id=@id ", conn)
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
-
-                })
-                  
-
-                {
-                    command.Parameters.AddWithValue("@id", id);
-
-                    conn.Open();
-
-                    //command.Parameters.AddWithValue("@zip","india");
-
-
-                    try
+                    using (OracleCommand comando = new OracleCommand())
                     {
-                        command.ExecuteNonQuery();
-
-                        SqlDataReader lector = command.ExecuteReader();
-
-                        while (lector.Read())
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_AREAINTERES";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                         {
-                            habilidad = new AreaInteres
+                            Value = id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+                            while (lector.Read())
                             {
-
-
-                                Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                            };
+                                areaInteres = new AreaInteres()
+                                {
+                                    Id = lector.GetInt32(0),
+                                    Descripcion = lector.GetString(1)
+                                };
+                            }
                         }
-                        conn.Close();
+                        finally
+                        {
+                            cnx.Close();
+                        }
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                }
             }
-            return habilidad;
-        }
-        public static string guardarAreaInteres(AreaInteres registro)
-        {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            catch (Exception ex)
             {
-                using (SqlCommand command = new SqlCommand("INSERT INTO AREASINTERES (descripcion) values(@descripcion)", conn)
-                {
-
-                })
-                                              {
-                    command.Parameters.AddWithValue("@descripcion", registro.Descripcion);
-                    command.Parameters.AddWithValue("@fechasystem", dateSistem);
-                    conn.Open();
-                    try
-                    {
-                      command.ExecuteNonQuery();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                Console.WriteLine(ex.Message);
             }
-            return "Registro Ingresado Con Exito";
+            return areaInteres;
+
         }
-
-        public static string ActualizarAreaInteres(AreaInteres registro)
+        public static String guardarAreaInteres(AreaInteres registro)
         {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            try
             {
-                using (SqlCommand command = new SqlCommand("UPDATE AREASINTERES set descripcion=@descripcion where id=@id", conn)
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_ARIN";
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.BindByName = true;
 
-                })
-                {
-                    command.Parameters.AddWithValue("@descripcion", registro.Descripcion);
-                    command.Parameters.AddWithValue("@id", registro.Id);
-                    command.Parameters.AddWithValue("@fechasystem", dateSistem);
-                    conn.Open();
-                    try
-                    {
-                        command.ExecuteNonQuery();
+                        comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                        {
+                            Value = registro.Descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+
+                        try
+                        {
+                            cnx.Open();
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                }
             }
-            return "Registro Actualizado Con Exito";
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Ingresado Con Éxito";
+
+        }
+        public static String ActualizarAreaInteres(AreaInteres registro)
+        {
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_ARIN";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
+                        {
+                            Value = registro.Id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                        {
+                            Value = registro.Descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Actualizado Con Éxito";
+
         }
 
         public static string EliminarAreaInteres(int id)
         {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            try
             {
-                using (SqlCommand command = new SqlCommand("DELETE FROM AREASINTERES where id=@id", conn)
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_ARIN";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
 
-                })
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    command.Parameters.AddWithValue("@fechasystem", dateSistem);
-                    conn.Open();
-                    try
-                    {
-                        command.ExecuteNonQuery();
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
+                        {
+                            Value = id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                }
             }
-            return "Registro Eliminado Con Exito";
-        }
-        public static string EliminarAreaInteresProyecto(int id)
-        {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            catch (Exception ex)
             {
-                using (SqlCommand command = new SqlCommand("DELETE FROM PROYECINTE where idProyecto=@id", conn)
-                {
-
-                })
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    conn.Open();
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                Console.WriteLine(ex.Message);
             }
-            return "Registro Eliminado Con Exito";
+            return "Registro Actualizado Con Éxito";
+
         }
+
+
     }
-
 }
