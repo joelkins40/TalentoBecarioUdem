@@ -160,7 +160,7 @@ namespace TalentoBecario.Models.Services
                                 Value = registro.Descripcion,
                                 Direction = System.Data.ParameterDirection.Input
                             });
-                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
+                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
                             {
                                 Direction = ParameterDirection.ReturnValue
                             });
@@ -208,7 +208,7 @@ namespace TalentoBecario.Models.Services
                                 Value = registro.Descripcion,
                                 Direction = System.Data.ParameterDirection.Input
                             });
-                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
+                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
                             {
                                 Direction = ParameterDirection.ReturnValue
                             });
@@ -252,7 +252,7 @@ namespace TalentoBecario.Models.Services
                                 Direction = System.Data.ParameterDirection.Input
                             });
 
-                            comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
                             {
                                 Direction = ParameterDirection.ReturnValue
                             });
