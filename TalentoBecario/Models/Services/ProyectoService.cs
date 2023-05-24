@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -10,29 +12,32 @@ namespace TalentoBecario.Models.Services
 {
     public class ProyectoService
     {
-        private static readonly string _conString = ConfigurationManager.ConnectionStrings["CONNSQL"].ConnectionString;
+        private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
 
         public static List<Proyecto> ObtieneListProyectos()
         {
             List<Proyecto> listProyecto = new List<Proyecto>();
 
-            using (SqlConnection conn = new SqlConnection(_conString))
+            using (OracleConnection conn = new OracleConnection(_conString))
             {
-                using (SqlCommand command = new SqlCommand("select * from PROYECTOS", conn)
+                using (OracleCommand comando = new OracleCommand())
                 {
-
-                })
-                {
+                    comando.Connection = conn;
+                    comando.CommandText = "SZ_BMA_RTB.F_GET_PROYECTOS";
+                    comando.CommandType = System.Data.CommandType.StoredProcedure;
+                    comando.BindByName = true;
+                    comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                    {
+                        Direction = ParameterDirection.ReturnValue
+                    });
                     conn.Open();
-
-                 
 
                     try
                     {
 
-                        command.ExecuteNonQuery();
+                        comando.ExecuteNonQuery();
 
-                        SqlDataReader lector = command.ExecuteReader();
+                        OracleDataReader lector = comando.ExecuteReader();
 
                         while (lector.Read())
                         {

@@ -11,8 +11,7 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.listAreaIntereses = AreaInteresService.ObtieneListAreaIntereses();
-            ViewBag.listHabilidades = HabilidadesService.ObtieneListHabilidades();
+            ViewBag.listProyectos = ProyectoService.ObtieneListProyectos();
 
             return View();
         }
