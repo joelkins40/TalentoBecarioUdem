@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -10,174 +12,272 @@ namespace TalentoBecario.Models.Services
 {
     public class DepartamentoService
     {
-        private static readonly string _conString = ConfigurationManager.ConnectionStrings["CONNSQL"].ConnectionString;
-
-        public static List<Departamento> ObtieneListDepartamentos()
+        public class DepartamentosService
         {
-            List<Departamento> listDepartamento = new List<Departamento>();
+            private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
 
-            using (SqlConnection conn = new SqlConnection(_conString))
+            public static List<Departamento> ObtieneListDepartamentos()
             {
-                using (SqlCommand command = new SqlCommand("select * from DEPARTAMENTO", conn)
+                List<Departamento> departamentoes = new List<Departamento>();
+
+                try
                 {
-
-                })
-                {
-                    conn.Open();
-
-                 
-
-                    try
+                    using (OracleConnection cnx = new OracleConnection(_conString))
                     {
 
-                        command.ExecuteNonQuery();
-
-                        SqlDataReader lector = command.ExecuteReader();
-
-                        while (lector.Read())
+                        using (OracleCommand comando = new OracleCommand())
                         {
-                            listDepartamento.Add(new Departamento
+                            comando.Connection = cnx;
+                            comando.CommandText = "SZ_BMA_RTB.F_GET_DEPARTAMENTOS";
+                            comando.CommandType = System.Data.CommandType.StoredProcedure;
+                            comando.BindByName = true;
+                            comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
                             {
-                                Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                               
+                                Direction = ParameterDirection.ReturnValue
                             });
-                        }
-                        conn.Close();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
-            }
-            return listDepartamento;
-        }
-
-        public static Departamento ConsultarDepartamento(int id)
-        {
-           Departamento habilidad = new Departamento();
-
-            using (SqlConnection conn = new SqlConnection(_conString))
-            {
-                using (SqlCommand command = new SqlCommand("select * from DEPARTAMENTO where id=@id ", conn)
-                {
-
-                })
-                  
-
-                {
-                    command.Parameters.AddWithValue("@id", id);
-
-                    conn.Open();
-
-                    //command.Parameters.AddWithValue("@zip","india");
 
 
-                    try
-                    {
-                        command.ExecuteNonQuery();
 
-                        SqlDataReader lector = command.ExecuteReader();
 
-                        while (lector.Read())
-                        {
-                            habilidad = new Departamento
+                            // Revisamos si se pudo ejecutar la consulta
+                            cnx.Open();
+
+                            try
                             {
 
+                                OracleDataReader lector = comando.ExecuteReader();
 
-                                Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                            };
+                                // Revisamos cada contacto
+
+                                while (lector.Read())
+                                {
+
+
+
+                                    departamentoes.Add(new Departamento()
+                                    {
+
+                                        Id = lector.GetInt32(0),
+                                        Descripcion = lector.GetString(1),
+
+
+
+                                    });
+
+
+
+
+                                }
+
+
+                            }
+                            finally
+                            {
+
+                                cnx.Close();
+                            }
+
                         }
-                        conn.Close();
+
+                        //cnx.Close();
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.Message);
+
+                }
+                return departamentoes;
+
             }
-            return habilidad;
-        }
-        public static string guardarDepartamento(Departamento registro)
-        {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+
+
+            public static Departamento ConsultarDepartamento(int id)
             {
-                using (SqlCommand command = new SqlCommand("INSERT INTO DEPARTAMENTO (descripcion) values(@descripcion)", conn)
+                Departamento departamento = new Departamento();
+                try
                 {
+                    using (OracleConnection cnx = new OracleConnection(_conString))
+                    {
+                        using (OracleCommand comando = new OracleCommand())
+                        {
+                            comando.Connection = cnx;
+                            comando.CommandText = "SZ_BMA_RTB.F_GET_DEPARTAMENTO";
+                            comando.CommandType = System.Data.CommandType.StoredProcedure;
+                            comando.BindByName = true;
+                            comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
+                            {
+                                Value = id,
+                                Direction = System.Data.ParameterDirection.Input
+                            });
+                            comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                            {
+                                Direction = ParameterDirection.ReturnValue
+                            });
+                            cnx.Open();
+                            try
+                            {
+                                OracleDataReader lector = comando.ExecuteReader();
+                                while (lector.Read())
+                                {
+                                    departamento = new Departamento()
+                                    {
+                                        Id = lector.GetInt32(0),
+                                        Descripcion = lector.GetString(1)
+                                    };
+                                }
+                            }
+                            finally
+                            {
+                                cnx.Close();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                return departamento;
 
-                })
-                                              {
-                    command.Parameters.AddWithValue("@descripcion", registro.Descripcion);
-                    command.Parameters.AddWithValue("@fechasystem", dateSistem);
-                    conn.Open();
-                    try
-                    {
-                      command.ExecuteNonQuery();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
             }
-            return "Registro Ingresado Con Exito";
-        }
-
-        public static string ActualizarDepartamento(Departamento registro)
-        {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            public static String guardarDepartamento(Departamento registro)
             {
-                using (SqlCommand command = new SqlCommand("UPDATE DEPARTAMENTO set descripcion=@descripcion where id=@id", conn)
+                try
                 {
+                    using (OracleConnection cnx = new OracleConnection(_conString))
+                    {
+                        using (OracleCommand comando = new OracleCommand())
+                        {
+                            comando.Connection = cnx;
+                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_DEPA";
+                            comando.CommandType = CommandType.StoredProcedure;
+                            comando.BindByName = true;
 
-                })
+                            comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                            {
+                                Value = registro.Descripcion,
+                                Direction = System.Data.ParameterDirection.Input
+                            });
+                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
+                            {
+                                Direction = ParameterDirection.ReturnValue
+                            });
+
+                            try
+                            {
+                                cnx.Open();
+                                comando.ExecuteNonQuery();
+
+                            }
+                            finally
+                            {
+                                cnx.Close();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
                 {
-                    command.Parameters.AddWithValue("@descripcion", registro.Descripcion);
-                    command.Parameters.AddWithValue("@id", registro.Id);
-                    command.Parameters.AddWithValue("@fechasystem", dateSistem);
-                    conn.Open();
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                    Console.WriteLine(ex.Message);
+                }
+                return "Registro Ingresado Con Éxito";
+
             }
-            return "Registro Actualizado Con Exito";
-        }
-
-        public static string EliminarDepartamento(Departamento registro)
-        {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            public static String ActualizarDepartamento(Departamento registro)
             {
-                using (SqlCommand command = new SqlCommand("DELETE FROM DEPARTAMENTO where id=@id", conn)
+                try
                 {
+                    using (OracleConnection cnx = new OracleConnection(_conString))
+                    {
+                        using (OracleCommand comando = new OracleCommand())
+                        {
+                            comando.Connection = cnx;
+                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_DEPA";
+                            comando.CommandType = System.Data.CommandType.StoredProcedure;
+                            comando.BindByName = true;
 
-                })
+                            comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
+                            {
+                                Value = registro.Id,
+                                Direction = System.Data.ParameterDirection.Input
+                            });
+                            comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                            {
+                                Value = registro.Descripcion,
+                                Direction = System.Data.ParameterDirection.Input
+                            });
+                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
+                            {
+                                Direction = ParameterDirection.ReturnValue
+                            });
+                            cnx.Open();
+                            try
+                            {
+                                comando.ExecuteNonQuery();
+
+                            }
+                            finally
+                            {
+                                cnx.Close();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
                 {
-                    command.Parameters.AddWithValue("@id", registro.Id);
-                    command.Parameters.AddWithValue("@fechasystem", dateSistem);
-                    conn.Open();
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                    Console.WriteLine(ex.Message);
+                }
+                return "Registro Actualizado Con Éxito";
+
             }
-            return "Registro Eliminado Con Exito";
-        }
 
+            public static string EliminarDepartamento(int id)
+            {
+                try
+                {
+                    using (OracleConnection cnx = new OracleConnection(_conString))
+                    {
+                        using (OracleCommand comando = new OracleCommand())
+                        {
+                            comando.Connection = cnx;
+                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_DEPA";
+                            comando.CommandType = System.Data.CommandType.StoredProcedure;
+                            comando.BindByName = true;
+
+                            comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
+                            {
+                                Value = id,
+                                Direction = System.Data.ParameterDirection.Input
+                            });
+
+                            comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                            {
+                                Direction = ParameterDirection.ReturnValue
+                            });
+                            cnx.Open();
+                            try
+                            {
+                                comando.ExecuteNonQuery();
+
+                            }
+                            finally
+                            {
+                                cnx.Close();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                return "Registro Actualizado Con Éxito";
+
+            }
+
+
+        }
     }
 }
