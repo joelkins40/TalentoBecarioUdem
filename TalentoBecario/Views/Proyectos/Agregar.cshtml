@@ -20,11 +20,11 @@
                             <div class="row">
                                 <div class="mb-3 col-md-2">
                                     <label class="form-label">ID</label>
-                                    <input name="id" id="id" type="text" class="form-control" placeholder="Id">
+                                    <input name="id" id="id" type="text" class="form-control" value="@ViewBag.proyecto.id" placeholder="Id">
                                 </div>
                                 <div class="mb-3 col-md-3">
                                     <label class="form-label">Departamento</label>
-                                    <select name="departamento" id="departamento" class="default-select  form-control wide">
+                                    <select name="departamento" id="departamento" value="@ViewBag.proyecto.departamento.Id" class="default-select  form-control wide">
                                         <option  selected>Selecciona una opción</option>
                                         @foreach (var item in ViewBag.listDepartamentos)
                                         {
@@ -37,12 +37,12 @@
                                 </div>
                                 <div class="mb-3 col-md-7">
                                     <label class="form-label">Nombre del Proyecto</label>
-                                    <input name="nombre" id="nombre"  type="text" class="form-control" placeholder="Nombre del proyecto">
+                                    <input name="nombre" id="nombre" value="@ViewBag.proyecto.nombre"  type="text" class="form-control" placeholder="Nombre del proyecto">
                                 </div>
 
                                 <div class="mb-3 col-md-12">
                                     <label class="form-label">Descripción del proyecto</label>
-                                    <textarea name="descripcion" id="descripcion"  class="form-control" rows="4" ></textarea>
+                                    <textarea name="descripcion" id="descripcion"  value="@ViewBag.proyecto.descripcion" class="form-control" rows="4" ></textarea>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
@@ -80,24 +80,7 @@
     </div>
 </div>
 <script>
-   function buscarProyecto(id) {
 
-
-
-                    $.post("@Url.Action("ConsultarProyecto", "Proyectos")", { id: id}, function (datas) {
-
-                    if (datas.Id == null) {
-                    alert("El Registro No Existe")
-
-                    }  else {
-                    clearRegister();
-
-                    $("#id").val(datas.Id);
-                    $("#descripcion").val(datas.Descripcion);
-                    }
-
-                    });
-                    };
 
                     function guardarRegister() {
                          var listHabilidades = $('[name=habilidades]').val();
@@ -161,9 +144,12 @@
                     };
 
 
-                    function clearRegister() {
-                    $("#id").val("");
-                    $("#descripcion").val("");
+    function clearRegister() {
+                        $("#id").val("");
+                    $("#descripcion")val("");
+                    $("#nombre")val("");
+                    $("#departamento").val("");
+                    $("#estatus").val("");
                     }
 
 </script>

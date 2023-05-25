@@ -17,8 +17,23 @@ namespace TalentoBecario.Controllers
             return View();
         }
 
-        public ActionResult Agregar()
+        public ActionResult Agregar(int id=0)
         {
+            if (id != 0)
+            {
+                ViewBag.proyecto = ProyectoService.ConsultarProyecto(id);
+            }
+            else
+            {
+                ViewBag.proyecto = new Proyecto()
+                {
+                    id = 0,
+                    nombre = "",
+                    departamento= new Departamento() { Id='0'},
+                   
+                    descripcion=""
+                };
+            }
             ViewBag.listAreaInteres = AreaInteresService.ObtieneListAreaIntereses();
             ViewBag.listHabilidades = HabilidadesService.ObtieneListHabilidades();
             ViewBag.listDepartamentos = DepartamentoService.ObtieneListDepartamentos();
@@ -41,6 +56,13 @@ namespace TalentoBecario.Controllers
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult ConsultarProyecto(int id)
+        {
+            Proyecto proyecto = ProyectoService.ConsultarProyecto(id);
+
+            return Json(proyecto, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Contact()
         {

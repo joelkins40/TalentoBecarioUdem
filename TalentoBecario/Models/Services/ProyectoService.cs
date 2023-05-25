@@ -30,7 +30,7 @@ namespace TalentoBecario.Models.Services
                         comando.CommandText = "SZ_BMA_RTB.F_GET_PROYECTOS";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
-                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
                         {
                             Direction = ParameterDirection.ReturnValue
                         });
@@ -42,16 +42,21 @@ namespace TalentoBecario.Models.Services
 
                             while (lector.Read())
                             {
-                                listProyecto.Add(new Proyecto
+                                proyectos.Add(new Proyecto
                                 {
                                     id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                    nombre = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                                    descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(2)),
-                                    estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
+                                    nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
+                                    descripcion = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
+                                    estatus = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
                                     formador = new Formador()
                                     {
-                                        Id = (lector.IsDBNull(1) ? " " : lector.GetString(4)),
-                                        Nombre = (lector.IsDBNull(1) ? " " : lector.GetString(5))
+                                        Id = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
+                                        Nombre = (lector.IsDBNull(6) ? "" : lector.GetString(6))
+                                    },
+                                    departamento=new Departamento()
+                                    {
+                                        Id = (lector.IsDBNull(5) ? 0 : lector.GetInt32(0)),
+                                         Descripcion = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
                                     }
 
 
@@ -71,7 +76,7 @@ namespace TalentoBecario.Models.Services
                 Console.WriteLine(ex.Message);
             }
 
-            return listProyecto;
+            return proyectos;
         }
        
         public static Proyecto ConsultarProyecto(int id)
@@ -87,12 +92,12 @@ namespace TalentoBecario.Models.Services
                         comando.CommandText = "SZ_BMA_RTB.F_GET_DEPARTAMENTO";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
-                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
                         {
                             Value = id,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
                         {
                             Direction = ParameterDirection.ReturnValue
                         });
@@ -105,13 +110,18 @@ namespace TalentoBecario.Models.Services
                                 proyecto = new Proyecto()
                                 {
                                     id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                    nombre = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                                    descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(2)),
-                                    estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
-                                    formador=new Formador()
+                                    nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
+                                    descripcion = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
+                                    estatus = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
+                                    formador = new Formador()
                                     {
-                                        Id = (lector.IsDBNull(1) ? " " : lector.GetString(4)),
-                                        Nombre = (lector.IsDBNull(1) ? " " : lector.GetString(5))
+                                        Id = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
+                                        Nombre = (lector.IsDBNull(5) ? "" : lector.GetString(6))
+                                    },
+                                    departamento = new Departamento()
+                                    {
+                                        Id = (lector.IsDBNull(6) ? 0 : lector.GetInt32(0)),
+                                        Descripcion = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
                                     }
 
 
@@ -166,6 +176,12 @@ namespace TalentoBecario.Models.Services
                             Value = registro.formador.Id,
                             Direction = System.Data.ParameterDirection.Input
                         });
+                        comando.Parameters.Add(new OracleParameter("P_IdDepartamento", OracleDbType.Int16)
+                        {
+                            Value = registro.departamento.Id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        
                         comando.Parameters.Add(new OracleParameter("V_Id", OracleDbType.Int32)
                         {
                             Direction = ParameterDirection.ReturnValue
