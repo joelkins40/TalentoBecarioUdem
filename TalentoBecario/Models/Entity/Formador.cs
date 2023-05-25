@@ -5,7 +5,7 @@ using System.Web;
 
 namespace TalentoBecario.Models.Entity
 {
-    public class Formador
+    public class Formador 
     {
         public int Id { get; set; }
         public string Nombre { get; set; }

@@ -17,7 +17,7 @@ namespace TalentoBecario.Controllers
 
 
 
-            ViewBag.listDepartamentos = DepartamentosService.ObtieneListDepartamentos();
+            ViewBag.listDepartamentos = DepartamentoService.ObtieneListDepartamentos();
 
             
             ViewBag.habilidad = habilidad;
@@ -32,11 +32,11 @@ namespace TalentoBecario.Controllers
 
             if (habilidad.Id == 0)
             {
-                message= DepartamentosService.guardarDepartamento(habilidad);
+                message= DepartamentoService.guardarDepartamento(habilidad);
             }
             else
             {
-                message= DepartamentosService.ActualizarDepartamento(habilidad);
+                message= DepartamentoService.ActualizarDepartamento(habilidad);
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);
@@ -45,7 +45,7 @@ namespace TalentoBecario.Controllers
         [HttpPost]
         public JsonResult ConsultarDepartamento(int id)
         {
-            Departamento habilidad= DepartamentosService.ConsultarDepartamento(id);
+            Departamento habilidad= DepartamentoService.ConsultarDepartamento(id);
 
             
             return Json(habilidad, JsonRequestBehavior.AllowGet);
@@ -53,7 +53,7 @@ namespace TalentoBecario.Controllers
         [HttpPost]
         public JsonResult EliminarDepartamento(int id)
         {
-            String message = DepartamentosService.EliminarDepartamento(id);
+            String message = DepartamentoService.EliminarDepartamento(id);
 
 
             return Json("Registro Eliminado", JsonRequestBehavior.AllowGet);

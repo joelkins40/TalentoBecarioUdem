@@ -12,8 +12,7 @@ namespace TalentoBecario.Models.Services
 {
     public class DepartamentoService
     {
-        public class DepartamentosService
-        {
+       
             private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
 
             public static List<Departamento> ObtieneListDepartamentos()
@@ -242,7 +241,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_DEPA";
+                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_DELETE_DEPA";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
 
@@ -252,7 +251,7 @@ namespace TalentoBecario.Models.Services
                                 Direction = System.Data.ParameterDirection.Input
                             });
 
-                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.RefCursor)
+                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
                             {
                                 Direction = ParameterDirection.ReturnValue
                             });
@@ -279,5 +278,5 @@ namespace TalentoBecario.Models.Services
 
 
         }
-    }
+    
 }

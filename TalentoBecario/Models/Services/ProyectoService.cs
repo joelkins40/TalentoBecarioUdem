@@ -46,8 +46,14 @@ namespace TalentoBecario.Models.Services
                                 id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
                                 nombre = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
                                 descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(2)),
-                                estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3))
-                              
+                                estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
+                                formador = new Formador()
+                                {
+                                    Id = (lector.IsDBNull(1) ? 0 : lector.GetInt16(4)),
+                                    Nombre = (lector.IsDBNull(1) ? " " : lector.GetString(5))
+                                }
+
+
                             });
                         }
                         conn.Close();
@@ -60,243 +66,231 @@ namespace TalentoBecario.Models.Services
             }
             return listProyecto;
         }
-
-        public static List<Habilidad> ConsultarHabilidadesProyecto(int id)
-        {
-            List<Habilidad> listaHabilidades = new List<Habilidad>();
-            using (SqlConnection conn = new SqlConnection(_conString))
-            {
-                using (SqlCommand command = new SqlCommand("select HABILIDADES.* from  PROYECHABIL inner join HABILIDADES on HABILIDADES.id = idHabilidad where PROYECHABIL.idProyecto=@id", conn)
-                {
-
-                })
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    conn.Open();
-
-
-
-                    try
-                    {
-
-                        command.ExecuteNonQuery();
-
-                        SqlDataReader lector = command.ExecuteReader();
-
-                        while (lector.Read())
-                        {
-                            listaHabilidades.Add(new Habilidad
-                            {
-                                Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-
-                            });
-                        }
-                        conn.Close();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
-            }
-
-            
-            return listaHabilidades;
-        }
-
-        public static List<AreaInteres> ConsultarAreaInteresProyecto(int id)
-        {
-            List<AreaInteres> listaInteres = new List<AreaInteres>();
-            using (SqlConnection conn = new SqlConnection(_conString))
-            {
-                using (SqlCommand command = new SqlCommand("select AREASINTERES.* from  PROYECINTE inner join AREASINTERES on AREASINTERES.id = idInteres where PROYECINTE.idProyecto=@id", conn)
-                {
-
-                })
-                {
-                    command.Parameters.AddWithValue("@id", id);
-
-                    conn.Open();
-
-
-
-                    try
-                    {
-
-                        command.ExecuteNonQuery();
-
-                        SqlDataReader lector = command.ExecuteReader();
-
-                        while (lector.Read())
-                        {
-                            listaInteres.Add(new AreaInteres
-                            {
-                                Id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                Descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                            
-                            });
-                        }
-                        conn.Close();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
-            }
-
-
-            return listaInteres;
-        }
         public static Proyecto ConsultarProyecto(int id)
         {
-           Proyecto proyecto = new Proyecto();
-
-            using (SqlConnection conn = new SqlConnection(_conString))
+            Proyecto proyecto = new Proyecto();
+            try
             {
-                using (SqlCommand command = new SqlCommand("select * from PROYECTOS where id=@id ", conn)
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
-
-                })
-                  
-
-                {
-                    command.Parameters.AddWithValue("@id", id);
-
-                    conn.Open();
-
-                    //command.Parameters.AddWithValue("@zip","india");
-
-
-                    try
+                    using (OracleCommand comando = new OracleCommand())
                     {
-                        command.ExecuteNonQuery();
-
-                        SqlDataReader lector = command.ExecuteReader();
-
-                        while (lector.Read())
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_DEPARTAMENTO";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                         {
-                            proyecto = new Proyecto
+                            Value = id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+                            while (lector.Read())
                             {
-                                id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                nombre = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                                descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(2)),
-                                estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
-                                 listAreaInteres = ConsultarAreaInteresProyecto(lector.GetInt32(0)),
-                                listHabilidades = ConsultarHabilidadesProyecto(lector.GetInt32(0))
-                            };
+                                proyecto = new Proyecto()
+                                {
+                                    id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
+                                    nombre = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
+                                    descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(2)),
+                                    estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
+                                    formador=new Formador()
+                                    {
+                                        Id = (lector.IsDBNull(1) ? 0 : lector.GetInt16(4)),
+                                        Nombre = (lector.IsDBNull(1) ? " " : lector.GetString(5))
+                                    }
+
+
+                                };
+                            }
                         }
-                        conn.Close();
+                        finally
+                        {
+                            cnx.Close();
+                        }
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return proyecto;
+
         }
-        public static string guardarProyecto(Proyecto registro)
+        public static String guardarProyecto(Proyecto registro)
         {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            try
             {
-                using (SqlCommand command = new SqlCommand("INSERT INTO PROYECTO (nombre,descripcion,estatus) values(@nombre,@descripcion,@estatus)", conn)
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
-
-                })
-                                              {
-                    command.Parameters.AddWithValue("@nombre", registro.nombre);
-                    command.Parameters.AddWithValue("@descripcion", registro.descripcion);
-                    command.Parameters.AddWithValue("@estatus", registro.estatus);
-
-                    conn.Open();
-                    try
+                    using (OracleCommand comando = new OracleCommand())
                     {
-                      command.ExecuteNonQuery();
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_PROY";
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.BindByName = true;
+
+                        comando.Parameters.Add(new OracleParameter("P_Nombre", OracleDbType.Varchar2)
+                        {
+                            Value = registro.nombre,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                        {
+                            Value = registro.descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                       
+                        comando.Parameters.Add(new OracleParameter("P_Estatus", OracleDbType.Varchar2)
+                        {
+                            Value = registro.estatus,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Int16)
+                        {
+                            Value = registro.formador.Id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Id", OracleDbType.Int16)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+
+                            comando.ExecuteNonQuery();
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                }
             }
-            guardarHabilidadesInteresProyecto(registro);
-            return "Registro Ingresado Con Exito";
-        }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Ingresado Con Éxito";
 
-        public static void guardarHabilidadesInteresProyecto(Proyecto registro)
+        }
+        public static String ActualizarProyecto(Proyecto registro)
         {
-            //HabilidadesService.EliminarHabilidadProyecto(registro.id);
-           // AreaInteresService.EliminarAreaInteresProyecto(registro.id);
-            foreach (Habilidad item in registro.listHabilidades)
+            try
             {
-                HabilidadesService.guardarHabilidad(item);
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_DEPA";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
+                        {
+                            Value = registro.id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Nombre", OracleDbType.Varchar2)
+                        {
+                            Value = registro.nombre,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                        {
+                            Value = registro.descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
 
+                        comando.Parameters.Add(new OracleParameter("P_Estatus", OracleDbType.Varchar2)
+                        {
+                            Value = registro.estatus,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Int16)
+                        {
+                            Value = registro.formador.Id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
             }
-            foreach (AreaInteres item in registro.listAreaInteres)
+            catch (Exception ex)
             {
-                AreaInteresService.guardarAreaInteres(item);
-
+                Console.WriteLine(ex.Message);
             }
+            return "Registro Actualizado Con Éxito";
+
         }
-        public static string ActualizarProyecto(Proyecto registro)
+
+        public static string EliminarProyecto(int id)
         {
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
+            try
             {
-                using (SqlCommand command = new SqlCommand("UPDATE PROYECTOS set nombre=@nombre,descripcion=@descripcion,estatus=@estatus where id=@id", conn)
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
-
-                })
-                {
-                    command.Parameters.AddWithValue("@nombre", registro.nombre);
-                    command.Parameters.AddWithValue("@descripcion", registro.descripcion);
-                    command.Parameters.AddWithValue("@estatus", registro.estatus);
-
-                    conn.Open();
-                    try
+                    using (OracleCommand comando = new OracleCommand())
                     {
-                        command.ExecuteNonQuery();
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_DELETE_DEPA";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
+                        {
+                            Value = id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                }
             }
-            guardarHabilidadesInteresProyecto(registro);
-            return "Registro Actualizado Con Exito";
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Actualizado Con Éxito";
+
         }
 
-        public static string EliminarProyecto(Proyecto registro)
-        {
-          
-            DateTime dateSistem = DateTime.Now;
-            using (SqlConnection conn = new SqlConnection(_conString))
-            {
-                using (SqlCommand command = new SqlCommand("DELETE FROM PROYECTOS where id=@id", conn)
-                {
-
-                })
-                {
-                    command.Parameters.AddWithValue("@id", registro.id);
-                    conn.Open();
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
-            }
-            //HabilidadesService.EliminarHabilidadProyecto(registro.id);
-          //  AreaInteresService.EliminarAreaInteresProyecto(registro.id);
-            return "Registro Eliminado Con Exito";
-        }
 
     }
+
 }

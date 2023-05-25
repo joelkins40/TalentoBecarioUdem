@@ -1,77 +1,169 @@
 ﻿
-    <div class="container-fluid">
-        <div class="row page-titles">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Mis Proyectos</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Agregar Nuevo Proyecto</a></li>
-            </ol>
-        </div>
-        <!-- row -->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Datos del nuevo proyecto</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="basic-form">
-                            <form>
+<div class="container-fluid">
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Mis Proyectos</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Agregar Nuevo Proyecto</a></li>
+        </ol>
+    </div>
+    <!-- row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Datos del nuevo proyecto</h4>
+                </div>
+                <div class="card-body">
+                    <div class="basic-form">
+                        <form>
 
-                                <div class="row">
-                                    <div class="mb-3 col-md-2">
-                                        <label class="form-label">ID</label>
-                                        <input type="text" class="form-control" placeholder="Id">
-                                    </div>
-                                    <div class="mb-3 col-md-3">
-                                        <label class="form-label">Departamento</label>
-                                        <select class="default-select  form-control wide">
-                                            <option selected>Selecciona una opción</option>
-                                            <option >Departamento 1</option>
-                                            <option>Departamento 2</option>
-                                            <option>Departamento 3</option>
-                                            <option>Departamento 4</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-md-7">
-                                        <label class="form-label">Nombre del Proyecto</label>
-                                        <input type="text" class="form-control" placeholder="Nombre del proyecto">
-                                    </div>
-
-                                    <div class="mb-3 col-md-12">
-                                        <label class="form-label">Descripción del proyecto</label>
-                                        <textarea class="form-control" rows="4" id="comment"></textarea>
-                                    </div>
-
-                                    <div class="mb-3 col-md-6">
-                                        <label class="form-label">Areas de Interes</label>
-                                        <select class="form-select" id="multiple-select-field" data-placeholder="" multiple>
-                                             @foreach (var item in ViewBag.listAreaIntereses) {
-                                            <option>@item.Descripcion</option>
-                                                }
-
-
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-md-6">
-                                        <label class="form-label">Habilidades</label>
-                                        <select class="form-select" id="multiple-select-field2" data-placeholder="" multiple>
-                                            @foreach (var item in ViewBag.listHabilidades)
-                                            {
-                                                <option>@item.Descripcion</option>
-                                            }
-                                        </select>
-                                    </div>
+                            <div class="row">
+                                <div class="mb-3 col-md-2">
+                                    <label class="form-label">ID</label>
+                                    <input name="id" id="id" type="text" class="form-control" placeholder="Id">
                                 </div>
-                             
-                                <div class="mb-3">
-                                    
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label">Departamento</label>
+                                    <select name="departamento" id="departamento" class="default-select  form-control wide">
+                                        <option  selected>Selecciona una opción</option>
+                                        @foreach (var item in ViewBag.listDepartamentos)
+                                        {
+                                            <option value="@item.Id">@item.Descripcion</option>
+                                        }
+
+
+
+                                    </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Guardar</button>
-                            </form>
-                        </div>
+                                <div class="mb-3 col-md-7">
+                                    <label class="form-label">Nombre del Proyecto</label>
+                                    <input name="nombre" id="nombre"  type="text" class="form-control" placeholder="Nombre del proyecto">
+                                </div>
+
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Descripción del proyecto</label>
+                                    <textarea name="descripcion" id="descripcion"  class="form-control" rows="4" ></textarea>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Areas de Interes</label>
+                                    <select  name="interes" class="form-select" id="multiple-select-field" data-placeholder="" multiple>
+                                        @foreach (var item in ViewBag.listAreaInteres)
+                                        {
+                                            <option value="@item.Id">@item.Descripcion</option>
+                                        }
+
+
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Habilidades</label>
+                                    <select name="habilidades" class="form-select" id="multiple-select-field2" data-placeholder="" multiple>
+                                        @foreach (var item in ViewBag.listHabilidades)
+                                        {
+                                            <option value="@item.Id">@item.Descripcion</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+
+                            </div>
+                            <button type="submit" class="btn btn-primary" onclick="guardarRegister()">Guardar</button>
+                        </form>
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>
+<script>
+   function buscarProyecto(id) {
+
+
+
+                    $.post("@Url.Action("ConsultarProyecto", "Proyectos")", { id: id}, function (datas) {
+
+                    if (datas.Id == null) {
+                    alert("El Registro No Existe")
+
+                    }  else {
+                    clearRegister();
+
+                    $("#id").val(datas.Id);
+                    $("#descripcion").val(datas.Descripcion);
+                    }
+
+                    });
+                    };
+
+                    function guardarRegister() {
+                         var listHabilidades = $('[name=habilidades]').val();
+                       var listInteres = $('[name=interes]').val();
+                       
+                        var habilidades = [];
+                        var intereses = [];
+                        listHabilidades.forEach( (rating) => {
+                            habilidades.push({
+                                'id': rating
+                            });
+                             
+                        });
+                        listInteres.forEach( (rating) => {
+                            intereses.push({
+                                'id': rating
+                            });
+                             
+                        });
+                    var habilidad = JSON.stringify(
+                    {
+                    'id': $('#id').val(),
+                    'descripcion': $('#descripcion').val(),
+                    'nombre': $('#nombre').val(),
+                    'departamento.id': $('#departamento').val(),
+                    'estatus': 'Pendinte',
+                    'formador.id': '1234',
+                    'listHabilidades': habilidades,
+                    'listAreaInteres':intereses
+                    
+                    });
+                    $.ajax({
+                    url: '/Proyectos/SaveProyecto',
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    traditional: true,
+                    data: habilidad,
+                    success: function (results) {
+                    alert(results);
+                    window.location.href = '/Intereses';
+                    }
+                    })
+
+
+                    };
+
+                    function eliminarProyecto(id) {
+
+
+
+                    $.post("@Url.Action("EliminarProyecto", "Proyectos")", { id: id}, function (datas) {
+
+                    alert(datas);
+
+
+                    window.location.href = '/Intereses';
+
+
+                    });
+                    };
+
+
+                    function clearRegister() {
+                    $("#id").val("");
+                    $("#descripcion").val("");
+                    }
+
+</script>
