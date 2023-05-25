@@ -1,71 +1,99 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
+using Oracle.ManagedDataAccess.Types;
 using System.Configuration;
+
+using System.Collections.Generic;
+
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+
+using System.Threading.Tasks;
 using System.Web;
 using TalentoBecario.Models.Entity;
+using System;
 
 namespace TalentoBecario.Models.Services
 {
     public class ProyectoService
     {
         private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
-
         public static List<Proyecto> ObtieneListProyectos()
         {
-            List<Proyecto> listProyecto = new List<Proyecto>();
+            List<Proyecto> proyectos = new List<Proyecto>();
 
-            using (OracleConnection conn = new OracleConnection(_conString))
+            try
             {
-                using (OracleCommand comando = new OracleCommand())
+                using (OracleConnection cnx = new OracleConnection(_conString))
                 {
-                    comando.Connection = conn;
-                    comando.CommandText = "SZ_BMA_RTB.F_GET_PROYECTOS";
-                    comando.CommandType = System.Data.CommandType.StoredProcedure;
-                    comando.BindByName = true;
-                    comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+
+                    using (OracleCommand comando = new OracleCommand())
                     {
-                        Direction = ParameterDirection.ReturnValue
-                    });
-                    conn.Open();
-
-                    try
-                    {
-
-                        comando.ExecuteNonQuery();
-
-                        OracleDataReader lector = comando.ExecuteReader();
-
-                        while (lector.Read())
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_PROYECTOS";
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
                         {
-                            listProyecto.Add(new Proyecto
+                            Direction = ParameterDirection.ReturnValue
+                        });
+
+
+
+
+                        // Revisamos si se pudo ejecutar la consulta
+                    
+
+                        try
+                        {
+                            cnx.Open();
+                            OracleDataReader lector = comando.ExecuteReader();
+
+                            // Revisamos cada contacto
+
+                            while (lector.Read())
                             {
-                                id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                nombre = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                                descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(2)),
-                                estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
-                                formador = new Formador()
+
+                                lector.GetInt32(0);
+
+                                proyectos.Add(new Proyecto()
                                 {
-                                    Id = (lector.IsDBNull(1) ? 0 : lector.GetInt16(4)),
-                                    Nombre = (lector.IsDBNull(1) ? " " : lector.GetString(5))
-                                }
+
+                                    id = lector.GetInt32(0),
+                                    nombre = lector.GetString(1),
+                                    descripcion = lector.GetString(2),
+                                    estatus = lector.GetString(3)
 
 
-                            });
+
+                                });
+
+
+
+
+                            }
+
+
                         }
-                        conn.Close();
+                        finally
+                        {
+
+                            cnx.Close();
+                        }
+
                     }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+
+                    //cnx.Close();
+                }
             }
-            return listProyecto;
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+            return proyectos;
+
         }
+       
         public static Proyecto ConsultarProyecto(int id)
         {
             Proyecto proyecto = new Proyecto();
@@ -102,7 +130,7 @@ namespace TalentoBecario.Models.Services
                                     estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
                                     formador=new Formador()
                                     {
-                                        Id = (lector.IsDBNull(1) ? 0 : lector.GetInt16(4)),
+                                        Id = (lector.IsDBNull(1) ? "" : lector.GetString(4)),
                                         Nombre = (lector.IsDBNull(1) ? " " : lector.GetString(5))
                                     }
 
@@ -153,19 +181,19 @@ namespace TalentoBecario.Models.Services
                             Value = registro.estatus,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Int16)
+                        comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Varchar2)
                         {
                             Value = registro.formador.Id,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("V_Id", OracleDbType.Int16)
+                        comando.Parameters.Add(new OracleParameter("V_Id", OracleDbType.Int32)
                         {
                             Direction = ParameterDirection.ReturnValue
                         });
-                        cnx.Open();
+                       
                         try
                         {
-
+                            cnx.Open();
                             comando.ExecuteNonQuery();
                         }
                         finally

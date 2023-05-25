@@ -144,7 +144,7 @@ namespace TalentoBecario.Models.Services
 
         }
         public static String guardarAreaInteres(AreaInteres registro)
-        {
+        { 
             try
             {
                 using (OracleConnection cnx = new OracleConnection(_conString))
