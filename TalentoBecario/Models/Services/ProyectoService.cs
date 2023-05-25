@@ -18,52 +18,57 @@ namespace TalentoBecario.Models.Services
         {
             List<Proyecto> listProyecto = new List<Proyecto>();
 
-            using (OracleConnection conn = new OracleConnection(_conString))
+            try
             {
-                using (OracleCommand comando = new OracleCommand())
+                using (OracleConnection conn = new OracleConnection(_conString))
                 {
-                    comando.Connection = conn;
-                    comando.CommandText = "SZ_BMA_RTB.F_GET_PROYECTOS";
-                    comando.CommandType = System.Data.CommandType.StoredProcedure;
-                    comando.BindByName = true;
-                    comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                    using (OracleCommand comando = new OracleCommand())
                     {
-                        Direction = ParameterDirection.ReturnValue
-                    });
-                    conn.Open();
-
-                    try
-                    {
-
-                        comando.ExecuteNonQuery();
-
-                        OracleDataReader lector = comando.ExecuteReader();
-
-                        while (lector.Read())
+                        comando.Connection = conn;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_PROYECTOS";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
                         {
-                            listProyecto.Add(new Proyecto
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        conn.Open();
+
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+
+                            while (lector.Read())
                             {
-                                id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                nombre = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
-                                descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(2)),
-                                estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
-                                formador = new Formador()
+                                listProyecto.Add(new Proyecto
                                 {
-                                    Id = (lector.IsDBNull(1) ? 0 : lector.GetInt16(4)),
-                                    Nombre = (lector.IsDBNull(1) ? " " : lector.GetString(5))
-                                }
+                                    id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
+                                    nombre = (lector.IsDBNull(1) ? " " : lector.GetString(1)),
+                                    descripcion = (lector.IsDBNull(1) ? " " : lector.GetString(2)),
+                                    estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
+                                    formador = new Formador()
+                                    {
+                                        Id = (lector.IsDBNull(1) ? " " : lector.GetString(4)),
+                                        Nombre = (lector.IsDBNull(1) ? " " : lector.GetString(5))
+                                    }
 
 
-                            });
+                                });
+                            }
+                            conn.Close();
                         }
-                        conn.Close();
-                    }
-                    finally
-                    {
-                        conn.Close();
-                    }
-                };
+                        finally
+                        {
+                            conn.Close();
+                        }
+                    };
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
             return listProyecto;
         }
         public static Proyecto ConsultarProyecto(int id)
@@ -102,7 +107,7 @@ namespace TalentoBecario.Models.Services
                                     estatus = (lector.IsDBNull(1) ? " " : lector.GetString(3)),
                                     formador=new Formador()
                                     {
-                                        Id = (lector.IsDBNull(1) ? 0 : lector.GetInt16(4)),
+                                        Id = (lector.IsDBNull(1) ? " " : lector.GetString(4)),
                                         Nombre = (lector.IsDBNull(1) ? " " : lector.GetString(5))
                                     }
 
@@ -153,7 +158,7 @@ namespace TalentoBecario.Models.Services
                             Value = registro.estatus,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Int16)
+                        comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Varchar2)
                         {
                             Value = registro.formador.Id,
                             Direction = System.Data.ParameterDirection.Input
@@ -215,7 +220,7 @@ namespace TalentoBecario.Models.Services
                             Value = registro.estatus,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Int16)
+                        comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Varchar2)
                         {
                             Value = registro.formador.Id,
                             Direction = System.Data.ParameterDirection.Input
