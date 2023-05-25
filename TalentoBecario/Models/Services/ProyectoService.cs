@@ -1,22 +1,24 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
+using Oracle.ManagedDataAccess.Types;
 using System.Configuration;
+
+using System.Collections.Generic;
+
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+
+using System.Threading.Tasks;
 using System.Web;
 using TalentoBecario.Models.Entity;
+using System;
 
 namespace TalentoBecario.Models.Services
 {
     public class ProyectoService
     {
         private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
-
         public static List<Proyecto> ObtieneListProyectos()
         {
-            List<Proyecto> listProyecto = new List<Proyecto>();
+            List<Proyecto> proyectos = new List<Proyecto>();
 
             try
             {
@@ -71,6 +73,7 @@ namespace TalentoBecario.Models.Services
 
             return listProyecto;
         }
+       
         public static Proyecto ConsultarProyecto(int id)
         {
             Proyecto proyecto = new Proyecto();
@@ -163,14 +166,14 @@ namespace TalentoBecario.Models.Services
                             Value = registro.formador.Id,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("V_Id", OracleDbType.Int16)
+                        comando.Parameters.Add(new OracleParameter("V_Id", OracleDbType.Int32)
                         {
                             Direction = ParameterDirection.ReturnValue
                         });
-                        cnx.Open();
+                       
                         try
                         {
-
+                            cnx.Open();
                             comando.ExecuteNonQuery();
                         }
                         finally
