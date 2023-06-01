@@ -1,11 +1,49 @@
-﻿
-    <div class="container-fluid">
-        <div class="row page-titles">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Proyectos</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Mis Proyectos</a></li>
-            </ol>
-        </div>
-        <!-- row -->
-       
+﻿@{
+    ViewBag.Title = "Iniciar Sesión";
+}
+<form action="@Url.Action("SignIn")" method="post">
+    <div class="row-cols-4" style="padding-bottom:50px;">
+        <span class="text-body">
+            <label style="color:white;">Favor de ingresar tu usuario y contraseña</label>
+        </span>
     </div>
+    <div class="wrap-input100 validate-input" data-validate="Ingresa tu usuario UDEM">
+        <input class="input100" type="text" name="username" placeholder="Usuario" id="username">
+        <span class="focus-input100"></span>
+    </div>
+    <div class="wrap-input100 validate-input" data-validate="Ingresa tu contraseña UDEM">
+
+        <input class="input100" type="password" name="pass" placeholder="Contraseña" id="password">
+        <span class="focus-input100"></span>
+        <a id="show_hide_password"><i class="fa fa-eye-slash text-white" aria-hidden="true"></i></a>
+        <input class="input100" type="text" name="tokenInp" value="@(ViewBag.Token)" id="tokenInp" style="display:none">
+
+    </div>
+    @{
+        if (ViewBag.ErrorLogin != null && !string.IsNullOrWhiteSpace(ViewBag.ErrorLogin))
+        {
+            <div class="alert alert-warning">
+                @ViewBag.ErrorLogin
+            </div>
+        }
+    }
+
+    <div class="row">
+        <div class="contact100-form-checkbox col-sm-6">
+            <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me" value="Y">
+            <label class="label-checkbox100" for="ckb1">
+                Recordarme
+            </label>
+        </div>
+        <div class="text-center col-sm-6">
+        </div>
+    </div>
+
+    <div class="container-login100-form-btn p-t-10">
+        <button type="submit" name="Submit" value="Submit" class="login100-form-btn">
+            Ingresar
+        </button>
+    </div>
+
+
+</form>

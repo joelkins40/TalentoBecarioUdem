@@ -26,5 +26,14 @@ namespace TalentoBecario.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public ActionResult SignIn()
+        {
+            string username = Request.Params["username"];
+            string pass = Request.Params["pass"];
+
+            return RedirectToAction("Index", "Habilidades");
+        }
     }
 }

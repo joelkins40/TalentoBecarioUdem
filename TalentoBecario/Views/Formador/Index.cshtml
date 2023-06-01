@@ -1,109 +1,111 @@
-﻿
-    <div class="container-fluid">
-        <div class="row page-titles">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de Alumnos</a></li>
-                
-            </ol>
-        </div>
-        <!-- row -->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Lista de Alumnos</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-responsive-md">
-                                <thead>
-                                    <tr>
-                                        <th><strong>Matricula</strong></th>
-                                        <th><strong>Nombre</strong></th>
-                                        <th><strong>Nivel</strong></th>
-                                        <th><strong>Horario</strong></th>
-                                        <th><strong>Formador</strong></th>
-                                        <th><strong>Estatus</strong></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>00013689</strong></td>
-                                        <td>Joel Vargas Osorio</td>
-                                        <td>Preparatoria</td>
-                                        <td>Matutino</td>
-                                        <td>Hilario Hinojosa</td>
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+<div class="container-fluid">
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de Alumnos</a></li>
 
-                                        <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
+        </ol>
+    </div>
+    <!-- row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Lista de Alumnos</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-responsive-md">
+                            <thead>
+                                <tr>
+                                    <th><strong>Matricula</strong></th>
+                                    <th><strong>Nombre</strong></th>
+                                    <th><strong>Nivel</strong></th>
+                                    <th><strong>Horario</strong></th>
+                                    <th><strong>Formador</strong></th>
+                                    <th><strong>Estatus</strong></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>00013689</strong></td>
+                                    <td>Joel Vargas Osorio</td>
+                                    <td>Preparatoria</td>
+                                    <td>Matutino</td>
+                                    <td>Hilario Hinojosa</td>
 
-                                        <td>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                    <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Ver Perfil</a>
-                                                    <a class="dropdown-item" href="#">Historial</a>
-                                                    <a class="dropdown-item" href="#">Solicitar Alumno</a>
+                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
 
-                                                </div>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
+                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Ver Perfil</a>
+                                                <a class="dropdown-item" href="#">Historial</a>
+                                                <a class="dropdown-item" href="#">Solicitar Alumno</a>
+
                                             </div>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                </tr>
 
-                                    <tr>
-                                        <td><strong>00013689</strong></td>
-                                        <td>Joel Vargas Osorio</td>
-                                        <td>Preparatoria</td>
-                                        <td>Matutino</td>
-                                        <td>Hilario Hinojosa</td>
+                                <tr>
+                                    <td><strong>00013689</strong></td>
+                                    <td>Joel Vargas Osorio</td>
+                                    <td>Preparatoria</td>
+                                    <td>Matutino</td>
+                                    <td>Hilario Hinojosa</td>
 
-                                        <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
+                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
 
-                                        <td>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                    <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Ver Perfil</a>
-                                                    <a class="dropdown-item" href="#">Historial</a>
-                                                    <a class="dropdown-item" href="#">Mantener Asignación</a>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
+                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Ver Perfil</a>
+                                                <a class="dropdown-item" href="#">Historial</a>
+                                                <a class="dropdown-item" href="#">Mantener Asignación</a>
 
-                                                </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>00013689</strong></td>
-                                        <td>Joel Vargas Osorio</td>
-                                        <td>Preparatoria</td>
-                                        <td>Matutino</td>
-                                        <td>Hilario Hinojosa</td>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>00013689</strong></td>
+                                    <td>Joel Vargas Osorio</td>
+                                    <td>Preparatoria</td>
+                                    <td>Matutino</td>
+                                    <td>Hilario Hinojosa</td>
 
-                                        <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
+                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
 
-                                        <td>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                    <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Ver Perfil</a>
-                                                    <a class="dropdown-item" href="#">Historial</a>
-                                                    <a class="dropdown-item" href="#">Solicitar Alumno</a>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
+                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Ver Perfil</a>
+                                                <a class="dropdown-item" href="#">Historial</a>
+                                                <a class="dropdown-item" href="#">Solicitar Alumno</a>
 
-                                                </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>

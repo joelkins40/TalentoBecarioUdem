@@ -475,6 +475,7 @@
     <Content Include="Views\Formador\Index.cshtml" />
     <Content Include="Views\Departamentos\Index.cshtml" />
     <Content Include="Views\SeleccionMasiva\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutApp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

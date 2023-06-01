@@ -1,4 +1,6 @@
-﻿
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
 <div class="container-fluid">
     <div class="row page-titles">
         <ol class="breadcrumb">
@@ -24,11 +26,11 @@
                                 </div>
                                 <div class="mb-3 col-md-3">
                                     <label class="form-label">Departamento</label>
-                                    <select name="departamento" id="departamento"  value="" class="default-select  form-control wide">
-                                        <option @(ViewBag.proyecto.departamento.Id==0 ? "Selected" : "")  >Selecciona una opción</option>
+                                    <select name="departamento" id="departamento" value="" class="default-select  form-control wide">
+                                        <option @(ViewBag.proyecto.departamento.Id == 0 ? "Selected" : "")>Selecciona una opción</option>
                                         @foreach (var item in ViewBag.listDepartamentos)
                                         {
-                                            <option @(ViewBag.proyecto.departamento.Id.Equals(item.Id) ? "Selected" : "")   value="@item.Id">@item.Descripcion</option>
+                                            <option @(ViewBag.proyecto.departamento.Id.Equals(item.Id) ? "Selected" : "") value="@item.Id">@item.Descripcion</option>
                                         }
 
 
@@ -37,20 +39,20 @@
                                 </div>
                                 <div class="mb-3 col-md-7">
                                     <label class="form-label">Nombre del Proyecto</label>
-                                    <input name="nombre" id="nombre" value="@ViewBag.proyecto.nombre"  type="text" class="form-control" placeholder="Nombre del proyecto">
+                                    <input name="nombre" id="nombre" value="@ViewBag.proyecto.nombre" type="text" class="form-control" placeholder="Nombre del proyecto">
                                 </div>
 
                                 <div class="mb-3 col-md-12">
                                     <label class="form-label">Descripción del proyecto</label>
-                                    <textarea name="descripcion" id="descripcion"    class="form-control" rows="4" >@ViewBag.proyecto.descripcion</textarea>
+                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="4">@ViewBag.proyecto.descripcion</textarea>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Areas de Interes</label>
-                                    <select  name="interes" class="form-select" id="multiple-select-field" data-placeholder="" multiple>
+                                    <select name="interes" class="form-select" id="multiple-select-field" data-placeholder="" multiple>
                                         @foreach (var item in ViewBag.listAreaInteres)
                                         {
-                                            <option @if(ViewBag.proyecto.listAreaInteres!=null){  foreach (var hab in ViewBag.proyecto.listAreaInteres) { @(hab.Id.Equals(item.Id) ? "selected" : "") }      }  value="@item.Id">@item.Descripcion</option>
+                                            <option @if (ViewBag.proyecto.listAreaInteres != null) { foreach (var hab in ViewBag.proyecto.listAreaInteres) { @(hab.Id.Equals(item.Id) ? "selected" : "") } } value="@item.Id">@item.Descripcion</option>
                                         }
 
 
@@ -61,7 +63,7 @@
                                     <select name="habilidades" class="form-select" id="multiple-select-field2" data-placeholder="" multiple>
                                         @foreach (var item in ViewBag.listHabilidades)
                                         {
-                                            <option  @if (ViewBag.proyecto.listAreaInteres != null) { foreach (var hab in ViewBag.proyecto.listHabilidades) { @(hab.Id.Equals(item.Id) ? "selected" : "") } }  value="@item.Id">@item.Descripcion</option>
+                                            <option @if (ViewBag.proyecto.listAreaInteres != null) { foreach (var hab in ViewBag.proyecto.listHabilidades) { @(hab.Id.Equals(item.Id) ? "selected" : "") } } value="@item.Id">@item.Descripcion</option>
                                         }
                                     </select>
                                 </div>
@@ -85,20 +87,20 @@
                     function guardarRegister() {
                          var listHabilidades = $('[name=habilidades]').val();
                        var listInteres = $('[name=interes]').val();
-                       
+
                         var habilidades = [];
                         var intereses = [];
                         listHabilidades.forEach( (rating) => {
                             habilidades.push({
                                 'id': rating
                             });
-                             
+
                         });
                         listInteres.forEach( (rating) => {
                             intereses.push({
                                 'id': rating
                             });
-                             
+
                         });
                     var habilidad = JSON.stringify(
                     {
@@ -110,7 +112,7 @@
                     'formador.id': '00012345',
                     'listHabilidades': habilidades,
                     'listAreaInteres':intereses
-                    
+
                     });
                     $.ajax({
                     url: '/Proyectos/SaveProyecto',

@@ -1,9 +1,11 @@
-﻿
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
 <div class="container-fluid">
     <div class="row page-titles">
         <ol class="breadcrumb">
             <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de Departamentos</a></li>
-            
+
         </ol>
     </div>
     <!-- row -->
@@ -13,7 +15,7 @@
                 <div class="card-header">
                     <h4 class="card-title">Lista de Departamentos</h4>
                 </div>
-              
+
                 <div class="card-body">
                     <div class="basic-form">
                         <form>
@@ -36,7 +38,7 @@
                             <div class="mb-3">
 
                             </div>
-                            <button  class="btn btn-primary" onclick="clearRegister()">Nuevo</button>  <button  class="btn btn-success" onclick="guardarRegister()">Guardar</button>
+                            <button class="btn btn-primary" onclick="clearRegister()">Nuevo</button>  <button class="btn btn-success" onclick="guardarRegister()">Guardar</button>
                         </form>
                     </div>
                 </div>
@@ -71,7 +73,7 @@
                                 </tr>
                             }
 
-                           
+
                         </tbody>
                     </table>
                 </div>
@@ -83,10 +85,10 @@
 <script>
 
 
-    
+
    function buscarDepartamento(id) {
-       
-      
+
+
 
                     $.post("@Url.Action("ConsultarDepartamento","Departamentos")", { id: id}, function (datas) {
 
@@ -104,7 +106,7 @@
     };
 
       function guardarRegister() {
-        
+
         var departamento = JSON.stringify(
         {
                'Id': $('#id').val(),
@@ -125,18 +127,18 @@
 
 
     };
-      
+
    function eliminarDepartamento(id) {
-       
-      
+
+
 
                     $.post("@Url.Action("EliminarDepartamento","Departamentos")", { id: id}, function (datas) {
 
                         alert(datas);
 
-                           
+
                          window.location.href = '/Departamentos';
-                        
+
 
                         });
     };
