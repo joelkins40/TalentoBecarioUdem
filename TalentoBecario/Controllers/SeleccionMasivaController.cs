@@ -8,7 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
-    public class SeleccionController : Controller
+    public class SeleccionMasivaController : Controller
     {
         public ActionResult Index()
         {

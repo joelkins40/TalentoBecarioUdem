@@ -7,10 +7,11 @@ namespace TalentoBecario.Models.Entity
 {
     public class Alumno
     {
-
-        public string idAlumno { get; set; }
+       
+        public string Pidm { get; set; }
         public string nombre { get; set; }
         public string nivel { get; set; }
+        public string programa { get; set; }
         public string horario { get; set; }
         public string formador { get; set; }
         public string estatus { get; set; }

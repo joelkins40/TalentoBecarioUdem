@@ -161,6 +161,7 @@
     <Compile Include="Controllers\ProyectosAlumnoController.cs" />
     <Compile Include="Controllers\PerfilController.cs" />
     <Compile Include="Controllers\OfertasController.cs" />
+    <Compile Include="Controllers\SeleccionMasivaController.cs" />
     <Compile Include="Controllers\SeleccionController.cs" />
     <Compile Include="Controllers\InteresesController.cs" />
     <Compile Include="Controllers\HabilidadesController.cs" />
@@ -473,6 +474,7 @@
     <Content Include="Views\ProyectosAlumno\Index.cshtml" />
     <Content Include="Views\Formador\Index.cshtml" />
     <Content Include="Views\Departamentos\Index.cshtml" />
+    <Content Include="Views\SeleccionMasiva\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

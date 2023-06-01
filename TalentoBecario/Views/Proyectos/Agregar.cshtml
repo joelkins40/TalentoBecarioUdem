@@ -20,15 +20,15 @@
                             <div class="row">
                                 <div class="mb-3 col-md-2">
                                     <label class="form-label">ID</label>
-                                    <input name="id" id="id" type="text" class="form-control" value="@ViewBag.proyecto.id" placeholder="Id">
+                                    <input name="id" id="id" type="text" class="form-control" value="@ViewBag.proyecto.id" placeholder="Id" disabled>
                                 </div>
                                 <div class="mb-3 col-md-3">
                                     <label class="form-label">Departamento</label>
-                                    <select name="departamento" id="departamento" value="@ViewBag.proyecto.departamento.Id" class="default-select  form-control wide">
-                                        <option  selected>Selecciona una opción</option>
+                                    <select name="departamento" id="departamento"  value="" class="default-select  form-control wide">
+                                        <option @(ViewBag.proyecto.departamento.Id==0 ? "Selected" : "")  >Selecciona una opción</option>
                                         @foreach (var item in ViewBag.listDepartamentos)
                                         {
-                                            <option value="@item.Id">@item.Descripcion</option>
+                                            <option @(ViewBag.proyecto.departamento.Id.Equals(item.Id) ? "Selected" : "")   value="@item.Id">@item.Descripcion</option>
                                         }
 
 
@@ -42,7 +42,7 @@
 
                                 <div class="mb-3 col-md-12">
                                     <label class="form-label">Descripción del proyecto</label>
-                                    <textarea name="descripcion" id="descripcion"  value="@ViewBag.proyecto.descripcion" class="form-control" rows="4" ></textarea>
+                                    <textarea name="descripcion" id="descripcion"    class="form-control" rows="4" >@ViewBag.proyecto.descripcion</textarea>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
@@ -50,7 +50,7 @@
                                     <select  name="interes" class="form-select" id="multiple-select-field" data-placeholder="" multiple>
                                         @foreach (var item in ViewBag.listAreaInteres)
                                         {
-                                            <option value="@item.Id">@item.Descripcion</option>
+                                            <option @if(ViewBag.proyecto.listAreaInteres!=null){  foreach (var hab in ViewBag.proyecto.listAreaInteres) { @(hab.Id.Equals(item.Id) ? "selected" : "") }      }  value="@item.Id">@item.Descripcion</option>
                                         }
 
 
@@ -61,7 +61,7 @@
                                     <select name="habilidades" class="form-select" id="multiple-select-field2" data-placeholder="" multiple>
                                         @foreach (var item in ViewBag.listHabilidades)
                                         {
-                                            <option value="@item.Id">@item.Descripcion</option>
+                                            <option  @if (ViewBag.proyecto.listAreaInteres != null) { foreach (var hab in ViewBag.proyecto.listHabilidades) { @(hab.Id.Equals(item.Id) ? "selected" : "") } }  value="@item.Id">@item.Descripcion</option>
                                         }
                                     </select>
                                 </div>
@@ -106,7 +106,7 @@
                     'descripcion': $('#descripcion').val(),
                     'nombre': $('#nombre').val(),
                     'departamento.id': $('#departamento').val(),
-                    'estatus': 'Pendinte',
+                    'estatus': 'Pendiente',
                     'formador.id': '00012345',
                     'listHabilidades': habilidades,
                     'listAreaInteres':intereses
@@ -121,7 +121,7 @@
                     data: habilidad,
                     success: function (results) {
                     alert(results);
-                    window.location.href = '/Intereses';
+                    window.location.href = '/Proyectos';
                     }
                     })
 
@@ -137,7 +137,7 @@
                     alert(datas);
 
 
-                    window.location.href = '/Intereses';
+                    window.location.href = '/Proyectos';
 
 
                     });
@@ -146,8 +146,8 @@
 
     function clearRegister() {
                         $("#id").val("");
-                    $("#descripcion")val("");
-                    $("#nombre")val("");
+                    $("#descripcion").val("");
+                    $("#nombre").val("");
                     $("#departamento").val("");
                     $("#estatus").val("");
                     }

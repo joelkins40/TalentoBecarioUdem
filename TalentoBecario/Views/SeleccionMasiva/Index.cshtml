@@ -1,0 +1,151 @@
+﻿
+<div class="container-fluid">
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de Alumnos</a></li>
+
+        </ol>
+    </div>
+    <!-- row -->
+    <div class="row">
+        <div class="mb-6 col-md-6">
+            <label class="form-label">Formador</label>
+            <select name="departamento" id="departamento" value="" class="default-select  form-control wide">
+                <option>Selecciona una Formador</option>
+                <option>Formador 1</option>
+
+                <option>Formador 2</option>
+
+
+            </select>
+        </div>
+        <div class="mb-6 col-md-6">
+           
+            <button class="btn btn-success" onclick="guardarRegister()">Guardar</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Lista de Alumnos</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-responsive-md" name="table" id="table">
+                            <thead>
+                                <tr>
+                                    <th><strong>Matricula</strong></th>
+                                    <th><strong>Matricula</strong></th>
+                                    <th><strong>Nombre</strong></th>
+                                    <th><strong>Nivel</strong></th>
+                                    <th><strong>Programa</strong></th>
+                                    <th><strong>Estatus</strong></th>
+                                    <th>Selección</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.listAlumnos)
+                                {
+                                    <tr>
+                                        <td><strong>@item.Pidm</strong></td>
+                                        <td>@item.nombre</td>
+                                        <td>@item.nivel</td>
+                                        <td>@item.programa</td>
+                                        <td>Hilario Hinojosa</td>
+
+                                        <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
+
+                                        <td class="text-center">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+
+    function guardarRegister() {
+        var checkedBoxes = $("input[type=checkbox]:checked", "#table");
+        console.log(checkedBoxes);
+                         var listHabilidades = $('[name=habilidades]').val();
+                       var listInteres = $('[name=interes]').val();
+
+                        var habilidades = [];
+                        var intereses = [];
+                        listHabilidades.forEach( (rating) => {
+                            habilidades.push({
+                                'id': rating
+                            });
+
+                        });
+                        listInteres.forEach( (rating) => {
+                            intereses.push({
+                                'id': rating
+                            });
+
+                        });
+                    var habilidad = JSON.stringify(
+                    {
+                    'id': $('#id').val(),
+                    'descripcion': $('#descripcion').val(),
+                    'nombre': $('#nombre').val(),
+                    'departamento.id': $('#departamento').val(),
+                    'estatus': 'Pendiente',
+                    'formador.id': '00012345',
+                    'listHabilidades': habilidades,
+                    'listAreaInteres':intereses
+
+                    });
+                    $.ajax({
+                    url: '/Proyectos/SaveProyecto',
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    traditional: true,
+                    data: habilidad,
+                    success: function (results) {
+                    alert(results);
+                    window.location.href = '/Proyectos';
+                    }
+                    })
+
+
+                    };
+
+                    function eliminarProyecto(id) {
+
+
+
+                    $.post("@Url.Action("EliminarProyecto", "Proyectos")", { id: id}, function (datas) {
+
+                    alert(datas);
+
+
+                    window.location.href = '/Proyectos';
+
+
+                    });
+                    };
+
+
+    function clearRegister() {
+                        $("#id").val("");
+                    $("#descripcion").val("");
+                    $("#nombre").val("");
+                    $("#departamento").val("");
+                    $("#estatus").val("");
+                    }
+
+</script>

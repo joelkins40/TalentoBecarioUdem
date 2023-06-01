@@ -143,6 +143,112 @@ namespace TalentoBecario.Models.Services
             return areaInteres;
 
         }
+        public static List<AreaInteres> ConsultarInteresesProyectoAlumno(int idProyecto, int tipo)
+        {
+            List<AreaInteres> areaInteres = new List<AreaInteres>();
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_RAI_BY_PROJECT_AND_TYPE";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_IdEntidad", OracleDbType.Int16)
+                        {
+                            Value = idProyecto,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Tipo", OracleDbType.Int16)
+                        {
+                            Value = tipo,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+                            while (lector.Read())
+                            {
+                                areaInteres.Add(new AreaInteres()
+                                {
+                                    Id = lector.GetInt32(1),
+
+                                });
+                            }
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return areaInteres;
+
+        }
+        public static String RelacionarInteresProyectoAlumno(int interes, int identidad, int tipo)
+        {
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_RAI";
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.BindByName = true;
+
+                        comando.Parameters.Add(new OracleParameter("P_IdAreaInteres", OracleDbType.Int16)
+                        {
+                            Value = interes,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Identidad", OracleDbType.Int16)
+                        {
+                            Value = identidad,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Tipo", OracleDbType.Int16)
+                        {
+                            Value = tipo,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        try
+                        {
+                            cnx.Open();
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Ingresado Con Éxito";
+
+        }
         public static String guardarAreaInteres(AreaInteres registro)
         { 
             try
@@ -233,7 +339,54 @@ namespace TalentoBecario.Models.Services
             return "Registro Actualizado Con Éxito";
 
         }
+        public static String eliminarAreaInteresRelacion(int registro, int tipo)
+        {
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_DELETE_RAI";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
 
+                        comando.Parameters.Add(new OracleParameter("P_IdEntidad", OracleDbType.Int16)
+                        {
+                            Value = registro,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+
+                        comando.Parameters.Add(new OracleParameter("P_IdEntidad", OracleDbType.Int16)
+                        {
+                            Value = tipo,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Actualizado Con Éxito";
+
+        }
         public static string EliminarAreaInteres(int id)
         {
             try

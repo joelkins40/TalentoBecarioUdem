@@ -89,13 +89,13 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_DEPARTAMENTO";
-                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_PROYECTO";
+                        comando.CommandType = CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
                         {
                             Value = id,
-                            Direction = System.Data.ParameterDirection.Input
+                            Direction =ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
                         {
@@ -116,13 +116,16 @@ namespace TalentoBecario.Models.Services
                                     formador = new Formador()
                                     {
                                         Id = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
-                                        Nombre = (lector.IsDBNull(5) ? "" : lector.GetString(6))
+                                        Nombre = (lector.IsDBNull(5) ? "" : lector.GetString(5))
                                     },
                                     departamento = new Departamento()
                                     {
-                                        Id = (lector.IsDBNull(6) ? 0 : lector.GetInt32(0)),
+                                        Id = (lector.IsDBNull(6) ? 0 : lector.GetInt32(6)),
                                         Descripcion = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
-                                    }
+                                    },
+                                    listHabilidades = HabilidadesService.ConsultarHabilidadesProyectoAlumno(id, 1),
+                                    listAreaInteres= AreaInteresService.ConsultarInteresesProyectoAlumno(id,1)
+
 
 
                                 };
@@ -144,6 +147,7 @@ namespace TalentoBecario.Models.Services
         }
         public static String guardarProyecto(Proyecto registro)
         {
+            string idProyecto="0";
             try
             {
                 using (OracleConnection cnx = new OracleConnection(_conString))
@@ -182,7 +186,7 @@ namespace TalentoBecario.Models.Services
                             Direction = System.Data.ParameterDirection.Input
                         });
                         
-                        comando.Parameters.Add(new OracleParameter("V_Id", OracleDbType.Int32)
+                        comando.Parameters.Add(new OracleParameter("V_Id", OracleDbType.Int32,5)
                         {
                             Direction = ParameterDirection.ReturnValue
                         });
@@ -191,6 +195,8 @@ namespace TalentoBecario.Models.Services
                         {
                             cnx.Open();
                             comando.ExecuteNonQuery();
+                            idProyecto = Convert.ToString(comando.Parameters["V_Id"].Value);
+
                         }
                         finally
                         {
@@ -203,11 +209,29 @@ namespace TalentoBecario.Models.Services
             {
                 Console.WriteLine(ex.Message);
             }
-            return "Registro Ingresado Con Éxito";
+            if (!idProyecto.Equals("0"))
+            {
+                if (registro.listHabilidades != null)
+                {
+                    foreach (var item in registro.listHabilidades)
+                    {
+                        HabilidadesService.RelacionarHabilidadProyectoAlumno(item.Id, Convert.ToInt16(idProyecto), 1);
+                    }
+                }
+                if (registro.listAreaInteres != null)
+                {
+                    foreach (var item in registro.listAreaInteres)
+                    {
+                        AreaInteresService.RelacionarInteresProyectoAlumno(item.Id, Convert.ToInt16(idProyecto), 1);
+                    }
+                }
+            }
+            return "Registro Agregado Con Éxito"; 
 
         }
         public static String ActualizarProyecto(Proyecto registro)
         {
+            int rowAffected = 0;
             try
             {
                 using (OracleConnection cnx = new OracleConnection(_conString))
@@ -215,7 +239,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_DEPA";
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_PROY";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
@@ -244,7 +268,12 @@ namespace TalentoBecario.Models.Services
                             Value = registro.formador.Id,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        
+                        comando.Parameters.Add(new OracleParameter("P_IdDepartamento", OracleDbType.Int16)
+                        {
+                            Value = registro.departamento.Id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+
                         comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
                         {
                             Direction = ParameterDirection.ReturnValue
@@ -252,7 +281,7 @@ namespace TalentoBecario.Models.Services
                         cnx.Open();
                         try
                         {
-                            comando.ExecuteNonQuery();
+                            rowAffected= comando.ExecuteNonQuery();
 
                         }
                         finally
@@ -265,6 +294,25 @@ namespace TalentoBecario.Models.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            if (rowAffected != 0)
+            {
+                HabilidadesService.eliminarHabilidadesRelacion(registro.id, 1);
+                AreaInteresService.eliminarAreaInteresRelacion(registro.id, 1);
+                if (registro.listHabilidades != null)
+                {
+                    foreach (var item in registro.listHabilidades)
+                    {
+                        HabilidadesService.RelacionarHabilidadProyectoAlumno(item.Id, registro.id, 1);
+                    }
+                }
+                if (registro.listAreaInteres != null)
+                {
+                    foreach (var item in registro.listAreaInteres)
+                    {
+                        AreaInteresService.RelacionarInteresProyectoAlumno(item.Id, registro.id, 1);
+                    }
+                }
             }
             return "Registro Actualizado Con Éxito";
 

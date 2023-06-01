@@ -57,6 +57,16 @@ namespace TalentoBecario.Controllers
 
             return Json(message, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult ActualizarProyecto(int id,string estatus)
+        {
+            Proyecto proyecto = ProyectoService.ConsultarProyecto(id);
+            proyecto.estatus = estatus;
+            ProyectoService.ActualizarProyecto(proyecto);
+
+            return Json(proyecto, JsonRequestBehavior.AllowGet);
+        }
+        
         [HttpPost]
         public JsonResult ConsultarProyecto(int id)
         {

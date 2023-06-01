@@ -142,6 +142,62 @@ namespace TalentoBecario.Models.Services
             return habilidad;
 
         }
+
+        public static List<Habilidad> ConsultarHabilidadesProyectoAlumno(int idProyecto,int tipo)
+        {
+            List<Habilidad> habilidades = new List<Habilidad>();
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_RH_BY_PROJECT_AND_TYPE";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_IdEntidad", OracleDbType.Int16)
+                        {
+                            Value = idProyecto,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Tipo", OracleDbType.Int16)
+                        {
+                            Value = tipo,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+                            while (lector.Read())
+                            {
+                                habilidades.Add(new Habilidad()
+                                {
+                                    Id = lector.GetInt32(1),
+                                  
+                                });
+                            }
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return habilidades;
+
+        }
+
         public static String guardarHabilidad(Habilidad registro)
         {
             try
@@ -165,6 +221,59 @@ namespace TalentoBecario.Models.Services
                             Direction = ParameterDirection.ReturnValue
                         });
                      
+                        try
+                        {
+                            cnx.Open();
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Ingresado Con Éxito";
+
+        }
+
+        public static String RelacionarHabilidadProyectoAlumno(int habilidad,int identidad, int tipo)
+        {
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_RHAB";
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.BindByName = true;
+
+                        comando.Parameters.Add(new OracleParameter("P_IdHabilidad", OracleDbType.Int16)
+                        {
+                            Value = habilidad,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Identidad", OracleDbType.Int16)
+                        {
+                            Value = identidad,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Tipo", OracleDbType.Int16)
+                        {
+                            Value = tipo,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
                         try
                         {
                             cnx.Open();
@@ -232,7 +341,54 @@ namespace TalentoBecario.Models.Services
             return "Registro Actualizado Con Éxito";
 
         }
+        public static String eliminarHabilidadesRelacion(int registro,int tipo)
+        {
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_DELETE_RHAB";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
 
+                        comando.Parameters.Add(new OracleParameter("P_IdEntidad", OracleDbType.Int16)
+                        {
+                            Value = registro,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+
+                        comando.Parameters.Add(new OracleParameter("P_IdEntidad", OracleDbType.Int16)
+                        {
+                            Value = tipo,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Actualizado Con Éxito";
+
+        }
         public static string EliminarHabilidad(int id)
         {
             try
