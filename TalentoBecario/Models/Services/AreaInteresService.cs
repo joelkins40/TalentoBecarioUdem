@@ -179,6 +179,7 @@ namespace TalentoBecario.Models.Services
                                 areaInteres.Add(new AreaInteres()
                                 {
                                     Id = lector.GetInt32(1),
+                                    Descripcion=lector.GetString(4)
 
                                 });
                             }
@@ -358,7 +359,7 @@ namespace TalentoBecario.Models.Services
                             Direction = System.Data.ParameterDirection.Input
                         });
 
-                        comando.Parameters.Add(new OracleParameter("P_IdEntidad", OracleDbType.Int16)
+                        comando.Parameters.Add(new OracleParameter("P_Tipo", OracleDbType.Int16)
                         {
                             Value = tipo,
                             Direction = System.Data.ParameterDirection.Input

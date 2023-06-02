@@ -22,7 +22,7 @@ namespace TalentoBecario.Models.Entity
         public Formador formador { get; set; }
       
         public List<AreaInteres> listAreaInteres { get; set; }
-        public List<AreaInteres> listHabilidades { get; set; }
+        public List<Habilidad> listHabilidades { get; set; }
         public List<Alumno> listAlumnos { get; set; }
 
     }

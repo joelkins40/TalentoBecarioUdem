@@ -51,11 +51,11 @@ namespace TalentoBecario.Models.Services
                                     formador = new Formador()
                                     {
                                         Id = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
-                                        Nombre = (lector.IsDBNull(6) ? "" : lector.GetString(6))
+                                        Nombre = (lector.IsDBNull(5) ? "" : lector.GetString(5))
                                     },
                                     departamento=new Departamento()
                                     {
-                                        Id = (lector.IsDBNull(5) ? 0 : lector.GetInt32(0)),
+                                        Id = (lector.IsDBNull(6) ? 0 : lector.GetInt32(6)),
                                          Descripcion = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
                                     }
 
