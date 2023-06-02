@@ -16,84 +16,39 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-responsive-md">
+                        <table class="table table-responsive-md" id="lista" name="lista">
                             <thead>
                                 <tr>
                                     <th style="width:80px;"><strong>ID</strong></th>
-                                    <th><strong>Nombre</strong></th>
+                                    <th><strong>Formador </strong></th>
                                     <th><strong>Departamento</strong></th>
-                                    <th><strong>Habilidades</strong></th>
-                                    <th><strong>Intereses</strong></th>
-                                    <th><strong>Responsable</strong></th>
+                                    <th><strong>Nombre Proyecto</strong></th>
                                     <th><strong>Estatus</strong></th>
-
-
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>01</strong></td>
-                                    <td>Proyecto A</td>
-                                    <td>Sistemas</td>
-                                    <td>Paginas Web</td>
-                                    <td>Informatica</td>
-                                    <td>Hilario Hinojosa</td>
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> En Oferta</div></td>
+                                @foreach (var item in ViewBag.listProyectos)
+                                {
+                                    <tr>
+                                        <td><strong>@item.id</strong></td>
+                                        <td>@item.formador.Nombre</td>
+                                        <td>@item.departamento.Descripcion</td>
+                                        <td>@item.nombre</td>
+                                        <td>@item.estatus</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
+                                                    <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" onclick="buscarProyecto(@item.id)">Ver Detalles</a>
 
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Aplicar</a>
-
-
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>02</strong></td>
-                                    <td>Proyecto B</td>
-                                    <td>Biblioteca</td>
-                                    <td>Desarrollo</td>
-                                    <td>Software</td>
-                                    <td>Hilario Hinojosa</td>
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> En Oferta</div></td>
-
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Aplicar</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>03</strong></td>
-                                    <td>Proyecto C</td>
-                                    <td>Ecologia</td>
-                                    <td>Mundo Verde</td>
-                                    <td>Medio Ambiente</td>
-                                    <td>Hilario Hinojosa</td>
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> En Oferta</div></td>
-
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Aplicar</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -101,5 +56,87 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<script>
+        function buscarProyecto(item) {
+        
+      
+      
+
+                    $.post("@Url.Action("ConsultarProyecto","Proyectos")", { id: item}, function (datas) {
+
+                   
+                        $("#id").val(datas.id);
+                        $("#departamento").text(datas.departamento.Descripcion);
+                        $("#nombre").text(datas.nombre);
+                        $("#descripcion").text(datas.descripcion);
+                        $("#estatus").val(datas.estatus);
+                        $("#formador").text(datas.formador.Nombre);
+                        $("#habilidades").empty();
+                         $("#intereses").empty();
+                        datas.listHabilidades.forEach(function (item) {
+                            var mess='<li id="item" class="list-group-item">' + item.Descripcion + '</li>'
+                            $("#habilidades").append(mess);
+
+                        });
+                     datas.listAreaInteres.forEach(function (item) {
+                            var mess='<li  id="item" class="list-group-item">' + item.Descripcion + '</li>'
+                            $("#intereses").append(mess);
+
+                        });
+                        
+                        $("#modalProyecto").modal("show");
+                        });
+    };
+</script>
+<div id="modalProyecto" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="nombre">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        Formador: <h6 id="formador"></h6>
+                    </div>
+                    <div class="col-md-4">
+                        Descripción: <h6 id="descripcion"></h6>
+                    </div>
+                    <div class="col-md-4">
+                        Departamento: <h6 id="departamento"></h6>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                   
+                    <div class="col-md-6">
+                        Habilidades
+                        <ul class="list-group" id="habilidades">
+                           
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        Áreas de interes.
+                        <ul class="list-group"  id="intereses">
+                          
+                        </ul>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Aplicar al Proyecto</button>
+            </div>
+        </div>
     </div>
 </div>
