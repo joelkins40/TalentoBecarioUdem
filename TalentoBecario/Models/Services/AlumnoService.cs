@@ -100,9 +100,100 @@ namespace TalentoBecario.Models.Services
                 return alumnoes;
 
             }
+        public static List<Alumno> ConsultarAlumnosPorFormador(string formador)
+        {
+            List<Alumno> alumnoes = new List<Alumno>();
+
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_ALUMNO_BY_TRAINER";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_Formador", OracleDbType.Varchar2)
+                        {
+                            Value = formador,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
 
 
-            public static Alumno ConsultarAlumno(string id)
+
+
+                        // Revisamos si se pudo ejecutar la consulta
+                        cnx.Open();
+
+                        try
+                        {
+
+                            OracleDataReader lector = comando.ExecuteReader();
+
+                            // Revisamos cada contacto
+
+                            while (lector.Read())
+                            {
+
+
+
+                                alumnoes.Add(new Alumno()
+                                {
+
+
+                                    Pidm = (lector.IsDBNull(0) ? "" : lector.GetString(0)),
+                                    nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
+                                    matricula = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
+                                    nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
+                                    horario = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
+                                    carrera = (lector.IsDBNull(5) ? "" : lector.GetString(5)),
+                                    estatus = (lector.IsDBNull(6) ? "" : lector.GetString(6)),
+                                    formador = new Formador()
+                                    {
+                                        Id = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
+                                        Nombre = (lector.IsDBNull(8) ? "" : lector.GetString(8))
+                                    },
+
+
+                                });
+
+
+
+
+                            }
+
+
+                        }
+                        finally
+                        {
+
+                            cnx.Close();
+                        }
+
+                    }
+
+                    //cnx.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+      
+            return alumnoes;
+
+        }
+
+     
+        public static Alumno ConsultarAlumno(string id)
             {
                 Alumno alumno = new Alumno();
                 try
@@ -304,7 +395,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_DEPA";
+                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_ALUM";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
 
@@ -348,7 +439,7 @@ namespace TalentoBecario.Models.Services
                             Value = registro.formador.Id,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,200)
                             {
                                 Direction = ParameterDirection.ReturnValue
                             });
@@ -372,8 +463,55 @@ namespace TalentoBecario.Models.Services
                 return "Registro Actualizado Con Éxito";
 
             }
+        public static String ActualizarFormador(string  formador,string nuevoFormador)
+        {
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_ALUM_BY_FORMADOR";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
 
-            public static string EliminarAlumno(int id)
+                        comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Varchar2)
+                        {
+                            Value = formador,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_NuevoIdFormador", OracleDbType.Varchar2)
+                        {
+                            Value = nuevoFormador,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                       
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 200)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return "Registro Actualizado Con Éxito";
+
+        }
+        public static string EliminarAlumno(int id)
             {
                 try
                 {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using TalentoBecario.Models.Entity;
 using System;
-
+using System.Linq;
 
 namespace TalentoBecario.Models.Services
 {
@@ -48,11 +48,15 @@ namespace TalentoBecario.Models.Services
                             {
                                 alumnos.Add(new Alumno
                                 {
-                                    Pidm = (lector.IsDBNull(0) ? "" : lector.GetString(0)),
+                                    matricula = (lector.IsDBNull(0) ? "" : lector.GetString(0)),
                                     nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                     nivel = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     programa = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
-                                   
+                                   formador=new Formador()
+                                   {
+                                       Nombre="Sin Formador"
+                                   }
+
 
 
                                 });
@@ -73,7 +77,33 @@ namespace TalentoBecario.Models.Services
 
             return alumnos;
         }
+        public static List<Alumno> AlumnosFiltro()
+        {
+            List<Alumno> alumnosExternos = new List<Alumno>();
+            List<Alumno> alumnoslocales = new List<Alumno>();
+            List<Alumno> todos = new List<Alumno>();
+            alumnosExternos = SeleccionService.ObtieneListAlumnos();
+            alumnoslocales = AlumnoService.ObtieneListAlumnos();
 
+            foreach (Alumno person in alumnosExternos)
+            {
+                foreach (Alumno personFormador in alumnoslocales)
+                {
+
+                    if (person.matricula.Equals(personFormador.matricula))
+                    {
+                        person.formador = personFormador.formador;
+                    }
+                }
+            }
+            
+           
+
+            //List<Alumno> unionList = alumnosExternos.uni (alumnoslocales);
+
+            return alumnosExternos;
+        }
 
     }
+   
 }

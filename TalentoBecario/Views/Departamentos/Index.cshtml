@@ -90,7 +90,7 @@
 
 
 
-                    $.post("@Url.Action("ConsultarDepartamento","Departamentos")", { id: id}, function (datas) {
+                    $.post("@Url.Action("ConsultarDepartamento","ConsultarAlumnosFormador")", { id: id}, function (datas) {
 
                         if (datas.Id == null) {
                             alert("El Registro No Existe")

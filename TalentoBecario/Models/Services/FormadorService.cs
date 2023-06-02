@@ -83,7 +83,8 @@ namespace TalentoBecario.Models.Services
                     Console.WriteLine(ex.Message);
 
                 }
-                return formadores;
+            formadores.RemoveAt(0);
+            return formadores;
 
             }
 

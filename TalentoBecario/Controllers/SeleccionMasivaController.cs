@@ -13,14 +13,14 @@ namespace TalentoBecario.Controllers
         public ActionResult Index()
         {
             ViewBag.listFormadores = FormadorService.ObtieneListFormadores();
-            ViewBag.listAlumnos = SeleccionService.ObtieneListAlumnos();
+            ViewBag.listAlumnos = SeleccionService.AlumnosFiltro();
             return View();
         }
-
+        [HttpPost]
         public JsonResult SaveAlumno(Alumno alumno)
         {
             string message;
-
+            AlumnoService.ActualizarFormador(alumno.formador.Id, "000000");
             foreach (Alumno item in alumno.listAlumnos){
                 Alumno itemAlumno = item;
                 itemAlumno = AlumnoService.ConsultarAlumno(item.matricula);
@@ -31,6 +31,7 @@ namespace TalentoBecario.Controllers
                 }
                 else
                 {
+                    itemAlumno.formador.Id = item.formador.Id;
                     message = AlumnoService.ActualizarAlumno(itemAlumno);
                 }
             }
@@ -39,9 +40,15 @@ namespace TalentoBecario.Controllers
             return Json("Registros actualizados", JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult ConsultarAlumnosFormador(string id)
+        {
+          
 
+            return Json(AlumnoService.ConsultarAlumnosPorFormador(id), JsonRequestBehavior.AllowGet);
+        }
 
-
+        
 
         public ActionResult Contact()
         {
