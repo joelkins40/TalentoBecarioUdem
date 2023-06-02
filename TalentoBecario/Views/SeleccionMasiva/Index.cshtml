@@ -48,7 +48,7 @@
                                     <th><strong>Nombre</strong></th>
                                     <th><strong>Nivel</strong></th>
                                     <th><strong>Programa</strong></th>
-                                    <th><strong>Formador</strong></th>
+                                    <th><strong>Horario</strong></th>
                                     <th><strong>Estatus</strong></th>
                                     <th>Selección</th>
                                 </tr>
@@ -61,7 +61,7 @@
                                         <td>@item.nombre</td>
                                         <td>@item.nivel</td>
                                         <td>@item.programa</td>
-                                        <td>Hilario Hinojosa</td>
+                                        <td>Matutino</td>
 
                                         <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
 
@@ -70,45 +70,7 @@
                                         </td>
                                     </tr>
                                 }
-                                <tr>
-                                    <td><strong>1234</strong></td>
-                                    <td>Joel Vargas</td>
-                                    <td>Desarrollo</td>
-                                    <td>Like</td>
-                                    <td>Hilario Hinojosa</td>
-
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
-
-                                    <td class="text-center">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>12345</strong></td>
-                                    <td>Joel Vargas</td>
-                                    <td>Desarrollo</td>
-                                    <td>Like</td>
-                                    <td>Hilario Hinojosa</td>
-
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
-
-                                    <td class="text-center">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>123456</strong></td>
-                                    <td>Joel Vargas</td>
-                                    <td>Desarrollo</td>
-                                    <td>Like</td>
-                                    <td>Hilario Hinojosa</td>
-
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
-
-                                    <td class="text-center">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </td>
-                                </tr>
+                            
                             </tbody>
                         </table>
                     </div>
@@ -129,7 +91,14 @@
             var row = $(this).parents('tr');
 
                          listAlumnos.push({
-                             'matricula':  row.find("td:eq(0)").text(),
+                             'matricula': row.find("td:eq(0)").text(),
+                             'nombre': row.find("td:eq(1)").text(),
+                             'nivel': row.find("td:eq(2)").text(),
+                             'carrera': row.find("td:eq(3)").text(),
+                              'programa': row.find("td:eq(3)").text(),
+                             
+                              'horario': row.find("td:eq(4)").text(),
+                             'estatus':  row.find("td:eq(5)").text(),
                               'formador.Id': idFormador
                             });
               

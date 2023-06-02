@@ -23,11 +23,11 @@ namespace TalentoBecario.Controllers
 
             foreach (Alumno item in alumno.listAlumnos){
                 Alumno itemAlumno = item;
-                itemAlumno = AlumnoService.ConsultarAlumno(itemAlumno.Pidm);
-                if (itemAlumno != null)
+                itemAlumno = AlumnoService.ConsultarAlumno(item.matricula);
+                if (itemAlumno.matricula == null)
 
                 {
-                    message = AlumnoService.guardarAlumno(itemAlumno);
+                    message = AlumnoService.guardarAlumno(item);
                 }
                 else
                 {
