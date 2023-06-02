@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     Layout = "~/Views/Shared/_LayoutApp.cshtml";
 }
 <div class="container-fluid">
@@ -12,11 +13,15 @@
     <div class="row">
         <div class="mb-6 col-md-6">
             <label class="form-label">Formador</label>
-            <select name="departamento" id="departamento" value="" class="default-select  form-control wide">
+            <select name="formador" id="formador" value="" class="default-select  form-control wide">
                 <option>Selecciona una Formador</option>
-                <option>Formador 1</option>
+                @foreach (var item in ViewBag.listFormadores)
+                {
+                    <option value="@item.Id">@item.Nombre</option>
+                }
 
-                <option>Formador 2</option>
+
+              
 
 
             </select>
@@ -39,10 +44,11 @@
                             <thead>
                                 <tr>
                                     <th><strong>Matricula</strong></th>
-                                    <th><strong>Matricula</strong></th>
+
                                     <th><strong>Nombre</strong></th>
                                     <th><strong>Nivel</strong></th>
                                     <th><strong>Programa</strong></th>
+                                    <th><strong>Formador</strong></th>
                                     <th><strong>Estatus</strong></th>
                                     <th>Selección</th>
                                 </tr>
@@ -64,7 +70,45 @@
                                         </td>
                                     </tr>
                                 }
+                                <tr>
+                                    <td><strong>1234</strong></td>
+                                    <td>Joel Vargas</td>
+                                    <td>Desarrollo</td>
+                                    <td>Like</td>
+                                    <td>Hilario Hinojosa</td>
 
+                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
+
+                                    <td class="text-center">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>12345</strong></td>
+                                    <td>Joel Vargas</td>
+                                    <td>Desarrollo</td>
+                                    <td>Like</td>
+                                    <td>Hilario Hinojosa</td>
+
+                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
+
+                                    <td class="text-center">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>123456</strong></td>
+                                    <td>Joel Vargas</td>
+                                    <td>Desarrollo</td>
+                                    <td>Like</td>
+                                    <td>Hilario Hinojosa</td>
+
+                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
+
+                                    <td class="text-center">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -79,44 +123,33 @@
 
 
     function guardarRegister() {
-        var checkedBoxes = $("input[type=checkbox]:checked", "#table");
-        console.log(checkedBoxes);
-                         var listHabilidades = $('[name=habilidades]').val();
-                       var listInteres = $('[name=interes]').val();
+        var idFormador = $('#formador').val();
+          var listAlumnos = [];
+        var checkedBoxes = $("input[type=checkbox]:checked", "#table tr").each(function () {
+            var row = $(this).parents('tr');
 
-                        var habilidades = [];
-                        var intereses = [];
-                        listHabilidades.forEach( (rating) => {
-                            habilidades.push({
-                                'id': rating
+                         listAlumnos.push({
+                             'matricula':  row.find("td:eq(0)").text(),
+                              'formador.Id': idFormador
                             });
-
-                        });
-                        listInteres.forEach( (rating) => {
-                            intereses.push({
-                                'id': rating
-                            });
-
-                        });
-                    var habilidad = JSON.stringify(
+              
+        });
+        
+      
+      
+                     var alumno = JSON.stringify(
                     {
-                    'id': $('#id').val(),
-                    'descripcion': $('#descripcion').val(),
-                    'nombre': $('#nombre').val(),
-                    'departamento.id': $('#departamento').val(),
-                    'estatus': 'Pendiente',
-                    'formador.id': '00012345',
-                    'listHabilidades': habilidades,
-                    'listAreaInteres':intereses
+                    
+                    'listAlumnos':listAlumnos
 
                     });
                     $.ajax({
-                    url: '/Proyectos/SaveProyecto',
+                    url: '/SeleccionMasiva/SaveAlumno',
                     type: "post",
                     contentType: "application/json",
                     dataType: "json",
                     traditional: true,
-                    data: habilidad,
+                    data: alumno,
                     success: function (results) {
                     alert(results);
                     window.location.href = '/Proyectos';

@@ -31,10 +31,13 @@ namespace TalentoBecario.Models.Services
                         comando.CommandText = "SZ_BMA_RTB.F_GET_ALUMNOS_BY_CODE";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
+                  
                         comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
                         {
                             Direction = ParameterDirection.ReturnValue
                         });
+                      
+                        
                         conn.Open();
 
                         try
