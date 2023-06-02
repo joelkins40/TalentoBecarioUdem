@@ -28,7 +28,7 @@
 
                                 <div class="mb-3 col-md-10">
                                     <label class="form-label">Descripción de la habilidad</label>
-                                    <input name="descripcion" id="descripcion" type="text" class="form-control" placeholder="Descrición Habilidad">
+                                    <input name="descripcion" id="descripcion" type="text" class="form-control" placeholder="Descrición Habilidad" required>
                                 </div>
 
 
@@ -88,8 +88,6 @@
 
    function buscarHabilidad(id) {
 
-
-
                     $.post("@Url.Action("ConsultarHabilidad","Habilidades")", { id: id}, function (datas) {
 
                         if (datas.Id == null) {
@@ -105,8 +103,11 @@
                         });
     };
 
-      function guardarRegister() {
-
+    function guardarRegister() {
+        let description = $('#descripcion').val();
+        if (!description || description === "") {
+            return;
+        }
         var habilidad = JSON.stringify(
         {
                'Id': $('#id').val(),

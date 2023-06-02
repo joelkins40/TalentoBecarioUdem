@@ -28,7 +28,7 @@
 
                                 <div class="mb-3 col-md-10">
                                     <label class="form-label">Descripción de la departamento</label>
-                                    <input name="descripcion" id="descripcion" type="text" class="form-control" placeholder="Descrición Departamento">
+                                    <input name="descripcion" id="descripcion" type="text" class="form-control" placeholder="Descrición Departamento" required>
                                 </div>
 
 
@@ -106,7 +106,10 @@
     };
 
       function guardarRegister() {
-
+        let description = $('#descripcion').val();
+        if (!description || description === "") {
+            return;
+        }
         var departamento = JSON.stringify(
         {
                'Id': $('#id').val(),

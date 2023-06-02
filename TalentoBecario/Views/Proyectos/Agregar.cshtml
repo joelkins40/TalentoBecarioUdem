@@ -36,15 +36,16 @@
 
 
                                     </select>
+                                    <span id="err-dep" style="color: red; display: none;">Debes seleccionar al menos un departamento</span>
                                 </div>
                                 <div class="mb-3 col-md-7">
                                     <label class="form-label">Nombre del Proyecto</label>
-                                    <input name="nombre" id="nombre" value="@ViewBag.proyecto.nombre" type="text" class="form-control" placeholder="Nombre del proyecto">
+                                    <input name="nombre" id="nombre" value="@ViewBag.proyecto.nombre" type="text" class="form-control" placeholder="Nombre del proyecto" required>
                                 </div>
 
                                 <div class="mb-3 col-md-12">
                                     <label class="form-label">Descripción del proyecto</label>
-                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="4">@ViewBag.proyecto.descripcion</textarea>
+                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="4" required>@ViewBag.proyecto.descripcion</textarea>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
@@ -57,6 +58,7 @@
 
 
                                     </select>
+                                    <span id="err-ai" style="color: red; display: none;">Debes seleccionar al menos una área de interes</span>
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Habilidades</label>
@@ -66,6 +68,7 @@
                                             <option @if (ViewBag.proyecto.listAreaInteres != null) { foreach (var hab in ViewBag.proyecto.listHabilidades) { @(hab.Id.Equals(item.Id) ? "selected" : "") } } value="@item.Id">@item.Descripcion</option>
                                         }
                                     </select>
+                                    <span id="err-hab" style="color: red; display: none;">Debes seleccionar al menos una habilidad</span>
                                 </div>
                             </div>
 
@@ -84,66 +87,90 @@
 <script>
 
 
-                    function guardarRegister() {
-                         var listHabilidades = $('[name=habilidades]').val();
-                       var listInteres = $('[name=interes]').val();
+    function guardarRegister() {
+        let description = $('#descripcion').val();
+        let name = $('#nombre').val();
+        let department = $('#departamento').val();
+        
+        if (name === "" || description === "") {
+            return;
+        }
 
-                        var habilidades = [];
-                        var intereses = [];
-                        listHabilidades.forEach( (rating) => {
-                            habilidades.push({
-                                'id': rating
-                            });
+        if (department === "Selecciona una opción") {
+            $('#err-dep').show();
+            return;
+        }
 
-                        });
-                        listInteres.forEach( (rating) => {
-                            intereses.push({
-                                'id': rating
-                            });
+        var listHabilidades = $('[name=habilidades]').val();
+        var listInteres = $('[name=interes]').val();
 
-                        });
-                    var habilidad = JSON.stringify(
-                    {
-                    'id': $('#id').val(),
-                    'descripcion': $('#descripcion').val(),
-                    'nombre': $('#nombre').val(),
-                    'departamento.id': $('#departamento').val(),
-                    'estatus': 'Pendiente',
-                    'formador.id': '00012345',
-                    'listHabilidades': habilidades,
-                    'listAreaInteres':intereses
+        var habilidades = [];
+        var intereses = [];
+        listHabilidades.forEach( (rating) => {
+            habilidades.push({
+                'id': rating
+            });
 
-                    });
-                    $.ajax({
-                    url: '/Proyectos/SaveProyecto',
-                    type: "post",
-                    contentType: "application/json",
-                    dataType: "json",
-                    traditional: true,
-                    data: habilidad,
-                    success: function (results) {
-                    alert(results);
-                    window.location.href = '/Proyectos';
-                    }
-                    })
+        });
+        listInteres.forEach( (rating) => {
+            intereses.push({
+                'id': rating
+            });
+
+        });
+
+        if (habilidades.length === 0) {
+            $('#err-hab').show();
+            return;
+        }
+
+        if (intereses.length === 0) {
+            $('#err-ai').show();
+            return;
+        }
+        
+        var habilidad = JSON.stringify(
+        {
+        'id': $('#id').val(),
+        'descripcion': $('#descripcion').val(),
+        'nombre': $('#nombre').val(),
+        'departamento.id': $('#departamento').val(),
+        'estatus': 'Pendiente',
+        'formador.id': '00012345',
+        'listHabilidades': habilidades,
+        'listAreaInteres':intereses
+
+        });
+        $.ajax({
+        url: '/Proyectos/SaveProyecto',
+        type: "post",
+        contentType: "application/json",
+        dataType: "json",
+        traditional: true,
+        data: habilidad,
+        success: function (results) {
+        alert(results);
+        window.location.href = '/Proyectos';
+        }
+        })
 
 
-                    };
+        };
 
-                    function eliminarProyecto(id) {
-
-
-
-                    $.post("@Url.Action("EliminarProyecto", "Proyectos")", { id: id}, function (datas) {
-
-                    alert(datas);
+        function eliminarProyecto(id) {
 
 
-                    window.location.href = '/Proyectos';
+
+        $.post("@Url.Action("EliminarProyecto", "Proyectos")", { id: id}, function (datas) {
+
+        alert(datas);
 
 
-                    });
-                    };
+        window.location.href = '/Proyectos';
+
+
+        });
+    };
 
 
     function clearRegister() {
