@@ -95,19 +95,28 @@
                            
 
                         } else {
+
                               $('input[name="check[]"]').prop('checked', false);
                             datas.forEach(function (item) {
+                                 var myTable = $('#lista').dataTable();
 
-                                $("#" + item.matricula).prop('checked', true);
+
+                myTable.$("#" + item.matricula, {"page": "all"}).prop('checked', true);
+                                
                         });
                         }
 
                         });
     };
-     function guardarRegister() {
+    function guardarRegister() {
+         var myTable = $('#lista').dataTable();
+
+//checkboxes should have a general class to traverse
+var rowcollection = myTable.$("input[type=checkbox]:checked", {"page": "all"});
+
         var idFor = $('#formador').val();
           var listAlumnos = [];
-        var checkedBoxes = $("input[type=checkbox]:checked", "#lista tr").each(function () {
+        var checkedBoxes = rowcollection.each(function () {
             var row = $(this).parents('tr');
 
                          listAlumnos.push({

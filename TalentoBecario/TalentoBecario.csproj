@@ -156,6 +156,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AsignacionController.cs" />
+    <Compile Include="Controllers\FormadoresController.cs" />
     <Compile Include="Controllers\FormadorController.cs" />
     <Compile Include="Controllers\DepartamentosController.cs" />
     <Compile Include="Controllers\ProyectosAlumnoController.cs" />
@@ -176,6 +177,8 @@
     <Compile Include="Models\Entity\Departamento.cs" />
     <Compile Include="Models\Entity\Habilidad.cs" />
     <Compile Include="Models\Entity\Proyecto.cs" />
+    <Compile Include="Models\Services\AlumnoService.cs" />
+    <Compile Include="Models\Services\FormadorService.cs" />
     <Compile Include="Models\Services\SeleccionService.cs" />
     <Compile Include="Models\Services\ProyectoService.cs" />
     <Compile Include="Models\Services\DepartamentoService.cs" />
@@ -220,6 +223,8 @@
     <Content Include="Content\icons\simple-line-icons\fonts\Simple-Line-Icons4c824c82.svg" />
     <Content Include="Content\icons\themify-icons\css\themify-icons.css" />
     <Content Include="Content\icons\themify-icons\fonts\themify9f249f24.svg" />
+    <Content Include="Content\img\login-bg.jpg" />
+    <Content Include="Content\img\logo-white.png" />
     <Content Include="Content\img\udem-logotipo-principal.png" />
     <Content Include="Content\js\custom.js" />
     <Content Include="Content\js\custom.min.js" />
@@ -436,6 +441,7 @@
     <None Include="Oracle.ManagedDataAccess.Client.Configuration.Section.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />
@@ -476,6 +482,7 @@
     <Content Include="Views\Departamentos\Index.cshtml" />
     <Content Include="Views\SeleccionMasiva\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutApp.cshtml" />
+    <Content Include="Views\Formadores\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
