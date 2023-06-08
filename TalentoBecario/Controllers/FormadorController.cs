@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TalentoBecario.Models.Entity;
+using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
@@ -25,6 +27,15 @@ namespace TalentoBecario.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [HttpPost]
+        public User SearchByPidm(int pidm)
+        {
+            var user = StudentService.FillUser(pidm);
+            user.IsEmployee = StudentService.UserIsEmployee(pidm).Result.Trim();
+
+            return user;
         }
     }
 }

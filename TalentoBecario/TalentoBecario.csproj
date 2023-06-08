@@ -177,6 +177,7 @@
     <Compile Include="Models\Entity\Departamento.cs" />
     <Compile Include="Models\Entity\Habilidad.cs" />
     <Compile Include="Models\Entity\Proyecto.cs" />
+    <Compile Include="Models\Entity\User.cs" />
     <Compile Include="Models\Services\AlumnoService.cs" />
     <Compile Include="Models\Services\FormadorService.cs" />
     <Compile Include="Models\Services\SeleccionService.cs" />

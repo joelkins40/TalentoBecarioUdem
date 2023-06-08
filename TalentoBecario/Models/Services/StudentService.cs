@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.OracleClient;
 using System.Threading.Tasks;
 using System.Web;
+using TalentoBecario.Models.Entity;
 using OracleCommand = Oracle.ManagedDataAccess.Client.OracleCommand;
 using OracleConnection = Oracle.ManagedDataAccess.Client.OracleConnection;
 using OracleParameter = Oracle.ManagedDataAccess.Client.OracleParameter;
@@ -121,7 +122,7 @@ namespace TalentoBecario.Models.Services
         /// <summary>
         /// Consulta los valores de nombre completo, nombre, genero, matricula y los almacena en el cache de la sesión.
         /// </summary>
-        /*public ResultObject FillUser(int pidm)
+        public static User FillUser(int pidm)
         {
             User user = new User();
             try
@@ -161,13 +162,13 @@ namespace TalentoBecario.Models.Services
 
                     }
                 }
-                return new ResultObject() { Success = true, Value = user };
+                return user;
             }
             catch (Exception ex)
             {
-                return new ResultObject() { Success = false, Message = ex.Message };
+                return user;
             }
-        }*/
+        }
 
         /// <summary>
         /// Función que convierte una matricula a pidm.
