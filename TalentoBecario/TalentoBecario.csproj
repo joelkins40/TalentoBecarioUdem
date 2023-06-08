@@ -184,6 +184,7 @@
     <Compile Include="Models\Services\DepartamentoService.cs" />
     <Compile Include="Models\Services\AreaInteresService.cs" />
     <Compile Include="Models\Services\HabilidadesService.cs" />
+    <Compile Include="Models\Services\StudentService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
