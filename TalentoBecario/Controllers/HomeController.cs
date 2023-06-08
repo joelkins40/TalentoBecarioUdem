@@ -52,17 +52,17 @@ namespace TalentoBecario.Controllers
 
             var isEmployee = StudentService.UserIsEmployee(pidmResult);
 
-            if (isEmployee.Result == "Y")
+            if (isEmployee.Result.Trim() == "Y")
             {
-                return RedirectToAction("Index", "Habilidades");
+                return RedirectToAction("Index", "Proyectos");
             }
 
-            if (isEmployee.Result == "N")
+            if (isEmployee.Result.Trim() == "N")
             {
-                return RedirectToAction("Index", "Habilidades");
+                return RedirectToAction("Index", "ProyectosAlumno");
             }
 
-            return RedirectToAction("Index", "Habilidades");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
