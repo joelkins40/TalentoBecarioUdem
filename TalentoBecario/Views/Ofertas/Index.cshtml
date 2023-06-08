@@ -68,7 +68,7 @@
                     $.post("@Url.Action("ConsultarProyecto","Proyectos")", { id: item}, function (datas) {
 
                    
-                        $("#id").val(datas.id);
+                        $("#idProyecto").text(datas.id);
                         $("#departamento").text(datas.departamento.Descripcion);
                         $("#nombre").text(datas.nombre);
                         $("#descripcion").text(datas.descripcion);
@@ -89,16 +89,54 @@
                         
                         $("#modalProyecto").modal("show");
                         });
-    };
+        };
+    function guardarSolicitud() {
+
+          var solicitud = JSON.stringify(
+              {
+                   'alumno.Pidm': '0',
+                  'proyecto.id': $('#idProyecto').text(),
+                  'comentario': $('#comentario').val(),
+                    'estatus':'En Revisión'
+
+                    });
+                    $.ajax({
+                    url: '/Ofertas/SaveSolicitud',
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    traditional: true,
+                    data: solicitud,
+                        success: function (results) {
+                            
+                                alert(results);
+                            
+                       
+                      window.location.href = '/Ofertas';
+                      
+                   
+                    }
+                    })
+    }
+
 </script>
 <div id="modalProyecto" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="nombre">Modal title</h5>
+                <h5 class="modal-title" >Datos del Proyecto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        No.Proyecto: <h6 id="idProyecto"></h6>
+                    </div>
+                    <div class="col-md-10">
+                        Nombre: <h6 id="nombre"></h6>
+                    </div>
+
+                </div>
                 <div class="row">
                     <div class="col-md-4">
                         Formador: <h6 id="formador"></h6>
@@ -113,30 +151,33 @@
                 </div>
 
                 <div class="row">
-                   
+
                     <div class="col-md-6">
                         Habilidades
-                        <ul class="list-group" id="habilidades">
-                           
-                        </ul>
+                        <ul class="list-group" id="habilidades"></ul>
                     </div>
                     <div class="col-md-6">
                         Áreas de interes.
-                        <ul class="list-group"  id="intereses">
-                          
-                        </ul>
+                        <ul class="list-group" id="intereses"></ul>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="mb-3 col-md-12">
+                        <label class="form-label">Comentarios</label>
+                        <textarea name="comentario" id="comentario" class="form-control" rows="2" required></textarea>
                     </div>
 
                 </div>
 
 
 
-
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Aplicar al Proyecto</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarSolicitud()">Aplicar al Proyecto</button>
+                </div>
             </div>
-        </div>
     </div>
 </div>

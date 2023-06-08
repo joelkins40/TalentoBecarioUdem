@@ -12,7 +12,8 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
-
+            String formador = "00012345";
+            ViewBag.listSolicitudes = SolicitudesService.consultarSolicitudesFormador(formador);
             return View();
         }
 

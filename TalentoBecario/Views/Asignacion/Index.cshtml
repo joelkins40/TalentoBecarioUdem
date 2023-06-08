@@ -20,24 +20,29 @@
                         <table class="table table-responsive-md"  id="lista" name="lista">
                             <thead>
                                 <tr>
+                                    <th><strong>Id</strong></th>
+
                                     <th><strong>Matricula</strong></th>
                                     <th><strong>Nombre</strong></th>
-                                    <th><strong>Nivel</strong></th>
-                                    <th><strong>Horario</strong></th>
                                     <th><strong>Formador</strong></th>
                                     <th><strong>Proyecto</strong></th>
+                                    <th><strong>Estatus</strong></th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach (var item in ViewBag.listSolicitudes)
+                                {
                                 <tr>
-                                    <td><strong>00013689</strong></td>
-                                    <td>Joel Vargas Osorio</td>
-                                    <td>Preparatoria</td>
-                                    <td>Matutino</td>
-                                    <td>Hilario Hinojosa</td>
+                                    <td><strong>@item.id</strong></td>
+                                    <td>@item.alumno.matricula</td>
 
-                                    <td>Proyecto X</td>
+                                    <td>@item.alumno.nombre</td>
+
+                                    <td>@item.proyecto.formador.Nombre</td>
+
+                                    <td>@item.proyecto.nombre</td>
+                                    <td>@item.estatus</td>
                                     <td>
                                         <div class="dropdown">
                                             <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
@@ -52,51 +57,11 @@
                                         </div>
                                     </td>
                                 </tr>
+                                }
 
-                                <tr>
-                                    <td><strong>00013689</strong></td>
-                                    <td>Joel Vargas Osorio</td>
-                                    <td>Preparatoria</td>
-                                    <td>Matutino</td>
-                                    <td>Hilario Hinojosa</td>
 
-                                    <td>Proyecto Y</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Ver detalles</a>
-                                                <a class="dropdown-item" href="#">Aprobar</a>
-                                                <a class="dropdown-item" href="#">Rechazar</a>
 
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>00013689</strong></td>
-                                    <td>Joel Vargas Osorio</td>
-                                    <td>Preparatoria</td>
-                                    <td>Matutino</td>
-                                    <td>Hilario Hinojosa</td>
-
-                                    <td>Proyecto Z</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Ver detalles</a>
-                                                <a class="dropdown-item" href="#">Aprobar</a>
-                                                <a class="dropdown-item" href="#">Rechazar</a>
-
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                
                             </tbody>
                         </table>
                     </div>

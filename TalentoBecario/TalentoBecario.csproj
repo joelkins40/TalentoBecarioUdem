@@ -173,6 +173,7 @@
     </Compile>
     <Compile Include="Models\Entity\Alumno.cs" />
     <Compile Include="Models\Entity\AreaInteres.cs" />
+    <Compile Include="Models\Entity\Solicitud.cs" />
     <Compile Include="Models\Entity\Formador.cs" />
     <Compile Include="Models\Entity\Departamento.cs" />
     <Compile Include="Models\Entity\Habilidad.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Models\Entity\User.cs" />
     <Compile Include="Models\Services\AlumnoService.cs" />
     <Compile Include="Models\Services\FormadorService.cs" />
+    <Compile Include="Models\Services\SolicitudesService.cs" />
     <Compile Include="Models\Services\SeleccionService.cs" />
     <Compile Include="Models\Services\ProyectoService.cs" />
     <Compile Include="Models\Services\DepartamentoService.cs" />
