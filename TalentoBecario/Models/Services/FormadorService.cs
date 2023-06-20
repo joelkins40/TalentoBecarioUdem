@@ -89,7 +89,7 @@ namespace TalentoBecario.Models.Services
             }
 
 
-            public static Formador ConsultarFormador(int id)
+            public static Formador ConsultarFormador(string id)
             {
                 Formador formador = new Formador();
                 try
@@ -102,7 +102,7 @@ namespace TalentoBecario.Models.Services
                             comando.CommandText = "SZ_BMA_RTB.F_GET_FORMADOR";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
-                            comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
+                            comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Varchar2)
                             {
                                 Value = id,
                                 Direction = System.Data.ParameterDirection.Input
@@ -139,6 +139,23 @@ namespace TalentoBecario.Models.Services
                 return formador;
 
             }
+
+        public static Formador verificarFormador(Formador registro,int pidm)
+        {
+          Formador  registroConsulta = ConsultarFormador(registro.Id);
+            if(registroConsulta == null || registroConsulta.Id == null)
+            {
+                var user = StudentService.FillUser(pidm);
+                registro.Nombre = user.FullName;
+                guardarFormador(registro);
+                return registro;
+            }
+            else
+            {
+                return registroConsulta;
+            }
+          
+        }
             public static String guardarFormador(Formador registro)
             {
                 try
@@ -148,7 +165,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_DEPA";
+                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_FORM";
                             comando.CommandType = CommandType.StoredProcedure;
                             comando.BindByName = true;
 

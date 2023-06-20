@@ -16,6 +16,7 @@ namespace TalentoBecario.Models.Services
     public class ProyectoService
     {
         private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
+
         public static List<Proyecto> ObtieneListProyectos()
         {
             List<Proyecto> proyectos = new List<Proyecto>();
@@ -78,7 +79,76 @@ namespace TalentoBecario.Models.Services
 
             return proyectos;
         }
-       
+
+        public static List<Proyecto> ObtieneListProyectosPorFormador(string id)
+        {
+            List<Proyecto> proyectos = new List<Proyecto>();
+
+            try
+            {
+                using (OracleConnection conn = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = conn;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_PROYECTOS_BY_FORMADOR";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Varchar2)
+                        {
+                            Value = id,
+                            Direction = ParameterDirection.Input
+                        });
+
+                        comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        conn.Open();
+
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+
+                            while (lector.Read())
+                            {
+                                proyectos.Add(new Proyecto
+                                {
+                                    id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
+                                    nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
+                                    descripcion = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
+                                    estatus = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
+                                    formador = new Formador()
+                                    {
+                                        Id = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
+                                        Nombre = (lector.IsDBNull(5) ? "" : lector.GetString(5))
+                                    },
+                                    departamento = new Departamento()
+                                    {
+                                        Id = (lector.IsDBNull(6) ? 0 : lector.GetInt32(6)),
+                                        Descripcion = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
+                                    }
+
+
+                                });
+                            }
+                            conn.Close();
+                        }
+                        finally
+                        {
+                            conn.Close();
+                        }
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return proyectos;
+        }
+
         public static Proyecto ConsultarProyecto(int id)
         {
             Proyecto proyecto = new Proyecto();

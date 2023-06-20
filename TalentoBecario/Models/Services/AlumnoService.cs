@@ -100,6 +100,7 @@ namespace TalentoBecario.Models.Services
                 return alumnoes;
 
             }
+
         public static List<Alumno> ConsultarAlumnosPorFormador(string formador)
         {
             List<Alumno> alumnoes = new List<Alumno>();

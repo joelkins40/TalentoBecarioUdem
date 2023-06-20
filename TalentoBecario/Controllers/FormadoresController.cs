@@ -43,7 +43,7 @@ namespace TalentoBecario.Controllers
         }
 
         [HttpPost]
-        public JsonResult ConsultarFormador(int id)
+        public JsonResult ConsultarFormador(string id)
         {
             Formador formador= FormadorService.ConsultarFormador(id);
 

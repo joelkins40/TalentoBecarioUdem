@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TalentoBecario.Models.Entity;
 using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
@@ -54,11 +55,15 @@ namespace TalentoBecario.Controllers
 
             if (isEmployee.Result.Trim() == "Y")
             {
-                return RedirectToAction("Index", "Proyectos");
-            }
+                Session["matricula"] = username;
+                FormadorService.verificarFormador(new Formador(){
+                    Id = Convert.ToString(username) }, pidmResult);
 
+                return RedirectToAction("Index", "Proyectos");
+            }else 
             if (isEmployee.Result.Trim() == "N")
             {
+                Session["matricula"] = matricula;
                 return RedirectToAction("Index", "ProyectosAlumno");
             }
 

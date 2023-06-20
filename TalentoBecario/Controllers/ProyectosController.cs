@@ -12,7 +12,9 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.listProyectos = ProyectoService.ObtieneListProyectos();
+
+            string matricula = Convert.ToString(Session["matricula"]);
+            ViewBag.listProyectos = ProyectoService.ObtieneListProyectosPorFormador(matricula);
 
             return View();
         }
@@ -44,6 +46,7 @@ namespace TalentoBecario.Controllers
         [HttpPost]
         public JsonResult SaveProyecto(Proyecto proyecto)
         {
+            proyecto.formador.Id= Convert.ToString(Session["matricula"]);
             string message = "";
 
             if (proyecto.id == 0)
