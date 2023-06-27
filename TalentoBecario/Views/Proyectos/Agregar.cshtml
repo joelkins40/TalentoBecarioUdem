@@ -38,9 +38,13 @@
                                     </select>
                                     <span id="err-dep" style="color: red; display: none;">Debes seleccionar al menos un departamento UDEM</span>
                                 </div>
-                                <div class="mb-3 col-md-7">
+                                <div class="mb-3 col-md-5">
                                     <label class="form-label">Nombre del Proyecto</label>
                                     <input name="nombre" id="nombre" value="@ViewBag.proyecto.nombre" type="text" class="form-control" placeholder="Nombre del proyecto" required>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label class="form-label">No. Alumnos</label>
+                                    <input name="noalumnos" id="noalumnos" value="@ViewBag.proyecto.alumnosRequeridos" type="number" class="form-control" placeholder="No. Alumnos" required>
                                 </div>
 
                                 <div class="mb-3 col-md-12">
@@ -91,7 +95,7 @@
         let description = $('#descripcion').val();
         let name = $('#nombre').val();
         let department = $('#departamento').val();
-        
+      
         if (name === "" || description === "") {
             return;
         }
@@ -140,6 +144,7 @@
         'departamento.id': $('#departamento').val(),
         'estatus': 'Pendiente',
         'formador.id': '00012345',
+        'alumnosRequeridos':$('#noalumnos').val(),
         'listHabilidades': habilidades,
         'listAreaInteres':intereses
 

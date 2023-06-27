@@ -21,8 +21,10 @@
                             <thead>
                                 <tr>
                                     <th style="width:80px;"><strong>ID</strong></th>
-                                    <th><strong>Nombre</strong></th>
-                                    <th><strong>Formador</strong></th>
+                                    <th style="width:200%;"><strong>Nombre</strong></th>
+                                    <th ><strong>Requeridos</strong></th>
+                                    <th><strong>Aplicados</strong></th>
+                                    <th><strong>Aceptados</strong></th>
                                     <th><strong>Estatus</strong></th>
                                     <th></th>
                                 </tr>
@@ -30,24 +32,26 @@
                             <tbody>
                                 @foreach (var item in ViewBag.listProyectos)
                                 {
-                                    <tr>
-                                        <td><strong>@item.id</strong></td>
-                                        <td>@item.nombre</td>
-                                        <td>@item.formador.Nombre</td>
-                                        <td>@item.estatus</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                    <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" onclick="OfertarProyecto(@item.id)">Ofertar</a>
-                                                    <a class="dropdown-item" href="@Url.Action("Agregar","Proyectos" , new {id= item.id})">Editar</a>
-                                                    <a class="dropdown-item" onclick="CancelarProyecto(@item.id)">Cancelar</a>
-                                                </div>
+                                <tr>
+                                    <td><strong>@item.id</strong></td>
+                                    <td>@item.nombre</td>
+                                    <td>@item.alumnosRequeridos</td>
+                                    <td>@item.alumnosRequeridos</td>
+                                    <td>@item.alumnosRequeridos</td>
+                                    <td>@item.estatus</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
+                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" onclick="OfertarProyecto(@item.id)">Ofertar</a>
+                                                <a class="dropdown-item" href="@Url.Action("Agregar","Proyectos" , new {id= item.id})">Editar</a>
+                                                <a class="dropdown-item" onclick="CancelarProyecto(@item.id)">Cancelar</a>
                                             </div>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>

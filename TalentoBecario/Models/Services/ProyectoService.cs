@@ -49,6 +49,7 @@ namespace TalentoBecario.Models.Services
                                     nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                     descripcion = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     estatus = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
+                                    alumnosRequeridos = (lector.IsDBNull(7) ? 0 : lector.GetInt32(7)),
                                     formador = new Formador()
                                     {
                                         Id = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
@@ -57,7 +58,7 @@ namespace TalentoBecario.Models.Services
                                     departamento=new Departamento()
                                     {
                                         Id = (lector.IsDBNull(6) ? 0 : lector.GetInt32(6)),
-                                         Descripcion = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
+                                         Descripcion = (lector.IsDBNull(8) ? "" : lector.GetString(8)),
                                     }
 
 
@@ -118,6 +119,7 @@ namespace TalentoBecario.Models.Services
                                     nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                     descripcion = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     estatus = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
+                                    alumnosRequeridos = (lector.IsDBNull(7) ? 0 : lector.GetInt32(7)),
                                     formador = new Formador()
                                     {
                                         Id = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
@@ -126,7 +128,7 @@ namespace TalentoBecario.Models.Services
                                     departamento = new Departamento()
                                     {
                                         Id = (lector.IsDBNull(6) ? 0 : lector.GetInt32(6)),
-                                        Descripcion = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
+                                        Descripcion = (lector.IsDBNull(8) ? "" : lector.GetString(8)),
                                     }
 
 
@@ -183,6 +185,7 @@ namespace TalentoBecario.Models.Services
                                     nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                     descripcion = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     estatus = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
+                                    alumnosRequeridos = (lector.IsDBNull(7) ? 0 : lector.GetInt32(7)),
                                     formador = new Formador()
                                     {
                                         Id = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
@@ -191,7 +194,7 @@ namespace TalentoBecario.Models.Services
                                     departamento = new Departamento()
                                     {
                                         Id = (lector.IsDBNull(6) ? 0 : lector.GetInt32(6)),
-                                        Descripcion = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
+                                        Descripcion = (lector.IsDBNull(8) ? "" : lector.GetString(8)),
                                     },
                                     listHabilidades = HabilidadesService.ConsultarHabilidadesProyectoAlumno(id, 1),
                                     listAreaInteres= AreaInteresService.ConsultarInteresesProyectoAlumno(id,1)
@@ -255,7 +258,13 @@ namespace TalentoBecario.Models.Services
                             Value = registro.departamento.Id,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        
+
+                        comando.Parameters.Add(new OracleParameter("P_AlumnosRequeridos", OracleDbType.Int16)
+                        {
+                            Value = registro.alumnosRequeridos,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+
                         comando.Parameters.Add(new OracleParameter("V_Id", OracleDbType.Int32,5)
                         {
                             Direction = ParameterDirection.ReturnValue
@@ -343,7 +352,11 @@ namespace TalentoBecario.Models.Services
                             Value = registro.departamento.Id,
                             Direction = System.Data.ParameterDirection.Input
                         });
-
+                        comando.Parameters.Add(new OracleParameter("P_AlumnosRequeridos", OracleDbType.Int16)
+                        {
+                            Value = registro.alumnosRequeridos,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
                         comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
                         {
                             Direction = ParameterDirection.ReturnValue
