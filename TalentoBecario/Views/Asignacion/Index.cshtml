@@ -17,7 +17,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-responsive-md"  id="lista" name="lista">
+                        <table class="table table-responsive-md" id="lista" name="lista">
                             <thead>
                                 <tr>
                                     <th><strong>Id</strong></th>
@@ -33,35 +33,34 @@
                             <tbody>
                                 @foreach (var item in ViewBag.listSolicitudes)
                                 {
-                                <tr>
-                                    <td><strong>@item.id</strong></td>
-                                    <td>@item.alumno.matricula</td>
+                                    <tr>
+                                        <td><strong>@item.id</strong></td>
+                                        <td>@item.alumno.matricula</td>
 
-                                    <td>@item.alumno.nombre</td>
+                                        <td>@item.alumno.nombre</td>
 
-                                    <td>@item.proyecto.formador.Nombre</td>
+                                        <td>@item.proyecto.formador.Nombre</td>
 
-                                    <td>@item.proyecto.nombre</td>
-                                    <td>@item.estatus</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Ver detalles</a>
-                                                <a class="dropdown-item" href="#">Aprobar</a>
-                                                <a class="dropdown-item" href="#">Rechazar</a>
+                                        <td>@item.proyecto.nombre</td>
+                                        <td>@item.estatus</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
+                                                    <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" onclick="buscarSolciitud(@item.id)">Ver detalles</a>
+                                                   
 
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 }
 
 
 
-                                
+
                             </tbody>
                         </table>
                     </div>
@@ -71,3 +70,106 @@
 
     </div>
 </div>
+
+
+<div id="modalProyecto" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Datos del Proyecto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        No.Proyecto: <h6 id="idProyecto"></h6>
+                    </div>
+                    <div class="col-md-10">
+                        Nombre: <h6 id="nombre"></h6>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        Formador: <h6 id="formador"></h6>
+                    </div>
+                    <div class="col-md-4">
+                        Descripción: <h6 id="descripcion"></h6>
+                    </div>
+                    <div class="col-md-4">
+                        Departamento UDEM: <h6 id="departamento"></h6>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        Habilidades
+                        <ul class="list-group" id="habilidades"></ul>
+                    </div>
+                    <div class="col-md-6">
+                        Áreas de interes.
+                        <ul class="list-group" id="intereses"></ul>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="mb-3 col-md-12">
+                        <label class="form-label">Comentarios</label>
+                        <textarea name="comentario" id="comentario" class="form-control" rows="2" required></textarea>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarSolicitud()">Aprobar Solicitud</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+               function buscarSolciitud(item) {
+        
+      
+      
+
+                    $.post("@Url.Action("ConsultarSolicitud","Ofertas")", { id: item}, function (datas) {
+
+                   
+                        $("#idProyecto").text(datas.id);
+                        $("#departamento").text(datas.departamento.Descripcion);
+                        $("#nombre").text(datas.nombre);
+                        $("#descripcion").text(datas.descripcion);
+                        $("#estatus").val(datas.estatus);
+                        $("#formador").text(datas.formador.Nombre);
+                        $("#habilidades").empty();
+                         $("#intereses").empty();
+                        datas.listHabilidades.forEach(function (item) {
+                            var mess='<li id="item" class="list-group-item">' + item.Descripcion + '</li>'
+                            $("#habilidades").append(mess);
+
+                        });
+                     datas.listAreaInteres.forEach(function (item) {
+                            var mess='<li  id="item" class="list-group-item">' + item.Descripcion + '</li>'
+                            $("#intereses").append(mess);
+
+                        });
+                        
+                        $("#modalProyecto").modal("show");
+                        });
+        };
+    function guardarSolicitud() {
+
+        
+    }
+
+</script>

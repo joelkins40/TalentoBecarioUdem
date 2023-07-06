@@ -83,13 +83,135 @@ namespace TalentoBecario.Models.Services
                     Console.WriteLine(ex.Message);
 
                 }
-            formadores.RemoveAt(0);
+           
             return formadores;
 
             }
 
+        public static List<Formador> ObtieneListaFormadoresExternos()
+        {
+            List<Formador> formadores = new List<Formador>();
 
-            public static Formador ConsultarFormador(string id)
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_ALL_EMPLOYEES";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+
+
+
+
+                        // Revisamos si se pudo ejecutar la consulta
+                        cnx.Open();
+
+                        try
+                        {
+
+                            OracleDataReader lector = comando.ExecuteReader();
+
+                            // Revisamos cada contacto
+
+                            while (lector.Read())
+                            {
+
+
+
+                                formadores.Add(new Formador()
+                                {
+                                    Id = lector.GetString(1),
+                                    Nombre = lector.GetString(2),
+                                });
+
+
+
+
+                            }
+
+
+                        }
+                        finally
+                        {
+
+                            cnx.Close();
+                        }
+
+                    }
+
+                    //cnx.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+
+            }
+
+            return formadores;
+
+        }
+
+        public static Formador ConsultarFormadorExternos(string id)
+        {
+            Formador formador = new Formador();
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_EMPLOYEE";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Varchar2)
+                        {
+                            Value = id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+                            while (lector.Read())
+                            {
+                                formador = new Formador()
+                                {
+                                    Id = lector.GetString(1),
+                                    Nombre = lector.GetString(2),
+
+                                };
+                            }
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return formador;
+
+        }
+        public static Formador ConsultarFormador(string id)
             {
                 Formador formador = new Formador();
                 try

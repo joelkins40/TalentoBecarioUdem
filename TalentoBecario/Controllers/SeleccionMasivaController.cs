@@ -12,7 +12,8 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.listFormadores = FormadorService.ObtieneListFormadores();
+
+            ViewBag.listFormadores = FormadorService.ObtieneListaFormadoresExternos();
             ViewBag.listAlumnos = SeleccionService.AlumnosFiltro();
             return View();
         }
@@ -40,15 +41,50 @@ namespace TalentoBecario.Controllers
             return Json("Registros actualizados", JsonRequestBehavior.AllowGet);
         }
 
+
         [HttpPost]
         public JsonResult ConsultarAlumnosFormador(string id)
         {
-          
+            List<Alumno> formadores = new List<Alumno>();
+            Formador formadorBuscar = FormadorService.ConsultarFormador(id);
+            if (formadorBuscar.Id == null)
+            {
+                formadorBuscar = FormadorService.ConsultarFormadorExternos(id);
+                if (formadorBuscar.Nombre != null)
+                {
+                    FormadorService.guardarFormador(formadorBuscar);
+                }
+                else
+                {
+                    formadorBuscar.Id = "";
+                    formadorBuscar.Nombre = "No existe el registro";
+                }
+               
+                return Json(formadorBuscar, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                formadores = AlumnoService.ConsultarAlumnosPorFormador(id);
+                if (formadores.Count == 0)
+                {
+                    
+                    return Json(formadorBuscar, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(formadores, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+           
+        }
+        public JsonResult ConsultarFormador(string id)
+        {
+
 
             return Json(AlumnoService.ConsultarAlumnosPorFormador(id), JsonRequestBehavior.AllowGet);
         }
 
-        
 
         public ActionResult Contact()
         {

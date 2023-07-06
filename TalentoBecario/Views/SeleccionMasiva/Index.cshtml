@@ -2,110 +2,200 @@
 @{
     Layout = "~/Views/Shared/_LayoutAdminApp.cshtml";
 }
-<div class="container-fluid">
-    <div class="row page-titles">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de Alumnos</a></li>
+    <style>
 
-        </ol>
-    </div>
-    <!-- row -->
-    <div class="row">
-        <div class="mb-6 col-md-6">
-            <label class="form-label">Formador</label>
-            <select name="formador" id="formador" value="" class="default-select  form-control wide" onchange="buscarAlumnos(this);">
-                <option value="null">Selecciona una Formador</option>
-                @foreach (var item in ViewBag.listFormadores)
-                {
-                    <option value="@item.Id">@item.Nombre</option>
-                }
+   .itemLow td:first-child
+{
+    width: 10px;
+}
+    </style>
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de Alumnos</a></li>
 
-
-
-
-
-            </select>
+            </ol>
         </div>
-        <div class="mb-6 col-md-6">
+        <!-- row
+           <div class="row">
+               <div class="mb-6 col-md-6">
+                   <label class="form-label">Formador</label>
+                   <select name="formador" id="formador" value="" class="default-select  form-control wide" onchange="buscarAlumnos(this);">
+                       <option value="null">Selecciona una Formador</option>
+                       @foreach (var item in ViewBag.listFormadores)
+                       {
+                           <option value="@item.Id">@item.Nombre</option>
+                       }
 
-            <button class="btn btn-success" onclick="guardarRegister()">Guardar</button>
+
+
+
+
+                   </select>
+               </div>
+
+           </div>
+    -->
+        <div class="row">
+            <div class="mb-3 col-md-2">
+                <label class="form-label">ID</label>
+                <input name="formador" id="formador" type="text" class="form-control" placeholder="ID Formador" onchange="changeMatriculaFormador()">
+            </div>
+
+            <div class="mb-3 col-md-7">
+                <label class="form-label">Nombre del Formador</label>
+                <input name="descripcion" id="descripcion" type="text" class="form-control" placeholder="Nombre del Formador" disabled>
+            </div>
+            <div class="mb-6 col-md-3">
+                <br />
+                <button class="btn btn-primary" onclick="buscarFormadores()">
+                    Buscar
+                </button>
+                <button class="btn btn-success" onclick="guardarRegister()">Guardar</button>
+            </div>
+
+
         </div>
-    </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Lista de Alumnos</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-responsive-md" id="lista" name="lista">
+                                <thead>
+                                    <tr>
+                                        <th><strong>Matrícula</strong></th>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Lista de Alumnos</h4>
+                                        <th><strong>Nombre</strong></th>
+                                        <th><strong>Nivel</strong></th>
+                                        <th><strong>Programa</strong></th>
+                                        <th><strong>Horario</strong></th>
+                                        <th><strong>Formador</strong></th>
+                                        <th><strong>Estatus</strong></th>
+                                        <th>Selección</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.listAlumnos)
+                                    {
+                                        <tr>
+                                            <td><strong>@item.matricula</strong></td>
+                                            <td>@item.nombre</td>
+                                            <td>@item.nivel</td>
+                                            <td>@item.programa</td>
+                                            <td>Matutino</td>
+                                            <td>@item.formador.Nombre</td>
+                                            <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
+
+                                            <td class="text-center">
+                                                <input class="form-check-input" type="checkbox" value="" id="@item.matricula" name="check[]" id="flexCheckDefault">
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
+            </div>
+
+        </div>
+    </div>
+    <div id="modalProyecto" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Datos del Proyecto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
                     <div class="table-responsive">
-                        <table class="table table-responsive-md"  id="lista" name="lista">
+                        <table class="table table-responsive-md" id="lista2" name="lista2">
                             <thead>
                                 <tr>
-                                    <th><strong>Matrícula</strong></th>
-
-                                    <th><strong>Nombre</strong></th>
-                                    <th><strong>Nivel</strong></th>
-                                    <th><strong>Programa</strong></th>
-                                    <th><strong>Horario</strong></th>
-                                    <th><strong>Formador</strong></th>
-                                    <th><strong>Estatus</strong></th>
-                                    <th>Selección</th>
+                                    <th><strong>Id</strong></th>
+                                    <th>Nombre</th>
+                                   
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in ViewBag.listAlumnos)
+                                @foreach (var item in ViewBag.listFormadores)
                                 {
-                                <tr>
-                                    <td><strong>@item.matricula</strong></td>
-                                    <td>@item.nombre</td>
-                                    <td>@item.nivel</td>
-                                    <td>@item.programa</td>
-                                    <td>Matutino</td>
-                                    <td>@item.formador.Nombre</td>
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
-
-                                    <td class="text-center">
-                                        <input class="form-check-input" type="checkbox" value="" id="@item.matricula" name="check[]" id="flexCheckDefault">
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td ><strong>@item.Id</strong></td>
+                                        <td>@item.Nombre</td>
+                                       
+                                        <td>
+                                            <button class="btn btn-primary" onclick="SeleccionarFormador('@item.Id')">Seleccionar</button>
+                                        </td>
+                                    </tr>
                                 }
 
                             </tbody>
                         </table>
                     </div>
+
+
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Cerrar</button>
+                  </div>
             </div>
         </div>
-
     </div>
-</div>
-
 <script>
 
+    function SeleccionarFormador(item) {
+
+        $('#formador').val(item);
+        buscarAlumnos(item);
+          $("#modalProyecto").modal("hide");
+    };
+    function changeMatriculaFormador() {
+        var idFormador = $('#formador').val();
+        if (idFormador.length == 9) {
+            buscarAlumnos(idFormador);
+        } else {
+             $("#descripcion").val('');
+        }
+        
+    }
     function buscarAlumnos(item) {
         
        var idFormador = $('#formador').val();
       
-
+          $("#descripcion").val('Buscando Información...');
                     $.post("@Url.Action("ConsultarAlumnosFormador","SeleccionMasiva")", { id: idFormador}, function (datas) {
-                       
-                        if (datas == null) {
+
+                        if (datas != null) {
+
                            
+                            if (datas.Id != null) {
 
+
+                                $("#descripcion").val(datas.Nombre);
+
+                            } else {
+
+                                $('input[name="check[]"]').prop('checked', false);
+                                datas.forEach(function (item) {
+                                    var myTable = $('#lista').dataTable();
+
+
+                                    myTable.$("#" + item.matricula, { "page": "all" }).prop('checked', true);
+                                    $("#descripcion").val(item.formador.Nombre);
+
+                                });
+                            }
                         } else {
-
-                              $('input[name="check[]"]').prop('checked', false);
-                            datas.forEach(function (item) {
-                                 var myTable = $('#lista').dataTable();
-
-
-                myTable.$("#" + item.matricula, {"page": "all"}).prop('checked', true);
-                                
-                        });
-                        }
-
+                             $("#formador").val('');
+                             $("#descripcion").val('No existe el registro');
+                        } 
                         });
     };
     function guardarRegister() {
@@ -176,10 +266,13 @@ var rowcollection = myTable.$("input[type=checkbox]:checked", {"page": "all"});
 
 
     function clearRegister() {
-         $('input[name="check[]"]').prop('checked', false);
-                     
-                    $("#formador").val("null");
-                   
-                    }
+        $('input[name="check[]"]').prop('checked', false);
+
+        $("#formador").val("null");
+
+    };
+        function buscarFormadores() {
+              $("#modalProyecto").modal("show");
+        }
 
 </script>
