@@ -14,6 +14,7 @@ namespace TalentoBecario.Models.Services
     {
        
             private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
+            private static readonly string _conPeopleSoftString = ConfigurationManager.ConnectionStrings["PeopleSoft"].ConnectionString;
 
             public static List<Formador> ObtieneListFormadores()
             {
@@ -419,7 +420,46 @@ namespace TalentoBecario.Models.Services
 
             }
 
+        public static Dictionary<string, dynamic> ConsultarUsuario(string matricula)
+        {
+            Dictionary<string, dynamic> user = new Dictionary<string, dynamic>();
 
+            using (var conn = new OracleConnection(_conPeopleSoftString))
+            {
+                var command = new OracleCommand("SELECT * FROM sysadm.PS_UDEM_RHPS_VW WHERE ALTER_EMPLID = '" + matricula + "'", conn);
+                //command.Parameters.Add("@Matricula", matricula);
+
+                conn.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+
+                    var lector = command.ExecuteReader();
+
+                    while (lector.Read())
+                    {
+                        user = new Dictionary<string, dynamic>
+                        {
+                            { "Email", (lector.IsDBNull(6) ? "Sin correo" : lector.GetString(6))},
+                            { "Estatus", (lector.IsDBNull(10) ? " " : lector.GetString(10)) },
+                            { "Departamento", (lector.IsDBNull(17) ? " " : lector.GetString(17)) },
+                        };
+                    }
+                    conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return user;
         }
+
+
+    }
     
 }
