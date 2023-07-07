@@ -4,8 +4,8 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Mis Proyectos</a></li>
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Agregar Nuevo Proyecto</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Mis proyectos</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Agregar nuevo proyecto</a></li>
         </ol>
     </div>
     <!-- row -->
@@ -13,7 +13,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Datos del nuevo proyecto</h4>
+                    <h4 class="card-title" style="text-transform: unset">Datos del nuevo proyecto</h4>
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
@@ -21,7 +21,7 @@
 
                             <div class="row">
                                 <div class="mb-3 col-md-2">
-                                    <label class="form-label">ID</label>
+                                    <label class="form-label">Id</label>
                                     <input name="id" id="id" type="text" class="form-control" value="@ViewBag.proyecto.id" placeholder="Id" disabled>
                                 </div>
                                 <div class="mb-3 col-md-3">
@@ -39,11 +39,11 @@
                                     <span id="err-dep" style="color: red; display: none;">Debes seleccionar al menos un departamento UDEM</span>
                                 </div>
                                 <div class="mb-3 col-md-5">
-                                    <label class="form-label">Nombre del Proyecto</label>
+                                    <label class="form-label">Nombre del proyecto</label>
                                     <input name="nombre" id="nombre" value="@ViewBag.proyecto.nombre" type="text" class="form-control" placeholder="Nombre del proyecto" required>
                                 </div>
                                 <div class="mb-3 col-md-2">
-                                    <label class="form-label">No. Alumnos</label>
+                                    <label class="form-label">No. alumnos</label>
                                     <input name="noalumnos" id="noalumnos" value="@ViewBag.proyecto.alumnosRequeridos" type="number" class="form-control" placeholder="No. Alumnos" required>
                                 </div>
 
@@ -53,7 +53,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Áreas de Interés</label>
+                                    <label class="form-label">Áreas de interés</label>
                                     <select name="interes" class="form-select" id="multiple-select-field" data-placeholder="" multiple>
                                         @foreach (var item in ViewBag.listAreaInteres)
                                         {
