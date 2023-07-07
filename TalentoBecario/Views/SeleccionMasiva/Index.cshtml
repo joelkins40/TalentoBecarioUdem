@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de Alumnos</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de alumnos</a></li>
 
             </ol>
         </div>
@@ -39,11 +39,11 @@
         <div class="row">
             <div class="mb-3 col-md-2">
                 <label class="form-label">ID</label>
-                <input name="formador" id="formador" type="text" class="form-control" placeholder="ID Formador" onchange="changeMatriculaFormador()">
+                <input name="formador" id="formador" type="text" class="form-control" placeholder="ID Formador" onkeyup="changeMatriculaFormador()">
             </div>
 
             <div class="mb-3 col-md-7">
-                <label class="form-label">Nombre del Formador</label>
+                <label class="form-label">Nombre del formador</label>
                 <input name="descripcion" id="descripcion" type="text" class="form-control" placeholder="Nombre del Formador" disabled>
             </div>
             <div class="mb-6 col-md-3">
@@ -51,7 +51,7 @@
                 <button class="btn btn-primary" onclick="buscarFormadores()">
                     Buscar
                 </button>
-                <button class="btn btn-success" onclick="guardarRegister()">Guardar</button>
+                <button class="btn btn-success" onclick="guardarRegister()" id="guardar" name="guardar" hidden>Guardar</button>
             </div>
 
 
@@ -60,13 +60,13 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Lista de Alumnos</h4>
+                        <h4 class="card-title">Lista de alumnos</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-responsive-md" id="lista" name="lista">
+                            <table style="font-size:14px" class="table table-responsive-md" id="lista" name="lista">
                                 <thead>
-                                    <tr>
+                                    <tr style="font-size:14px">
                                         <th><strong>Matrícula</strong></th>
 
                                         <th><strong>Nombre</strong></th>
@@ -75,7 +75,7 @@
                                         <th><strong>Horario</strong></th>
                                         <th><strong>Formador</strong></th>
                                         <th><strong>Estatus</strong></th>
-                                        <th>Selección</th>
+                                        <th><input type="checkbox" name="selectAll" id="selectAll"   onchange="changeAllSelect()"/></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -161,6 +161,10 @@
         if (idFormador.length == 9) {
             buscarAlumnos(idFormador);
         } else {
+            $("#guardar").attr("hidden", true);
+             var myTable = $('#lista').dataTable();
+             myTable.$('input[name="check[]"]', { "page": "all" }).prop('checked', false);
+             $('#selectAll').prop('checked', false);
              $("#descripcion").val('');
         }
         
@@ -168,21 +172,24 @@
     function buscarAlumnos(item) {
         
        var idFormador = $('#formador').val();
-      
+
+        var myTable2 = $('#lista').dataTable();
+        myTable2.$('input[name="check[]"]', { "page": "all" }).prop('checked', false);
+        $('#selectAll').prop('checked', false);
           $("#descripcion").val('Buscando Información...');
                     $.post("@Url.Action("ConsultarAlumnosFormador","SeleccionMasiva")", { id: idFormador}, function (datas) {
 
                         if (datas != null) {
-
+                           
                            
                             if (datas.Id != null) {
 
-
+                               
                                 $("#descripcion").val(datas.Nombre);
-
+                                 $("#guardar").removeAttr('hidden')
                             } else {
 
-                                $('input[name="check[]"]').prop('checked', false);
+                                
                                 datas.forEach(function (item) {
                                     var myTable = $('#lista').dataTable();
 
@@ -191,9 +198,11 @@
                                     $("#descripcion").val(item.formador.Nombre);
 
                                 });
+                                $("#guardar").removeAttr('hidden')
                             }
                         } else {
-                             $("#formador").val('');
+                            $("#formador").val('');
+
                              $("#descripcion").val('No existe el registro');
                         } 
                         });
@@ -274,5 +283,14 @@ var rowcollection = myTable.$("input[type=checkbox]:checked", {"page": "all"});
         function buscarFormadores() {
               $("#modalProyecto").modal("show");
         }
+       function changeAllSelect() {
+       
+           if ($("#selectAll").is(':checked')) {
+                
+                 $('input[name="check[]"]').prop('checked', true);
+           } else {
+                 $('input[name="check[]"]').prop('checked', false);
+           }
+    }
 
 </script>
