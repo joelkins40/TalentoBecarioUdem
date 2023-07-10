@@ -12,24 +12,7 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
-            var listFormadores = FormadorService.ObtieneListaFormadoresExternos();
-
-            List<Formador> _formadores = new List<Formador>();
-
-            foreach(var user in listFormadores)
-            {
-                var _formador = FormadorService.ConsultarUsuario(user.Id);
-
-                if(_formador.Count() > 0 && _formador["Estatus"] == "A")
-                {
-                    user.Email = _formador["Email"];
-                    user.Departamento = _formador["Departamento"];
-
-                    _formadores.Add(user);
-                }
-            }
-
-            ViewBag.listFormadores = _formadores;
+            ViewBag.listFormadores = new List<Formador>();
             ViewBag.listAlumnos = SeleccionService.AlumnosFiltro();
             return View();
         }
@@ -63,6 +46,15 @@ namespace TalentoBecario.Controllers
         {
             List<Alumno> formadores = new List<Alumno>();
             Formador formadorBuscar = FormadorService.ConsultarFormador(id);
+            var _formador = FormadorService.ConsultarUsuario(formadorBuscar.Id);
+
+            if (_formador.Count() <= 0 && _formador["Estatus"] != "A")
+            {
+                formadorBuscar.Id = "";
+                formadorBuscar.Nombre = "No existe el registro";
+                return Json(formadorBuscar, JsonRequestBehavior.AllowGet);
+            }
+
             if (formadorBuscar.Id == null)
             {
                 formadorBuscar = FormadorService.ConsultarFormadorExternos(id);
