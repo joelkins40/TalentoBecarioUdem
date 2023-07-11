@@ -57,7 +57,7 @@ namespace TalentoBecario.Models.Services
                                     {
 
 
-                                        Pidm = (lector.IsDBNull(0) ? "" : lector.GetString(0)),
+                                        id = (lector.IsDBNull(0) ? 1 : lector.GetInt16(0)),
                                         nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                         matricula = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                         nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
@@ -148,7 +148,7 @@ namespace TalentoBecario.Models.Services
                                 {
 
 
-                                    Pidm = (lector.IsDBNull(0) ? "" : lector.GetString(0)),
+                                    id = (lector.IsDBNull(0) ? 0 : lector.GetInt16(0)),
                                     nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                     matricula = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
@@ -193,7 +193,26 @@ namespace TalentoBecario.Models.Services
 
         }
 
-     
+     public static String guardarAlumnoRelacion(Alumno alumno)
+        {
+            HabilidadesService.eliminarHabilidadesRelacion(alumno.id, 2);
+            AreaInteresService.eliminarAreaInteresRelacion(alumno.id, 2);
+            if (alumno.listHabilidades != null)
+            {
+                foreach (var item in alumno.listHabilidades)
+                {
+                    HabilidadesService.RelacionarHabilidadProyectoAlumno(item.Id, alumno.id, 2);
+                }
+            }
+            if (alumno.listAreaInteres != null)
+            {
+                foreach (var item in alumno.listAreaInteres)
+                {
+                    AreaInteresService.RelacionarInteresProyectoAlumno(item.Id, alumno.id, 2);
+                }
+            }
+            return "";
+        }
         public static Alumno ConsultarAlumno(string id)
             {
                 Alumno alumno = new Alumno();
@@ -224,7 +243,7 @@ namespace TalentoBecario.Models.Services
                                 {
                                     alumno = new Alumno()
                                     {
-                                        Pidm = (lector.IsDBNull(0) ? "" : lector.GetString(0)),
+                                        id = (lector.IsDBNull(0) ? 0 : lector.GetInt16(0)),
                                         nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                         matricula = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                         nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
@@ -237,6 +256,9 @@ namespace TalentoBecario.Models.Services
                                             Nombre = (lector.IsDBNull(8) ? "" : lector.GetString(8))
                                         },
 
+
+                                    listHabilidades = HabilidadesService.ConsultarHabilidadesProyectoAlumno(lector.GetInt16(0), 2),
+                                        listAreaInteres = AreaInteresService.ConsultarInteresesProyectoAlumno(lector.GetInt16(0), 2)
                                     };
                                 }
                             }
@@ -284,7 +306,7 @@ namespace TalentoBecario.Models.Services
                             {
                                 alumno = new Alumno()
                                 {
-                                    Pidm = (lector.IsDBNull(0) ? "" : lector.GetString(0)),
+                                    id = (lector.IsDBNull(0) ? 0 : lector.GetInt16(0)),
                                     nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                     matricula = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
@@ -296,6 +318,9 @@ namespace TalentoBecario.Models.Services
                                         Id = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
                                         Nombre = (lector.IsDBNull(8) ? "" : lector.GetString(8))
                                     },
+                                    
+                                    listHabilidades = HabilidadesService.ConsultarHabilidadesProyectoAlumno(lector.GetInt16(0), 2),
+                                    listAreaInteres = AreaInteresService.ConsultarInteresesProyectoAlumno(lector.GetInt16(0), 2)
 
                                 };
                             }
@@ -402,7 +427,7 @@ namespace TalentoBecario.Models.Services
 
                             comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
                             {
-                                Value = registro.Pidm,
+                                Value = registro.id,
                                 Direction = System.Data.ParameterDirection.Input
                             });
                         comando.Parameters.Add(new OracleParameter("P_Nombre", OracleDbType.Varchar2)

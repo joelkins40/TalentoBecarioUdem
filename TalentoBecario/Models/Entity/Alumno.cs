@@ -8,7 +8,7 @@ namespace TalentoBecario.Models.Entity
     public class Alumno
     {
        
-        public string Pidm { get; set; }
+        public int id { get; set; }
         public string matricula { get; set; }
 
         public string nombre { get; set; }

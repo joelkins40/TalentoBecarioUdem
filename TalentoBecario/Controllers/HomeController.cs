@@ -63,7 +63,7 @@ namespace TalentoBecario.Controllers
             }else 
             if (isEmployee.Result.Trim() == "N")
             {
-                Session["matricula"] = matricula;
+                Session["matricula"] = username;
                 return RedirectToAction("Index", "ProyectosAlumno");
             }
 

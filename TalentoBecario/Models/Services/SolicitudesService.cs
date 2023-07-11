@@ -276,7 +276,7 @@ namespace TalentoBecario.Models.Services
 
                         comando.Parameters.Add(new OracleParameter("P_IdAlumno", OracleDbType.Int16)
                         {
-                            Value = registro.alumno.Pidm,
+                            Value = registro.alumno.id,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdProyecto", OracleDbType.Int16)
@@ -339,12 +339,12 @@ namespace TalentoBecario.Models.Services
 
                         comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                         {
-                            Value = registro.alumno.Pidm,
+                            Value = registro.alumno.id,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdAlumno", OracleDbType.Int16)
                         {
-                            Value = registro.alumno.Pidm,
+                            Value = registro.alumno.id,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdProyecto", OracleDbType.Int16)

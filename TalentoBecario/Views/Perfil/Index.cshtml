@@ -1,11 +1,11 @@
 ﻿@{
+
     Layout = "~/Views/Shared/_LayoutStudentApp.cshtml";
 }
 <div class="container-fluid">
     <div class="row page-titles">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Mis Proyectos</a></li>
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Agregar Nuevo Proyecto</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Mi perfil</a></li>
         </ol>
     </div>
     <!-- row -->
@@ -13,44 +13,72 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Datos del nuevo proyecto</h4>
+                    <h4 class="card-title" style="text-transform: unset">Mis datos personales</h4>
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
+                        <form onsubmit="return false">
 
                             <div class="row">
-                                <div class="mb-3 col-md-2">
-                                    <label class="form-label">ID</label>
-                                    <input type="text" class="form-control" placeholder="Id">
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label">Matrícula</label>
+                                    <input name="matricula" id="matricula" type="text" class="form-control" placeholder="Matrícula" value="01234567" disabled>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Nombre del alumno</label>
+                                    <input name="nombre" id="nombre" type="text" class="form-control" placeholder="Nombre del Alumno" required>
                                 </div>
                                 <div class="mb-3 col-md-3">
-                                    <label class="form-label">Departamento UDEM</label>
-                                    <select class="default-select  form-control wide">
-                                        <option selected>Selecciona una opción</option>
-                                        <option>Departamento 1</option>
-                                        <option>Departamento 2</option>
-                                        <option>Departamento 3</option>
-                                        <option>Departamento 4</option>
+                                    <label class="form-label">Nivel</label>
+                                    <input name="nivel" id="nivel" type="text" class="form-control" placeholder="Nivel" required>
+                                </div>
+
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label">Programa</label>
+                                    <input name="programa" id="programa" type="text" class="form-control" placeholder="Programa" required>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label">Horario</label>
+                                    <input name="horario" id="horario" type="text" class="form-control" placeholder="Horario" required>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label">Carrera</label>
+                                    <input name="carrera" id="carrera" type="text" class="form-control" placeholder="carrera" required>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label">Formador</label>
+                                    <input name="formador" id="formador" type="text" class="form-control" placeholder="Formador" required>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Áreas de interés</label>
+                                    <select name="interes" class="form-select" id="multiple-select-field" data-placeholder="" multiple>
+                                        @foreach (var item in ViewBag.listAreaInteres)
+                                        {
+                                            <option @if (ViewBag.alumno.listAreaInteres != null) { foreach (var hab in ViewBag.alumno.listAreaInteres) { @(hab.Id.Equals(item.Id) ? "selected" : "") } } value="@item.Id">@item.Descripcion</option>
+                                        }
+
+
                                     </select>
+                                    <span id="err-ai" style="color: red; display: none;">Debes seleccionar al menos una área de interes</span>
                                 </div>
-                                <div class="mb-3 col-md-7">
-                                    <label class="form-label">Nombre del Proyecto</label>
-                                    <input type="text" class="form-control" placeholder="Nombre del proyecto">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Habilidades</label>
+                                    <select name="habilidades" class="form-select" id="multiple-select-field2" data-placeholder="" multiple>
+                                        @foreach (var item in ViewBag.listHabilidades)
+                                        {
+                                            <option @if (ViewBag.alumno.listAreaInteres != null) { foreach (var hab in ViewBag.alumno.listHabilidades) { @(hab.Id.Equals(item.Id) ? "selected" : "") } } value="@item.Id">@item.Descripcion</option>
+                                        }
+                                    </select>
+                                    <span id="err-hab" style="color: red; display: none;">Debes seleccionar al menos una habilidad</span>
                                 </div>
-
-                                <div class="mb-3 col-md-12">
-                                    <label class="form-label">Descripción del proyecto</label>
-                                    <textarea class="form-control" rows="4" id="comment"></textarea>
-                                </div>
-
-
                             </div>
 
                             <div class="mb-3">
 
                             </div>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="submit" class="btn btn-primary" onclick="guardarRegister()">Guardar</button>
                         </form>
                     </div>
                 </div>
@@ -59,3 +87,78 @@
 
     </div>
 </div>
+<script>
+
+
+    function guardarRegister() {
+        let description = $('#matricula').val();
+       
+        
+        var listHabilidades = $('[name=habilidades]').val();
+        var listInteres = $('[name=interes]').val();
+
+        var habilidades = [];
+        var intereses = [];
+        listHabilidades.forEach( (rating) => {
+            habilidades.push({
+                'id': rating
+            });
+
+        });
+        listInteres.forEach( (rating) => {
+            intereses.push({
+                'id': rating
+            });
+
+        });
+
+       
+
+        var habilidad = JSON.stringify(
+        {
+        'matricula': $('#matricula').val(),
+        'listHabilidades': habilidades,
+        'listAreaInteres':intereses
+
+        });
+        $.ajax({
+        url: '/Perfil/SavePerfil',
+        type: "post",
+        contentType: "application/json",
+        dataType: "json",
+        traditional: true,
+        data: habilidad,
+        success: function (results) {
+        alert(results);
+        window.location.href = '/Perfil';
+        }
+        })
+
+
+        };
+
+        function eliminarProyecto(id) {
+
+
+
+        $.post("@Url.Action("EliminarProyecto", "Proyectos")", { id: id}, function (datas) {
+
+        alert(datas);
+
+
+        window.location.href = '/Proyectos';
+
+
+        });
+    };
+
+
+    function clearRegister() {
+                        $("#id").val("");
+                    $("#descripcion").val("");
+                    $("#nombre").val("");
+                    $("#departamento").val("");
+                    $("#estatus").val("");
+                    }
+
+</script>
