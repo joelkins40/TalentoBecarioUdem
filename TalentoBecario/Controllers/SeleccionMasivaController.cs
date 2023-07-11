@@ -46,9 +46,9 @@ namespace TalentoBecario.Controllers
         {
             List<Alumno> formadores = new List<Alumno>();
             Formador formadorBuscar = FormadorService.ConsultarFormador(id);
-            var _formador = FormadorService.ConsultarUsuario(formadorBuscar.Id);
+            Dictionary<string, dynamic> _formador = FormadorService.ConsultarUsuario(formadorBuscar.Id);
 
-            if (_formador.Count() <= 0 && _formador["Estatus"] != "A")
+            if (_formador.Count() <= 0 || _formador["Estatus"] != "A")
             {
                 formadorBuscar.Id = "";
                 formadorBuscar.Nombre = "No existe el registro";
