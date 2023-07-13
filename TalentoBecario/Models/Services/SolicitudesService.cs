@@ -102,7 +102,7 @@ namespace TalentoBecario.Models.Services
                                 solicitud = new Solicitud()
                                 {
                                     id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
-                                    alumno = AlumnoService.ConsultarAlumno((lector.IsDBNull(1) ? "0" : lector.GetString(1))),
+                                    alumno = AlumnoService.HomologarAlumno((lector.IsDBNull(5) ? "0" : lector.GetString(5))),
 
 
                                     proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? 0 : lector.GetInt32(2))),
@@ -124,6 +124,7 @@ namespace TalentoBecario.Models.Services
             {
                 Console.WriteLine(ex.Message);
             }
+           
             return solicitud;
 
         }

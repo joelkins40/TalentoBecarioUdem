@@ -20,7 +20,9 @@ namespace TalentoBecario.Controllers
         public JsonResult SaveSolicitud(Solicitud solicitud)
         {
             string message = "";
-            solicitud.alumno.id = 53;
+            string user = Convert.ToString(Session["matricula"]);
+
+            solicitud.alumno = AlumnoService.ConsultarAlumno(user);
             int itemSolicitudExistente = SolicitudesService.ConsultarSiExisteSolicitud(solicitud.alumno.id,solicitud.proyecto.id).Capacity;
             if (itemSolicitudExistente == 0)
             {

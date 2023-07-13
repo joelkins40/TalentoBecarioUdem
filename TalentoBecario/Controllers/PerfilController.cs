@@ -13,8 +13,10 @@ namespace TalentoBecario.Controllers
         public ActionResult Index()
         {
             string user = Convert.ToString(Session["matricula"]);
+
             
-            ViewBag.alumno = AlumnoService.ConsultarAlumno(user);
+            ViewBag.alumno = AlumnoService.HomologarAlumno(user);
+
             ViewBag.listAreaInteres = AreaInteresService.ObtieneListAreaIntereses();
             ViewBag.listHabilidades = HabilidadesService.ObtieneListHabilidades();
 
@@ -37,18 +39,16 @@ namespace TalentoBecario.Controllers
 
             if (consultingAlumno.id == null)
             {
-                int pidmResult = StudentService.GetPidm(alumno.matricula);
-                User user = StudentService.FillUser(pidmResult);
-
-                alumno.nombre = user.FullName;
-                alumno.programa = user.Program;
+                
 
                 AlumnoService.guardarAlumno(alumno);
                 
                 alumno = AlumnoService.ConsultarAlumno(alumno.matricula);
             }
-           
-            message = AlumnoService.guardarAlumnoRelacion(alumno);
+            consultingAlumno.listHabilidades = alumno.listHabilidades;
+            consultingAlumno.listAreaInteres = alumno.listAreaInteres;
+
+            message = AlumnoService.guardarAlumnoRelacion(consultingAlumno);
            
             return Json(message, JsonRequestBehavior.AllowGet);
         }

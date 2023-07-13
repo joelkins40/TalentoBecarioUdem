@@ -63,6 +63,24 @@ namespace TalentoBecario.Controllers
             }else 
             if (isEmployee.Result.Trim() == "N")
             {
+               Alumno AlumnoConsulting= AlumnoService.ConsultarAlumno(username);
+                if (AlumnoConsulting.id == 0)
+                {
+                    AlumnoConsulting = SeleccionService.ObtieneDatosAlumno(username);
+                    if (AlumnoConsulting.pidm == null)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        AlumnoConsulting.formador.Id = "000000";
+                        AlumnoConsulting.horario = "NA";
+                        AlumnoConsulting.estatus = "Activo";
+                        AlumnoService.guardarAlumno(AlumnoConsulting);
+                    }
+                   
+                }
+               
                 Session["matricula"] = username;
                 return RedirectToAction("Index", "ProyectosAlumno");
             }

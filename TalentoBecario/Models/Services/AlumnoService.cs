@@ -62,7 +62,7 @@ namespace TalentoBecario.Models.Services
                                         matricula = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                         nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
                                         horario = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
-                                        carrera = (lector.IsDBNull(5) ? "" : lector.GetString(5)),
+                                        programa = (lector.IsDBNull(5) ? "" : lector.GetString(5)),
                                         estatus = (lector.IsDBNull(6) ? "" : lector.GetString(6)),
                                         formador = new Formador()
                                         {
@@ -153,7 +153,7 @@ namespace TalentoBecario.Models.Services
                                     matricula = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
                                     horario = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
-                                    carrera = (lector.IsDBNull(5) ? "" : lector.GetString(5)),
+                                    programa = (lector.IsDBNull(5) ? "" : lector.GetString(5)),
                                     estatus = (lector.IsDBNull(6) ? "" : lector.GetString(6)),
                                     formador = new Formador()
                                     {
@@ -213,7 +213,19 @@ namespace TalentoBecario.Models.Services
             }
             return "";
         }
-        public static Alumno ConsultarAlumno(string id)
+        
+        public static Alumno HomologarAlumno(string user)
+        {
+            Alumno alumno= SeleccionService.ObtieneDatosAlumno(user);
+            Alumno consulting = new Alumno();
+            consulting = ConsultarAlumno(alumno.matricula);
+            alumno.listAreaInteres = consulting.listAreaInteres;
+            alumno.listHabilidades = consulting.listHabilidades;
+            alumno.formador = consulting.formador;
+
+            return alumno; 
+        }
+            public static Alumno ConsultarAlumno(string id)
             {
                 Alumno alumno = new Alumno();
                 try
@@ -248,7 +260,7 @@ namespace TalentoBecario.Models.Services
                                         matricula = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                         nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
                                         horario = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
-                                        carrera = (lector.IsDBNull(5) ? "" : lector.GetString(5)),
+                                        programa = (lector.IsDBNull(5) ? "" : lector.GetString(5)),
                                         estatus = (lector.IsDBNull(6) ? "" : lector.GetString(6)),
                                         formador = new Formador()
                                         {
@@ -311,7 +323,7 @@ namespace TalentoBecario.Models.Services
                                     matricula = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
                                     horario = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
-                                    carrera = (lector.IsDBNull(5) ? "" : lector.GetString(5)),
+                                    programa = (lector.IsDBNull(5) ? "" : lector.GetString(5)),
                                     estatus = (lector.IsDBNull(6) ? "" : lector.GetString(6)),
                                     formador = new Formador()
                                     {
@@ -374,7 +386,7 @@ namespace TalentoBecario.Models.Services
                         });
                         comando.Parameters.Add(new OracleParameter("P_Carrera", OracleDbType.Varchar2)
                         {
-                            Value = registro.carrera,
+                            Value = registro.programa,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_Estatus", OracleDbType.Varchar2)
@@ -452,7 +464,7 @@ namespace TalentoBecario.Models.Services
                         });
                         comando.Parameters.Add(new OracleParameter("P_Carrera", OracleDbType.Varchar2)
                         {
-                            Value = registro.carrera,
+                            Value = registro.programa,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_Estatus", OracleDbType.Varchar2)
