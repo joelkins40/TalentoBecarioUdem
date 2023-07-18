@@ -52,6 +52,20 @@ namespace TalentoBecario.Controllers
 
             return Json(SolicitudesService.ConsultarSolicitud(id), JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public JsonResult ActualizarSolicitud(int id, string estatus)
+        {
+            Solicitud itemSolicitud = SolicitudesService.ConsultarSolicitud(id);
+                itemSolicitud.estatus = estatus;
+
+            return Json(SolicitudesService.ActualizarSolicitud(itemSolicitud), JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult rechazarSolicitud(int id)
+        {
+
+            return Json(SolicitudesService.ConsultarSolicitud(id), JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult Contact()
         {

@@ -58,16 +58,114 @@
 
     </div>
 </div>
+<div id="modalProyecto" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">No. Proyecto:  <span class="badge badge-success light" id="idProyecto"> </span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="product-detail-content">
+                    <!--Product details-->
+                    <div class="new-arrival-content pr">
+                        <div class="row">
+                            <div class="media mb-4 align-items-center col-md-12">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-user-circle"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1">Nombre del Proyecto</p>
+                                    <h4 class="mb-0 text-black" id="nombre">$124,00</h4>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="row">
+
+
+
+                            <div class="media mb-4 align-items-center col-md-6">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-people-carry"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1">Nombre del Responsable del proyecto</p>
+                                    <h4 class="mb-0 text-black" id="formador">$124,00</h4>
+                                </div>
+                            </div>
+                            <div class="media mb-4 align-items-center  col-md-6">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-sitemap"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1">Departamento UDEM</p>
+                                    <h4 class="mb-0 text-black" id="departamento">$124,00</h4>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="media mb-4 align-items-center ">
+                            <div class="me-3">
+                                <i style="font-size:40px; color:#0b5ed7" class="fa fa-chart-pie"></i>
+                            </div>
+                            <div class="media-body">
+                                <p class="mb-1"> Habilidades</p>
+                                <h4 class="mb-0 text-black" id="habilidades">$124,00</h4>
+                            </div>
+                        </div>
+                        <div class="media mb-4 align-items-center">
+                            <div class="me-3">
+                                <i style="font-size:40px; color:#0b5ed7" class="fa fa-puzzle-piece primary"></i>
+                            </div>
+                            <div class="media-body">
+                                <p class="mb-1"> Areas de Interes:</p>
+                                <h4 class="mb-0 text-black" id="intereses">$124,00</h4>
+                            </div>
+                        </div>
+
+
+                        <div class="media mb-4 align-items-center">
+                            <div class="me-3">
+                                <i style="font-size:40px; color:#0b5ed7" class="fa fa-envelope-open-text"></i>
+                            </div>
+                            <div class="media-body">
+                                <p class="mb-1">Descripción del proyecto</p>
+                                <p class="mb-0 text-black" id="descripcion">$124,00</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-md-12">
+                            <label class="form-label">Comentarios</label>
+                            <textarea name="comentario" id="comentario" class="form-control" rows="2" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarSolicitud()">Aplicar al proyecto</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
         function buscarProyecto(item) {
-        
-      
-      
+
+
+
 
                     $.post("@Url.Action("ConsultarProyecto","Proyectos")", { id: item}, function (datas) {
 
-                   
+
                         $("#idProyecto").text(datas.id);
                         $("#departamento").text(datas.departamento.Descripcion);
                         $("#nombre").text(datas.nombre);
@@ -77,16 +175,16 @@
                         $("#habilidades").empty();
                          $("#intereses").empty();
                         datas.listHabilidades.forEach(function (item) {
-                            var mess='<li id="item" class="list-group-item">' + item.Descripcion + '</li>'
+                            var mess='<span class="badge badge-success light">' + item.Descripcion + '</span>'
                             $("#habilidades").append(mess);
 
                         });
                      datas.listAreaInteres.forEach(function (item) {
-                            var mess='<li  id="item" class="list-group-item">' + item.Descripcion + '</li>'
+                            var mess='<span class="badge badge-success light">' + item.Descripcion + '</span>'
                             $("#intereses").append(mess);
 
                         });
-                        
+
                         $("#modalProyecto").modal("show");
                         });
         };
@@ -108,76 +206,16 @@
                     traditional: true,
                     data: solicitud,
                         success: function (results) {
-                            
+
                                 alert(results);
-                            
-                       
+
+
                       window.location.href = '/Ofertas';
-                      
-                   
+
+
                     }
                     })
     }
 
 </script>
-<div id="modalProyecto" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" >Datos del proyecto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-2">
-                        No.Proyecto: <h6 id="idProyecto"></h6>
-                    </div>
-                    <div class="col-md-10">
-                        Nombre: <h6 id="nombre"></h6>
-                    </div>
 
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        Formador: <h6 id="formador"></h6>
-                    </div>
-                    <div class="col-md-4">
-                        Descripción: <h6 id="descripcion"></h6>
-                    </div>
-                    <div class="col-md-4">
-                        Departamento UDEM: <h6 id="departamento"></h6>
-                    </div>
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col-md-6">
-                        Habilidades
-                        <ul class="list-group" id="habilidades"></ul>
-                    </div>
-                    <div class="col-md-6">
-                        Áreas de interes.
-                        <ul class="list-group" id="intereses"></ul>
-                    </div>
-
-                </div>
-                <div class="row">
-
-                    <div class="mb-3 col-md-12">
-                        <label class="form-label">Comentarios</label>
-                        <textarea name="comentario" id="comentario" class="form-control" rows="2" required></textarea>
-                    </div>
-
-                </div>
-
-
-
-            </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" onclick="guardarSolicitud()">Aplicar al proyecto</button>
-                </div>
-            </div>
-    </div>
-</div>

@@ -22,35 +22,43 @@
                             <div class="row">
                                 <div class="mb-3 col-md-3">
                                     <label class="form-label">Matrícula</label>
-                                    <input name="matricula" id="matricula" type="text" class="form-control" placeholder="Matrícula" value="01234567" disabled>
+                                    <input name="matricula" id="matricula" type="text" class="form-control" placeholder="Matrícula" value="@ViewBag.alumno.matricula" disabled>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Nombre del alumno</label>
-                                    <input name="nombre" id="nombre" type="text" class="form-control" placeholder="Nombre del Alumno" required>
+                                    <input name="nombre" id="nombre" type="text" class="form-control" placeholder="Nombre del Alumno" value="@ViewBag.alumno.nombre" disabled>
                                 </div>
                                 <div class="mb-3 col-md-3">
                                     <label class="form-label">Nivel</label>
-                                    <input name="nivel" id="nivel" type="text" class="form-control" placeholder="Nivel" required>
+                                    <input name="nivel" id="nivel" type="text" class="form-control" placeholder="Nivel" value="@ViewBag.alumno.nivel" disabled>
                                 </div>
 
                                 <div class="mb-3 col-md-3">
                                     <label class="form-label">Programa</label>
-                                    <input name="programa" id="programa" type="text" class="form-control" placeholder="Programa" required>
+                                    <input name="programa" id="programa" type="text" class="form-control" placeholder="Programa" value="@ViewBag.alumno.programa" disabled>
                                 </div>
                                 <div class="mb-3 col-md-3">
                                     <label class="form-label">Horario</label>
-                                    <input name="horario" id="horario" type="text" class="form-control" placeholder="Horario" required>
+                                    <input name="horario" id="horario" type="text" class="form-control" placeholder="Horario" value="@ViewBag.alumno.matricula" disabled>
                                 </div>
                                 <div class="mb-3 col-md-3">
-                                    <label class="form-label">Carrera</label>
-                                    <input name="carrera" id="carrera" type="text" class="form-control" placeholder="carrera" required>
+                                    <label class="form-label">Avance Academico</label>
+                                    <input name="carrera" id="carrera" type="text" class="form-control" placeholder="carrera" value="@ViewBag.alumno.avanceAcademico" disabled>
                                 </div>
                                 <div class="mb-3 col-md-3">
-                                    <label class="form-label">Formador</label>
-                                    <input name="formador" id="formador" type="text" class="form-control" placeholder="Formador" required>
+                                    <label class="form-label">% Beca</label>
+                                    <input name="carrera" id="carrera" type="text" class="form-control" placeholder="carrera" value="@ViewBag.alumno.porcentajeBeca%" disabled>
                                 </div>
 
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label">Horas</label>
+                                    <input name="formador" id="Horas" type="text" class="form-control" placeholder="Horas" value="@ViewBag.alumno.horas" disabled>
+                                </div>
+                                <div class="mb-3 col-md-9">
+                                    <label class="form-label">Formador</label>
+                                    <input name="formador" id="formador" type="text" class="form-control" placeholder="Formador" value="@ViewBag.alumno.formador.Nombre" disabled>
+                                </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Áreas de interés</label>
                                     <select name="interes" class="form-select" id="multiple-select-field" data-placeholder="" multiple>

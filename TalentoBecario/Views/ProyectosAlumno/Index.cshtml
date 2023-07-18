@@ -16,102 +16,47 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-responsive-md"  id="lista" name="lista">
+                        <table class="table table-responsive-md" id="lista" name="lista">
                             <thead>
+
                                 <tr>
                                     <th style="width:80px;"><strong>ID</strong></th>
                                     <th><strong>Nombre</strong></th>
                                     <th><strong>Departamento UDEM</strong></th>
-                                    <th><strong>Habilidades</strong></th>
-                                    <th><strong>Intereses</strong></th>
+                                    <th><strong>Formador</strong></th>
                                     <th><strong>Estatus</strong></th>
 
                                     <th></th>
                                 </tr>
+
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>01</strong></td>
-                                    <td>Proyecto A</td>
-                                    <td>Sistemas</td>
-                                    <td>Paginas Web</td>
-                                    <td>Informatica</td>
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i>Activo</div></td>
+                                @foreach (var item in ViewBag.listProyectos)
+                                {
 
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Ver Detalles</a>
+                                    <tr>
+                                        <td><strong>@item.id</strong></td>
+                                        <td>@item.proyecto.nombre</td>
+                                        <td>@item.proyecto.departamento.Descripcion</td>
+                                        <td>@item.proyecto.formador.Nombre</td>
+
+                                        <td><div class="d-flex align-items-center"><i class="fa fa-circle @(item.estatus.Equals("En Revisión") ? "text-warning" : "") @(item.estatus.Equals("Aceptada") ? "text-success" : "") @(item.estatus.Equals("Rechazada") ? "text-danger" : "")   me-1"></i>@item.estatus</div></td>
+
+                                        <td>
+                                            <div class="dropdown">
+                                                <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
+                                                    <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item"  onclick="buscarProyecto(@item.id)">Ver Detalles</a>
 
 
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                }
 
-                                <tr>
-                                    <td><strong>02</strong></td>
-                                    <td>Proyecto B</td>
-                                    <td>Biblioteca</td>
-                                    <td>Desarrollo</td>
-                                    <td>Software</td>
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-danger me-1"></i> Terminado</div></td>
-
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-danger light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Ver detalles</a>
-
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>02</strong></td>
-                                    <td>Proyecto B</td>
-                                    <td>Biblioteca</td>
-                                    <td>Desarrollo</td>
-                                    <td>Software</td>
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-danger me-1"></i> Terminado</div></td>
-
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-danger light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Ver Detalles</a>
-
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>02</strong></td>
-                                    <td>Proyecto B</td>
-                                    <td>Biblioteca</td>
-                                    <td>Desarrollo</td>
-                                    <td>Software</td>
-                                    <td><div class="d-flex align-items-center"><i class="fa fa-circle text-danger me-1"></i> Terminado</div></td>
-
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-danger light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Ver Detalles</a>
-
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -121,3 +66,174 @@
 
     </div>
 </div>
+
+<div id="modalProyecto" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Solicitud No  <span class="badge badge-success light" id="idProyecto"> </span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="product-detail-content">
+                    <!--Product details-->
+                    <div class="new-arrival-content pr">
+                        <div class="row">
+                            <div class="media mb-4 align-items-center col-md-9">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-user-circle"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1">Nombre del Proyecto</p>
+                                    <h4 class="mb-0 text-black" id="nombre">$124,00</h4>
+                                </div>
+                            </div>
+                            <div class="media mb-4 align-items-center col-md-2">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-info-circle"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1"> Estatus</p>
+                                    <h4 class="mb-0 text-black" id="estatus">$124,00</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+
+
+                            <div class="media mb-4 align-items-center col-md-6">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-people-carry"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1">Nombre del Responsable del proyecto</p>
+                                    <h4 class="mb-0 text-black" id="formador">$124,00</h4>
+                                </div>
+                            </div>
+                            <div class="media mb-4 align-items-center  col-md-6">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-sitemap"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1">Departamento UDEM</p>
+                                    <h4 class="mb-0 text-black" id="departamento">$124,00</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                            <div class="media mb-4 align-items-center ">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-chart-pie"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1"> Habilidades</p>
+                                    <h4 class="mb-0 text-black" id="habilidades">$124,00</h4>
+                                </div>
+                            </div>
+                            <div class="media mb-4 align-items-center">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-puzzle-piece primary"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1"> Areas de Interes:</p>
+                                    <h4 class="mb-0 text-black" id="intereses">$124,00</h4>
+                                </div>
+                            </div>
+                    
+
+                            <div class="media mb-4 align-items-center">
+                                <div class="me-3">
+                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-envelope-open-text"></i>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-1">Descripción del proyecto</p>
+                                    <p class="mb-0 text-black" id="descripcion">$124,00</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Comentarios</label>
+                                <textarea name="comentario" id="comentario" class="form-control" rows="2" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                
+               
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Cerrar</button>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        function buscarProyecto(item) {
+
+
+
+
+                    $.post("@Url.Action("ConsultarSolicitud","Ofertas")", { id: item}, function (datas) {
+
+
+                        $("#idProyecto").text(datas.id);
+                        $("#departamento").text(datas.proyecto.departamento.Descripcion);
+                        $("#nombre").text(datas.proyecto.nombre);
+                        $("#descripcion").text(datas.proyecto.descripcion);
+                        $("#estatus").val(datas.estatus);
+                        $("#formador").text(datas.proyecto.formador.Nombre);
+                        $('#comentario').val(datas.comentario),
+                        $('#estatus').text(datas.estatus)  ,
+                        $("#habilidades").empty();
+                         $("#intereses").empty();
+                        datas.proyecto.listHabilidades.forEach(function (item) {
+                            var mess='<span class="badge badge-success light">' + item.Descripcion + '</span>'
+                            $("#habilidades").append(mess);
+
+                        });
+                     datas.proyecto.listAreaInteres.forEach(function (item) {
+                            var mess='<span class="badge badge-success light">' + item.Descripcion + '</span>'
+                            $("#intereses").append(mess);
+
+                        });
+
+                        $("#modalProyecto").modal("show");
+                        });
+        };
+    function guardarSolicitud() {
+
+          var solicitud = JSON.stringify(
+              {
+                   'alumno.Pidm': '0',
+                  'proyecto.id': $('#idProyecto').text(),
+                  'comentario': $('#comentario').val(),
+                    'estatus':'En Revisión'
+
+                    });
+                    $.ajax({
+                    url: '/Ofertas/SaveSolicitud',
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    traditional: true,
+                    data: solicitud,
+                        success: function (results) {
+
+                                alert(results);
+
+
+                      window.location.href = '/Ofertas';
+
+
+                    }
+                    })
+    }
+
+</script>

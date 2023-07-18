@@ -128,6 +128,8 @@ namespace TalentoBecario.Models.Services
             return solicitud;
 
         }
+
+
         public static List<Solicitud> ConsultarSiExisteSolicitud(int idAlumno,int idProyecto)
         {
           
@@ -189,7 +191,64 @@ namespace TalentoBecario.Models.Services
             return solicituds;
 
         }
+        public static List<Solicitud> consultarSolicitudesAlumno(int matricula)
+        {
 
+            List<Solicitud> solicituds = new List<Solicitud>();
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_HISTORIAL_BY_ALUMNO";
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.BindByName = true;
+
+                        comando.Parameters.Add(new OracleParameter("P_IdAlumno", OracleDbType.Int16)
+                        {
+                            Value = matricula,
+                            Direction = ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+                            while (lector.Read())
+                            {
+                                solicituds.Add(new Solicitud
+                                {
+                                    id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
+                                  
+
+
+                                    proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? 0 : lector.GetInt32(2))),
+                                    comentario = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
+                                    estatus = (lector.IsDBNull(4) ? "" : lector.GetString(4))
+
+
+                                });
+                            }
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return solicituds;
+
+        }
         public static List<Solicitud> consultarSolicitudesFormador(string formador)
         {
 
@@ -340,7 +399,7 @@ namespace TalentoBecario.Models.Services
 
                         comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                         {
-                            Value = registro.alumno.id,
+                            Value = registro.id,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdAlumno", OracleDbType.Int16)

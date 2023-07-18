@@ -25,7 +25,7 @@
                                     <th><strong>Nivel</strong></th>
                                     <th><strong>Programa</strong></th>
                                     <th><strong>Formador</strong></th>
-                                    <th><strong>Estatus</strong></th>
+                                    
                                     <th></th>
                                 </tr>
                             </thead>
@@ -33,23 +33,21 @@
                                 @foreach (var item in ViewBag.listAlumnos)
                                 {
                                     <tr>
-                                        <td><strong>@item.Pidm</strong></td>
+                                        <td><strong>@item.matricula</strong></td>
                                         <td>@item.nombre</td>
                                         <td>@item.nivel</td>
                                         <td>@item.programa</td>
-                                        <td>Hilario Hinojosa</td>
+                                        <td>@item.formador.Nombre</td>
 
-                                        <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
-
+                                       
                                         <td>
                                             <div class="dropdown">
                                                 <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
                                                     <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Ver Perfil</a>
-                                                    <a class="dropdown-item" href="#">Historial</a>
-                                                    <a class="dropdown-item" href="#">Solicitar Alumno</a>
+                                                    
+                                                    <a class="dropdown-item" onclick="cambiarFormador('@item.matricula')">Solicitar Alumno</a>
 
                                                 </div>
                                             </div>
@@ -130,34 +128,14 @@
 </div>
 
 <script>
-        function buscarProyecto(item) {
+        function cambiarFormador(item) {
 
 
 
 
-                    $.post("@Url.Action("ConsultarProyecto","Proyectos")", { id: item}, function (datas) {
-
-
-                        $("#idProyecto").text(datas.id);
-                        $("#departamento").text(datas.departamento.Descripcion);
-                        $("#nombre").text(datas.nombre);
-                        $("#descripcion").text(datas.descripcion);
-                        $("#estatus").val(datas.estatus);
-                        $("#formador").text(datas.formador.Nombre);
-                        $("#habilidades").empty();
-                         $("#intereses").empty();
-                        datas.listHabilidades.forEach(function (item) {
-                            var mess='<li id="item" class="list-group-item">' + item.Descripcion + '</li>'
-                            $("#habilidades").append(mess);
-
-                        });
-                     datas.listAreaInteres.forEach(function (item) {
-                            var mess='<li  id="item" class="list-group-item">' + item.Descripcion + '</li>'
-                            $("#intereses").append(mess);
-
-                        });
-
-                        $("#modalProyecto").modal("show");
+            $.post("@Url.Action("AsignarAlumnoFormador","Seleccion")", { matricula: item }, function (datas) {
+                alert('El Alumno se ha asignado'); 
+                 window.location.href = '/Seleccion';
                         });
         };
     function guardarSolicitud() {

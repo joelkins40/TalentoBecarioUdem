@@ -218,7 +218,9 @@ namespace TalentoBecario.Models.Services
         {
             Alumno alumno= SeleccionService.ObtieneDatosAlumno(user);
             Alumno consulting = new Alumno();
+
             consulting = ConsultarAlumno(alumno.matricula);
+            alumno.id = consulting.id;
             alumno.listAreaInteres = consulting.listAreaInteres;
             alumno.listHabilidades = consulting.listHabilidades;
             alumno.formador = consulting.formador;

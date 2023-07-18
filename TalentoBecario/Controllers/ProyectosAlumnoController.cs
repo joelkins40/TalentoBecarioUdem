@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
@@ -10,6 +11,9 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
+            string matricula = Convert.ToString(Session["matricula"]);
+
+            ViewBag.listProyectos=SolicitudesService.consultarSolicitudesAlumno(AlumnoService.ConsultarAlumno(matricula).id);
             return View();
         }
 
