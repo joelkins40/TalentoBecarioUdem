@@ -134,8 +134,14 @@
 
 
             $.post("@Url.Action("AsignarAlumnoFormador","Seleccion")", { matricula: item }, function (datas) {
-                alert('El Alumno se ha asignado'); 
-                 window.location.href = '/Seleccion';
+              
+                if (datas == 'A') {
+                    window.location.href = '/Seleccion';
+                     alert('El alumno ha sido asignado a un formador'); 
+                } else {
+                      alert(datas); 
+                }
+                 
                         });
         };
     function guardarSolicitud() {

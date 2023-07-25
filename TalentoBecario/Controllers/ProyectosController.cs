@@ -12,8 +12,11 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.NameUser = "Joel Vargas Osorio";
 
             string matricula = Convert.ToString(Session["matricula"]);
+            ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
+           
             ViewBag.listProyectos = ProyectoService.ObtieneListProyectosPorFormador(matricula);
 
             return View();
@@ -36,6 +39,7 @@ namespace TalentoBecario.Controllers
                     descripcion=""
                 };
             }
+            ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
             ViewBag.listAreaInteres = AreaInteresService.ObtieneListAreaIntereses();
             ViewBag.listHabilidades = HabilidadesService.ObtieneListHabilidades();
             ViewBag.listDepartamentos = DepartamentoService.ObtieneListDepartamentos();

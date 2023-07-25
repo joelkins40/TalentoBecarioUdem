@@ -12,6 +12,7 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
             ViewBag.listProyectos = ProyectoService.ObtieneListProyectos().Where(o => o.estatus == "En Oferta"); ;
             return View();
         }

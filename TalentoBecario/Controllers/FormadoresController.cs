@@ -14,7 +14,7 @@ namespace TalentoBecario.Controllers
         public ActionResult Index()
         {
             Formador formador = new Formador();
-
+            ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
 
 
             ViewBag.listFormadores = FormadorService.ObtieneListFormadores();

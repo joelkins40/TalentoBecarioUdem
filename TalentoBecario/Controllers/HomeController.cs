@@ -43,8 +43,8 @@ namespace TalentoBecario.Controllers
             bool valida = StudentService.ValidaCredenciales(username, pass);
             if (!valida)
             {
-                ViewBag.ErrorLogin = "Cuenta o contraseña incorrecta";
-                return RedirectToAction("Index", "Home");
+           //     ViewBag.ErrorLogin = "Cuenta o contraseña incorrecta";
+           //     return RedirectToAction("Index", "Home");
             }
 
             var pidmResult = StudentService.GetPidm(username);
@@ -56,9 +56,9 @@ namespace TalentoBecario.Controllers
             if (isEmployee.Result.Trim() == "Y")
             {
                 Session["matricula"] = username;
-                FormadorService.verificarFormador(new Formador(){
+                Formador consulting= FormadorService.verificarFormador(new Formador(){
                     Id = Convert.ToString(username) }, pidmResult);
-
+                Session["nombreUser"] = consulting.Nombre;
                 return RedirectToAction("Index", "Proyectos");
             }else 
             if (isEmployee.Result.Trim() == "N")
@@ -82,6 +82,7 @@ namespace TalentoBecario.Controllers
                 }
                
                 Session["matricula"] = username;
+                Session["nombreUser"] = AlumnoConsulting.nombre;
                 return RedirectToAction("Index", "ProyectosAlumno");
             }
 

@@ -12,6 +12,7 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
             ViewBag.listAlumnos = SeleccionService.AlumnosFiltro();
             return View();
         }
@@ -25,6 +26,7 @@ namespace TalentoBecario.Controllers
            string idFormador= Convert.ToString(Session["matricula"]);
             String message="";
            Alumno itemAlumno = AlumnoService.ConsultarAlumno(matricula);
+           
             if (itemAlumno.matricula == null)
 
             {
@@ -32,12 +34,28 @@ namespace TalentoBecario.Controllers
                 itemAlumno.formador.Id = idFormador;
                 itemAlumno.horario = "NA";
                 itemAlumno.estatus = "A";
-                message = AlumnoService.guardarAlumno(itemAlumno);
+                AlumnoService.guardarAlumno(itemAlumno);
+                message = "A";
             }
             else
             {
-                itemAlumno.formador.Id = idFormador;
-                message = AlumnoService.ActualizarAlumno(itemAlumno);
+                
+                if (itemAlumno.formador.Id == "000000")
+                {
+                    itemAlumno.formador.Id = idFormador;
+                    AlumnoService.ActualizarAlumno(itemAlumno);
+                    message = "A";
+
+                }
+                else if(itemAlumno.formador.Id == idFormador)
+                {
+                    message = "El alumno ya pertenece a su grupo de alumnos asignados.";
+                }
+                else
+                {
+                    message = "El alumno ya pertenece a un formador.";
+                }
+               
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);

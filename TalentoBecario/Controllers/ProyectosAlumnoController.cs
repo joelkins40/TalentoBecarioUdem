@@ -11,6 +11,7 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
             string matricula = Convert.ToString(Session["matricula"]);
 
             ViewBag.listProyectos=SolicitudesService.consultarSolicitudesAlumno(AlumnoService.ConsultarAlumno(matricula).id);

@@ -45,9 +45,11 @@
                                                 <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" onclick="OfertarProyecto(@item.id)">Ofertar</a>
                                                 <a class="dropdown-item" href="@Url.Action("Agregar","Proyectos" , new {id= item.id})">Editar</a>
-                                                <a class="dropdown-item" onclick="CancelarProyecto(@item.id)">Cancelar</a>
+                                                <a class="dropdown-item" onclick="OfertarProyecto(@item.id)">Ofertar</a>
+                                                                                                <a class="dropdown-item" onclick="pausarProyecto(@item.id)">Pausar</a>
+                                                                                                <a class="dropdown-item" onclick="CancelarProyecto(@item.id)">Cancelar</a>
+                                                <a class="dropdown-item" onclick="finalizarProyecto(@item.id)">Finalizar</a>
                                             </div>
                                         </div>
                                     </td>
@@ -107,6 +109,32 @@
 
 
                     $.post("@Url.Action("ActualizarProyecto", "Proyectos")", { id: id,estatus:'Cancelado'}, function (datas) {
+
+                    alert("El proyecto ha sido Cancelado")
+
+                        window.location.href = '/Proyectos';
+
+                    });
+        };
+
+    
+    function   finalizarProyecto(id) {
+
+
+
+                    $.post("@Url.Action("ActualizarProyecto", "Proyectos")", { id: id,estatus:'Finalizado'}, function (datas) {
+
+                    alert("El proyecto ha sido Cancelado")
+
+                        window.location.href = '/Proyectos';
+
+                    });
+        };
+       function   pausarProyecto(id) {
+
+
+
+                    $.post("@Url.Action("ActualizarProyecto", "Proyectos")", { id: id,estatus:'Pausado'}, function (datas) {
 
                     alert("El proyecto ha sido Cancelado")
 

@@ -14,7 +14,7 @@ namespace TalentoBecario.Controllers
         {
             string user = Convert.ToString(Session["matricula"]);
 
-            
+            ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
             ViewBag.alumno = AlumnoService.HomologarAlumno(user);
 
             ViewBag.listAreaInteres = AreaInteresService.ObtieneListAreaIntereses();

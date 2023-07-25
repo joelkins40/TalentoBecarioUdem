@@ -14,7 +14,7 @@ namespace TalentoBecario.Controllers
         {
             AreaInteres areaInteres = new AreaInteres();
 
-
+            ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
             ViewBag.listAreaIntereses = AreaInteresService.ObtieneListAreaIntereses();
 
            
