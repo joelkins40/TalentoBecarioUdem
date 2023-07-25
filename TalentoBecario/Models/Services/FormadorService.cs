@@ -440,6 +440,7 @@ namespace TalentoBecario.Models.Services
                     {
                         user = new Dictionary<string, dynamic>
                         {
+                            { "Nombre", (lector.IsDBNull(4) ? "Sin nombre" : lector.GetString(4))},
                             { "Email", (lector.IsDBNull(6) ? "Sin correo" : lector.GetString(6))},
                             { "Estatus", (lector.IsDBNull(10) ? " " : lector.GetString(10)) },
                             { "Departamento", (lector.IsDBNull(17) ? " " : lector.GetString(17)) },
