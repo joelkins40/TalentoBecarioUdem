@@ -13,6 +13,10 @@ namespace TalentoBecario.Models.Entity
         public string descripcion { get; set; }
         public string estatus { get; set; }
         public int alumnosRequeridos { get; set; }
+        public int noSolicitudes { get; set; }
+        public int noAsignados { get; set; }
+        public int noRechazados { get; set; }
+        public int noEnRevision { get; set; }
         public Departamento departamento { get; set; }
         public Formador formador { get; set; }
         public List<AreaInteres> listAreaInteres { get; set; }

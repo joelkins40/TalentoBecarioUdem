@@ -17,14 +17,15 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-responsive-md"  id="lista" name="lista">
-                            <thead>
+                        <table style="font-size:14px" class="table table-responsive-md"  id="lista" name="lista">
+                            <thead style="font-size:14px">
                                 <tr>
                                     <th style="width:80px;"><strong>ID</strong></th>
                                     <th style="width:200%;"><strong>Nombre</strong></th>
-                                    <th ><strong>Requeridos</strong></th>
-                                    <th><strong>Aplicados</strong></th>
+                                    <th><strong>Requeridos</strong></th>
+                                    <th><strong>Solicitudes</strong></th>
                                     <th><strong>Aceptados</strong></th>
+                                    <th><strong>Pendientes</strong></th>
                                     <th><strong>Estatus</strong></th>
                                     <th></th>
                                 </tr>
@@ -36,8 +37,9 @@
                                     <td><strong>@item.id</strong></td>
                                     <td>@item.nombre</td>
                                     <td>@item.alumnosRequeridos</td>
-                                    <td>@item.alumnosRequeridos</td>
-                                    <td>@item.alumnosRequeridos</td>
+                                    <td>@item.noSolicitudes</td>
+                                    <td>@item.noAsignados</td>
+                                    <td>@item.noEnRevision</td>
                                     <td>@item.estatus</td>
                                     <td>
                                         <div class="dropdown">
@@ -47,8 +49,8 @@
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="@Url.Action("Agregar","Proyectos" , new {id= item.id})">Editar</a>
                                                 <a class="dropdown-item" onclick="OfertarProyecto(@item.id)">Ofertar</a>
-                                                                                                <a class="dropdown-item" onclick="pausarProyecto(@item.id)">Pausar</a>
-                                                                                                <a class="dropdown-item" onclick="CancelarProyecto(@item.id)">Cancelar</a>
+                                                <a class="dropdown-item" onclick="pausarProyecto(@item.id)">Pausar</a>
+                                                <a class="dropdown-item" onclick="CancelarProyecto(@item.id)">Cancelar</a>
                                                 <a class="dropdown-item" onclick="finalizarProyecto(@item.id)">Finalizar</a>
                                             </div>
                                         </div>

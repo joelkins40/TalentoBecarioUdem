@@ -119,7 +119,7 @@ namespace TalentoBecario.Models.Services
                                     nombre = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                     descripcion = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     estatus = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
-                                    alumnosRequeridos = (lector.IsDBNull(7) ? 0 : lector.GetInt32(7)),
+                                    
                                     formador = new Formador()
                                     {
                                         Id = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
@@ -129,8 +129,14 @@ namespace TalentoBecario.Models.Services
                                     {
                                         Id = (lector.IsDBNull(6) ? 0 : lector.GetInt32(6)),
                                         Descripcion = (lector.IsDBNull(8) ? "" : lector.GetString(8)),
-                                    }
+                                    },
+                                    alumnosRequeridos = (lector.IsDBNull(7) ? 0 : lector.GetInt32(7)),
 
+                                    
+                                    noSolicitudes = (lector.IsDBNull(9) ? 0 : lector.GetInt32(9)),
+                                     noAsignados = (lector.IsDBNull(10) ? 0 : lector.GetInt32(10)),
+                                     noRechazados = (lector.IsDBNull(11) ? 0 : lector.GetInt32(11)),
+                                    noEnRevision = (lector.IsDBNull(12) ? 0 : lector.GetInt32(12)),
 
                                 });
                             }
