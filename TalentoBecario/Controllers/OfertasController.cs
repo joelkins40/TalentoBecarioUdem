@@ -13,7 +13,7 @@ namespace TalentoBecario.Controllers
         public ActionResult Index()
         {
             ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
-            ViewBag.listProyectos = ProyectoService.ObtieneListProyectos().Where(o => o.estatus == "En Oferta"); ;
+            ViewBag.listProyectos = ProyectoService.ObtieneListProyectos().Where(o => o.estatus == "En Oferta");
             return View();
         }
 
@@ -58,7 +58,12 @@ namespace TalentoBecario.Controllers
         {
             Solicitud itemSolicitud = SolicitudesService.ConsultarSolicitud(id);
                 itemSolicitud.estatus = estatus;
-
+            if (estatus.Equals("Asignado"))
+            {
+                itemSolicitud.alumno.formador = itemSolicitud.proyecto.formador;
+                AlumnoService.ActualizarAlumno(itemSolicitud.alumno);
+                
+            }
             return Json(SolicitudesService.ActualizarSolicitud(itemSolicitud), JsonRequestBehavior.AllowGet);
         }
         [HttpPost]

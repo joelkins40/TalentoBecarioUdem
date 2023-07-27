@@ -450,6 +450,73 @@ namespace TalentoBecario.Models.Services
             return "Registro Actualizado Con Éxito";
 
         }
+        public static String ActualizarSolicitudesPorEstatus(Solicitud registro)
+        {
+            int rowAffected = 0;
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_HIAL";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
+                        {
+                            Value = registro.id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_IdAlumno", OracleDbType.Int16)
+                        {
+                            Value = registro.alumno.id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_IdProyecto", OracleDbType.Int16)
+                        {
+                            Value = registro.proyecto.id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+
+                        comando.Parameters.Add(new OracleParameter("P_Comentarios", OracleDbType.Varchar2)
+                        {
+                            Value = registro.comentario,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Estatus", OracleDbType.Varchar2)
+                        {
+                            Value = registro.estatus,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 200)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+
+                        cnx.Open();
+                        try
+                        {
+                            comando.ExecuteNonQuery();
+
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return "Registro Actualizado Con Éxito";
+
+        }
 
         public static string EliminarSolicitud(int id)
         {

@@ -290,6 +290,59 @@ namespace TalentoBecario.Models.Services
                 return alumno;
 
             }
+        public static Alumno ConsultarFormadorDelAlumno(string id)
+        {
+            Alumno alumno = new Alumno();
+            try
+            {
+                using (OracleConnection cnx = new OracleConnection(_conString))
+                {
+                    using (OracleCommand comando = new OracleCommand())
+                    {
+                        comando.Connection = cnx;
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_ALUMNO";
+                        comando.CommandType = System.Data.CommandType.StoredProcedure;
+                        comando.BindByName = true;
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Varchar2)
+                        {
+                            Value = id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
+                        {
+                            Direction = ParameterDirection.ReturnValue
+                        });
+                        cnx.Open();
+                        try
+                        {
+                            OracleDataReader lector = comando.ExecuteReader();
+                            while (lector.Read())
+                            {
+                                alumno = new Alumno()
+                                {
+                                    formador = new Formador()
+                                    {
+                                        Id = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
+                                        Nombre = (lector.IsDBNull(8) ? "" : lector.GetString(8))
+                                    },
+
+};
+                            }
+                        }
+                        finally
+                        {
+                            cnx.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return alumno;
+
+        }
         public static Alumno ConsultarAlumnoByCode(string id)
         {
             Alumno alumno = new Alumno();
@@ -461,7 +514,7 @@ namespace TalentoBecario.Models.Services
                         });
                         comando.Parameters.Add(new OracleParameter("P_Horario", OracleDbType.Varchar2)
                         {
-                            Value = registro.horario,
+                            Value = "NA",
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_Carrera", OracleDbType.Varchar2)
@@ -471,7 +524,7 @@ namespace TalentoBecario.Models.Services
                         });
                         comando.Parameters.Add(new OracleParameter("P_Estatus", OracleDbType.Varchar2)
                         {
-                            Value = registro.estatus,
+                            Value = "NA",
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdFormador", OracleDbType.Varchar2)

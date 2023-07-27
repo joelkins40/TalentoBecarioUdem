@@ -161,7 +161,13 @@ namespace TalentoBecario.Models.Services
             return formadores;
 
         }
+        public static Formador HomologarFormador(string id)
+        {
+            Formador formador = new Formador();
+            formador = ConsultarFormadorExternos(id);
+            return ConsultarFormadorDatos(formador);
 
+        }
         public static Formador ConsultarFormadorExternos(string id)
         {
             Formador formador = new Formador();
@@ -192,9 +198,11 @@ namespace TalentoBecario.Models.Services
                             {
                                 formador = new Formador()
                                 {
-                                    Id = lector.GetString(1),
+                                   
+                                    Id = lector.IsDBNull(1) ? "000000" : lector.GetString(1),
                                     Nombre = lector.GetString(2),
-
+                                    Departamento=lector.GetString(7),
+                                    Direccion = lector.GetString(8),
                                 };
                             }
                         }
@@ -460,7 +468,42 @@ namespace TalentoBecario.Models.Services
             return user;
         }
 
+        public static Formador ConsultarFormadorDatos(Formador formador)
+        {
+            Dictionary<string, dynamic> user = new Dictionary<string, dynamic>();
+
+            using (var conn = new OracleConnection(_conPeopleSoftString))
+            {
+                var command = new OracleCommand("SELECT * FROM sysadm.PS_UDEM_RHPS_VW WHERE ALTER_EMPLID = '" + formador.Id + "'", conn);
+                //command.Parameters.Add("@Matricula", matricula);
+
+                conn.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+
+                    var lector = command.ExecuteReader();
+
+                    while (lector.Read())
+                    {
+                        formador.Email = lector.IsDBNull(6) ? "Sin correo" : lector.GetString(6);
+                        formador.Vicerreptoria = lector.IsDBNull(17) ? " " : lector.GetString(17);
+                        
+                    }
+                    conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return formador;
+        }
 
     }
-    
+
 }

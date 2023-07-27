@@ -11,6 +11,8 @@ namespace TalentoBecario.Models.Entity
         public string Nombre { get; set; }
         public string Email { get; set; }
         public string Departamento { get; set; }
+        public string Direccion { get; set; }
+        public string Vicerreptoria { get; set; }
         public List<AreaInteres> listAreaInteres { get; set; }
         public List<AreaInteres> listHabilidades { get; set; }
     }
