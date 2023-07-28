@@ -203,6 +203,7 @@ namespace TalentoBecario.Models.Services
                                     Nombre = lector.GetString(2),
                                     Departamento=lector.GetString(7),
                                     Direccion = lector.GetString(8),
+                                    EmailInst = lector.GetString(9),
                                 };
                             }
                         }

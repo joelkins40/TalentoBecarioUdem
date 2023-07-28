@@ -14,6 +14,7 @@ namespace TalentoBecario.Controllers
         {
             ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
             string matricula = Convert.ToString(Session["matricula"]);
+            ViewBag.mensaje = ComunicadosService.ConsultarComunicado(0, 1);
             Proyecto itemValor = new Proyecto();
             Alumno alumno = AlumnoService.ConsultarAlumno(matricula);
             foreach (Solicitud item in  SolicitudesService.consultarSolicitudesAlumno(alumno.id))

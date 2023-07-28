@@ -21,6 +21,8 @@ namespace TalentoBecario.Models.Entity
         public string horas { get; set; }
         public string beca { get; set; }
         public string estatus { get; set; }
+        public string EmailInst { get; set; }
+        
         public Formador formador { get; set; }
       
         public List<AreaInteres> listAreaInteres { get; set; }

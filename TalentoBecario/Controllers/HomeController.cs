@@ -83,7 +83,7 @@ namespace TalentoBecario.Controllers
                
                 Session["matricula"] = username;
                 Session["nombreUser"] = AlumnoConsulting.nombre;
-                return RedirectToAction("Index", "ProyectosAlumno");
+                return RedirectToAction("Index", "MiProyecto");
             }
 
             return RedirectToAction("Index", "Home");

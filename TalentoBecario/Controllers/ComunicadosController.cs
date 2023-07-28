@@ -13,47 +13,44 @@ namespace TalentoBecario.Controllers
         public ActionResult Index()
         {
             ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
-            Habilidad habilidad = new Habilidad();
 
-
-
-            ViewBag.listHabilidades = HabilidadesService.ObtieneListHabilidades();
+            ViewBag.listComunicados = ComunicadosService.ObtieneListComunicadoes();
 
             
-            ViewBag.habilidad = habilidad;
+            
 
             return View();
         }
 
         [HttpPost]
-        public JsonResult SaveHabilidad(Habilidad habilidad)
+        public JsonResult SaveComunicado(Comunicado comunicado)
         {
             string message = "";
 
-            if (habilidad.Id == 0)
+            if (comunicado.id == 0)
             {
-                message= HabilidadesService.guardarHabilidad(habilidad);
+                message= ComunicadosService.guardarComunicado(comunicado);
             }
             else
             {
-                message= HabilidadesService.ActualizarHabilidad(habilidad);
+                message= ComunicadosService.ActualizarComunicado(comunicado);
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public JsonResult ConsultarHabilidad(int id)
+        public JsonResult ConsultarComunicado(int id,int tipo)
         {
-            Habilidad habilidad= HabilidadesService.ConsultarHabilidad(id);
+            Comunicado comunicado= ComunicadosService.ConsultarComunicado(id,tipo)[0];
 
             
-            return Json(habilidad, JsonRequestBehavior.AllowGet);
+            return Json(comunicado, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult EliminarHabilidad(int id)
+        public JsonResult EliminarComunicado(int id)
         {
-            String message = HabilidadesService.EliminarHabilidad(id);
+            String message = ComunicadosService.EliminarComunicado(id);
 
 
             return Json("Registro Eliminado", JsonRequestBehavior.AllowGet);

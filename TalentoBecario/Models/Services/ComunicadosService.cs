@@ -57,9 +57,13 @@ namespace TalentoBecario.Models.Services
 
                                 comunicadoes.Add(new Comunicado()
                                 {
-                             
-                                    id= lector.GetInt32(0),
-                                    descripcion = lector.GetString(1),
+                                    id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
+                                    tipo = (lector.IsDBNull(1) ? 0 : lector.GetInt32(1)),
+                                    descripcion = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
+                                    visible = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
+
+                                    titulo = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
+                                   
 
 
 
@@ -94,16 +98,17 @@ namespace TalentoBecario.Models.Services
         }
 
 
-        public static Comunicado ConsultarComunicado(int id)
+        public static List<Comunicado> ConsultarComunicado(int id,int tipo)
         {
-            Comunicado comunicado = new Comunicado();
-            try{
+            List<Comunicado> comunicadoes = new List<Comunicado>();
+            try
+            {
                 using (OracleConnection cnx = new OracleConnection(_conString))
                 {
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_MENSAJES";
+                        comando.CommandText = "SZ_BMA_RTB.F_GET_MENSAJE_BY_TYPE_ID";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
@@ -111,6 +116,12 @@ namespace TalentoBecario.Models.Services
                             Value = id,
                             Direction = System.Data.ParameterDirection.Input
                         });
+                        comando.Parameters.Add(new OracleParameter("P_Tipo", OracleDbType.Int16)
+                        {
+                            Value = tipo,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                       
                         comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
                         {
                             Direction = ParameterDirection.ReturnValue
@@ -121,12 +132,16 @@ namespace TalentoBecario.Models.Services
                             OracleDataReader lector = comando.ExecuteReader();
                             while (lector.Read())
                             {
-                                comunicado=new Comunicado()
+                                comunicadoes.Add(new Comunicado()
                                 {
-                                    id = lector.GetInt32(0),
-                                    descripcion = lector.GetString(1),
-                                     visible = lector.GetString(2)
-                                };
+                                    id = (lector.IsDBNull(0) ? 0 : lector.GetInt32(0)),
+                                    tipo = (lector.IsDBNull(1) ? 0 : lector.GetInt32(1)),
+                                    descripcion = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
+                                    visible = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
+
+                                    titulo = (lector.IsDBNull(4) ? "" : lector.GetString(4)),
+
+                                });
                             }
                         }
                         finally
@@ -140,7 +155,7 @@ namespace TalentoBecario.Models.Services
             {
                 Console.WriteLine(ex.Message);
             }
-            return comunicado;
+            return comunicadoes;
 
         }
 
@@ -160,6 +175,11 @@ namespace TalentoBecario.Models.Services
                         comando.Parameters.Add(new OracleParameter("P_Tipo", OracleDbType.Varchar2)
                         {
                             Value = registro.tipo,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_Titulo", OracleDbType.Varchar2)
+                        {
+                            Value = registro.titulo,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
@@ -202,18 +222,29 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_HAB";
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_MSJ";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
 
                         comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                         {
-                            Value = registro.tipo,
+                            Value = registro.id,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        
+                        comando.Parameters.Add(new OracleParameter("P_Titulo", OracleDbType.Varchar2)
+                        {
+                            Value = registro.titulo,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
                         {
                             Value = registro.descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_IsVisible", OracleDbType.Int16)
+                        {
+                            Value = registro.visible,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
@@ -249,7 +280,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_HAB";
+                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_DELETE_MSJ";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
 

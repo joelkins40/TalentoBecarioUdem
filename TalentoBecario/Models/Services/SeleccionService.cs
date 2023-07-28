@@ -129,7 +129,8 @@ namespace TalentoBecario.Models.Services
                                     formador = new Formador()
                                     {
                                         Nombre = "Sin Formador"
-                                    }
+                                    },
+                                    EmailInst = (lector.IsDBNull(8) ? "" : lector.GetString(8)),
 
 
 

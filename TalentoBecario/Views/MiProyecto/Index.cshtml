@@ -10,9 +10,16 @@
             <div class="col-xl-12">
                 <div class="welcome-card rounded ps-5 pt-5 pb-4 mt-3 position-relative mb-5">
                     <h4 class="text-warning">Hola @ViewBag.NameUser</h4>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dumm.</p>
-                   
-                    
+
+                    @foreach (var item in @ViewBag.mensaje)
+                    {
+                        <h4 class="text-primary">@item.titulo</h4>
+                        <p>@item.descripcion</p>
+                       
+                    }
+
+
+
                     <img src="~/Content/img/welcom-card.svg" alt="" class="position-absolute">
                 </div>
             </div>
@@ -157,7 +164,8 @@
                                                             <p>@ViewBag.formador.Departamento/ @ViewBag.formador.Vicerreptoria</p>
                                                         </div>
                                                         <div class="profile-email px-2 pt-2">
-                                                            <h4 class="text-muted mb-0">@ViewBag.formador.Email</h4>
+                                                            <h4 class="text-muted mb-0">@ViewBag.formador.Email</h4><br />
+                                                            <h4 class="text-muted mb-0">@ViewBag.formador.EmailInst</h4>
                                                             <p>@ViewBag.formador.Direccion</p>
                                                         </div>
 

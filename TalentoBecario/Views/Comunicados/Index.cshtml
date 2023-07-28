@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de habilidades</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de comunicados</a></li>
 
         </ol>
     </div>
@@ -13,7 +13,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title" style="text-transform: unset">Lista de habilidades</h4>
+                    <h4 class="card-title" style="text-transform: unset">Lista de comunicados</h4>
                 </div>
 
                 <div class="card-body">
@@ -26,12 +26,15 @@
                                     <input name="id" id="id" type="text" class="form-control" placeholder="Id" disabled>
                                 </div>
 
+
                                 <div class="mb-3 col-md-10">
-                                    <label class="form-label">Descripción de la habilidad</label>
-                                    <input name="descripcion" id="descripcion" type="text" class="form-control" placeholder="Descripción habilidad" required>
+                                    <label class="form-label">Título</label>
+                                    <input name="titulo" id="titulo" type="text" class="form-control" placeholder="Título comunicado" required>
                                 </div>
-
-
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Mensaje</label>
+                                    <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Descripción comunicado" required></textarea>
+                                </div>
 
                             </div>
 
@@ -47,30 +50,31 @@
                         <thead>
                             <tr>
                                 <th style="width:80px;"><strong>ID</strong></th>
+                                <th><strong>Título</strong></th>
                                 <th><strong>Descripción</strong></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in ViewBag.listHabilidades)
+                            @foreach (var item in ViewBag.listComunicados)
                             {
-                                <tr>
-                                    <td><strong>@item.Id</strong></td>
-                                    <td>@item.Descripcion</td>
+                            <tr>
+                                <td><strong>@item.id</strong></td>
+                                <td>@item.titulo</td>
+                                <td>@item.descripcion</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
+                                            <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" onclick="buscarComunicado(@item.id,0)">Editar</a>
+                                            <a class="dropdown-item" onclick="eliminarComunicado(@item.id)">Eliminar</a>
 
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" onclick="buscarHabilidad(@item.Id)">Editar</a>
-                                                <a class="dropdown-item" onclick="eliminarHabilidad(@item.Id)">Eliminar</a>
-
-                                            </div>
                                         </div>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </td>
+                            </tr>
                             }
 
 
@@ -86,59 +90,62 @@
 
 
 
-   function buscarHabilidad(id) {
+   function buscarComunicado(id,tipo) {
 
-                    $.post("@Url.Action("ConsultarHabilidad","Habilidades")", { id: id}, function (datas) {
+                    $.post("@Url.Action("ConsultarComunicado","Comunicados")", { id: id,tipo:tipo}, function (datas) {
 
-                        if (datas.Id == null) {
+                        if (datas.id == null) {
                             alert("El Registro No Existe")
 
                         }  else {
                             clearRegister();
 
-                            $("#id").val(datas.Id);
-                            $("#descripcion").val(datas.Descripcion);
+                            $("#id").val(datas.id);
+                            $("#descripcion").val(datas.descripcion);
+                            $("#titulo").val(datas.titulo);
                         }
 
                         });
     };
 
     function guardarRegister() {
-        let description = $('#descripcion').val();
-        if (!description || description === "") {
-            return;
-        }
-        var habilidad = JSON.stringify(
+       
+
+       
+        var comunicado = JSON.stringify(
         {
-               'Id': $('#id').val(),
-               'Descripcion': $('#descripcion').val()
+               'id': $('#id').val(),
+                'descripcion': $('#descripcion').val(),
+                'titulo': $('#titulo').val(),
+                'tipo': 1,
+               'visible':1
         });
           $.ajax({
-              url: '/Habilidades/SaveHabilidad',
+              url: '/Comunicados/SaveComunicado',
               type: "post",
               contentType: "application/json",
               dataType: "json",
               traditional: true,
-              data: habilidad,
+              data: comunicado,
               success: function (results) {
                   alert(results);
-                   window.location.href = '/Habilidades';
+                   window.location.href = '/Comunicados';
               }
           })
 
 
     };
 
-   function eliminarHabilidad(id) {
+   function eliminarComunicado(id) {
 
 
 
-                    $.post("@Url.Action("EliminarHabilidad","Habilidades")", { id: id}, function (datas) {
+                    $.post("@Url.Action("EliminarComunicado","Comunicados")", { id: id}, function (datas) {
 
                         alert(datas);
 
 
-                         window.location.href = '/Habilidades';
+                         window.location.href = '/Comunicados';
 
 
                         });
