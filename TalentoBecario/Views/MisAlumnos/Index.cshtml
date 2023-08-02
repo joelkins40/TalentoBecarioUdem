@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Catalogo de alumnos</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Listado de Estudiantes</a></li>
 
         </ol>
     </div>
@@ -79,7 +79,7 @@
                         <div class="row">
                             <div class="media mb-4 align-items-center col-md-4">
                                 <div class="me-3">
-                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-info-circle"></i>
+                                    <i style="font-size:40px; color:#ffe000" class="fa fa-info-circle"></i>
                                 </div>
                                 <div class="media-body">
                                     <p class="mb-1"> Matricula</p>
@@ -88,7 +88,7 @@
                             </div>
                             <div class="media mb-4 align-items-center col-md-8">
                                 <div class="me-3">
-                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-user-circle"></i>
+                                    <i style="font-size:40px; color:#ffe000" class="fa fa-user-circle"></i>
                                 </div>
                                 <div class="media-body">
                                     <p class="mb-1">Nombre del Alumno</p>
@@ -102,7 +102,7 @@
 
                             <div class="media mb-4 align-items-center col-md-4">
                                 <div class="me-3">
-                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-sitemap"></i>
+                                    <i style="font-size:40px; color:#ffe000" class="fa fa-sitemap"></i>
                                 </div>
                                 <div class="media-body">
                                     <p class="mb-1">Nivel</p>
@@ -113,7 +113,7 @@
 
                             <div class="media mb-4 align-items-center  col-md-4">
                                 <div class="me-3">
-                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-money-bill"></i>
+                                    <i style="font-size:40px; color:#ffe000" class="fa fa-money-bill"></i>
                                 </div>
                                 <div class="media-body">
                                     <p class="mb-1">% Beca</p>
@@ -122,7 +122,7 @@
                             </div>
                             <div class="media mb-4 align-items-center  col-md-4">
                                 <div class="me-3">
-                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-clock"></i>
+                                    <i style="font-size:40px; color:#ffe000" class="fa fa-clock"></i>
                                 </div>
                                 <div class="media-body">
                                     <p class="mb-1">Horas</p>
@@ -131,7 +131,7 @@
                             </div>
                             <div class="media mb-4 align-items-center  col-md-6">
                                 <div class="me-3">
-                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-calendar-times"></i>
+                                    <i style="font-size:40px; color:#ffe000" class="fa fa-calendar-times"></i>
                                 </div>
                                 <div class="media-body">
                                     <p class="mb-1">Programa</p>
@@ -140,7 +140,7 @@
                             </div>
                             <div class="media mb-4 align-items-center  col-md-4">
                                 <div class="me-3">
-                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-people-carry"></i>
+                                    <i style="font-size:40px; color:#ffe000;"  class="fa fa-people-carry"></i>
                                 </div>
                                 <div class="media-body">
                                     <p class="mb-1">Avance Academico</p>
@@ -149,7 +149,7 @@
                             </div>
                             <div class="media mb-4 align-items-center  col-md-4">
                                 <div class="me-3">
-                                    <i style="font-size:40px; color:#0b5ed7" class="fa fa-mail-bulk"></i>
+                                    <i style="font-size:40px; color:#ffE000" class="fa fa-mail-bulk"></i>
                                 </div>
                                 <div class="media-body">
                                     <p class="mb-1">Email</p>
@@ -162,7 +162,7 @@
 
                         <div class="media mb-4 align-items-center ">
                             <div class="me-3">
-                                <i style="font-size:40px; color:#0b5ed7" class="fa fa-chart-pie"></i>
+                                <i style="font-size:40px; color:#ffe000" class="fa fa-chart-pie"></i>
                             </div>
                             <div class="media-body">
                                 <p class="mb-1"> Habilidades</p>
@@ -171,7 +171,7 @@
                         </div>
                         <div class="media mb-4 align-items-center">
                             <div class="me-3">
-                                <i style="font-size:40px; color:#0b5ed7" class="fa fa-puzzle-piece primary"></i>
+                                <i style="font-size:40px; color:#ffe000" class="fa fa-puzzle-piece primary"></i>
                             </div>
                             <div class="media-body">
                                 <p class="mb-1"> Areas de Interes:</p>
@@ -218,12 +218,12 @@
                         $("#habilidades").empty();
                          $("#intereses").empty();
                         datas.listHabilidades.forEach(function (item) {
-                            var mess='<span class="badge badge-success light">' + item.Descripcion + '</span>'
+                            var mess='<span class="badge rounded-pill bg-dark ">' + item.Descripcion + '</span>'
                             $("#habilidades").append(mess);
 
                         });
                      datas.listAreaInteres.forEach(function (item) {
-                            var mess='<span class="badge badge-success light">' + item.Descripcion + '</span>'
+                            var mess='<span class="badge rounded-pill bg-dark ">' + item.Descripcion + '</span>'
                             $("#intereses").append(mess);
 
                         });
