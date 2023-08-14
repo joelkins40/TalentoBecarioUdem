@@ -8,6 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class ProyectosController : Controller
     {
         public ActionResult Index()
@@ -22,9 +23,9 @@ namespace TalentoBecario.Controllers
             return View();
         }
 
-        public ActionResult Agregar(int id=0)
+        public ActionResult Agregar(string id="")
         {
-            if (id != 0)
+            if (id == "")
             {
                 ViewBag.proyecto = ProyectoService.ConsultarProyecto(id);
             }
@@ -65,7 +66,7 @@ namespace TalentoBecario.Controllers
             return Json(message, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult ActualizarProyecto(int id,string estatus)
+        public JsonResult ActualizarProyecto(string id,string estatus)
         {
             Proyecto proyecto = ProyectoService.ConsultarProyecto(id);
             proyecto.estatus = estatus;
@@ -75,7 +76,7 @@ namespace TalentoBecario.Controllers
         }
         
         [HttpPost]
-        public JsonResult ConsultarProyecto(int id)
+        public JsonResult ConsultarProyecto(string id)
         {
             Proyecto proyecto = ProyectoService.ConsultarProyecto(id);
 

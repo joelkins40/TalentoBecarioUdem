@@ -27,7 +27,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = conn;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_PROYECTOS";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_PROYECTOS";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
@@ -48,7 +48,7 @@ namespace TalentoBecario.Models.Services
                                     alumno = AlumnoService.ConsultarAlumno((lector.IsDBNull(1) ? "0" : lector.GetString(1))),
 
 
-                                    proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? 0 : lector.GetInt32(2))),
+                                    proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? "0" : lector.GetString(2))),
                                     comentario = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
                                     estatus = (lector.IsDBNull(4) ? "" : lector.GetString(4))
 
@@ -81,7 +81,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_HISTORIALALUMNO";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_HISTORIALALUMNO";
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int32)
@@ -105,7 +105,7 @@ namespace TalentoBecario.Models.Services
                                     alumno = AlumnoService.HomologarAlumno((lector.IsDBNull(5) ? "0" : lector.GetString(5))),
 
 
-                                    proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? 0 : lector.GetInt32(2))),
+                                    proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? "0" : lector.GetString(2))),
                                   comentario= (lector.IsDBNull(3) ? "" : lector.GetString(3)),
                                    estatus= (lector.IsDBNull(4) ? "" : lector.GetString(4))
 
@@ -130,7 +130,7 @@ namespace TalentoBecario.Models.Services
         }
 
 
-        public static List<Solicitud> ConsultarSiExisteSolicitud(int idAlumno,int idProyecto)
+        public static List<Solicitud> ConsultarSiExisteSolicitud(string idAlumno,int idProyecto)
         {
           
             List<Solicitud> solicituds = new List<Solicitud>();
@@ -141,7 +141,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_PROJECT_BY_ALUMNO";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_PROJECT_BY_ALUMNO";
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("P_IdAlumno", OracleDbType.Int32)
@@ -170,7 +170,7 @@ namespace TalentoBecario.Models.Services
                                     alumno = AlumnoService.ConsultarAlumno((lector.IsDBNull(1) ? "0" : lector.GetString(1))),
 
 
-                                    proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? 0 : lector.GetInt32(2))),
+                                    proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? "0" : lector.GetString(2))),
                                     comentario = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
                                     estatus = (lector.IsDBNull(4) ? "" : lector.GetString(4))
 
@@ -191,7 +191,7 @@ namespace TalentoBecario.Models.Services
             return solicituds;
 
         }
-        public static List<Solicitud> consultarSolicitudesAlumno(int matricula)
+        public static List<Solicitud> consultarSolicitudesAlumno(string matricula)
         {
 
             List<Solicitud> solicituds = new List<Solicitud>();
@@ -202,7 +202,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_HISTORIAL_BY_ALUMNO";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_HISTORIAL_BY_ALUMNO";
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.BindByName = true;
 
@@ -227,7 +227,7 @@ namespace TalentoBecario.Models.Services
                                   
 
 
-                                    proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? 0 : lector.GetInt32(2))),
+                                    proyecto = ProyectoService.ConsultarProyecto((lector.IsDBNull(2) ? "0" : lector.GetString(2))),
                                     comentario = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
                                     estatus = (lector.IsDBNull(4) ? "" : lector.GetString(4))
 
@@ -260,7 +260,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_HISTORIAL_BY_FORMADOR";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_HISTORIAL_BY_FORMADOR";
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.BindByName = true;
                        
@@ -330,13 +330,13 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_HIAL";
+                        comando.CommandText = "SZ_BGQ_WTB.F_UDEM_ADD_HIAL";
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.BindByName = true;
 
                         comando.Parameters.Add(new OracleParameter("P_IdAlumno", OracleDbType.Int16)
                         {
-                            Value = registro.alumno.id,
+                            Value = registro.alumno.pidm,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdProyecto", OracleDbType.Int16)
@@ -393,7 +393,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_HIAL";
+                        comando.CommandText = "SZ_BGQ_WTB.F_UDEM_UPDATE_HIAL";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
 
@@ -404,7 +404,7 @@ namespace TalentoBecario.Models.Services
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdAlumno", OracleDbType.Int16)
                         {
-                            Value = registro.alumno.id,
+                            Value = registro.alumno.pidm,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdProyecto", OracleDbType.Int16)
@@ -460,7 +460,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_HIAL";
+                        comando.CommandText = "SZ_BGQ_WTB.F_UDEM_UPDATE_HIAL";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
 
@@ -471,7 +471,7 @@ namespace TalentoBecario.Models.Services
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdAlumno", OracleDbType.Int16)
                         {
-                            Value = registro.alumno.id,
+                            Value = registro.alumno.pidm,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("P_IdProyecto", OracleDbType.Int16)
@@ -527,7 +527,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_DELETE_DEPA";
+                        comando.CommandText = "SZ_BGQ_WTB.F_UDEM_DELETE_DEPA";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
 

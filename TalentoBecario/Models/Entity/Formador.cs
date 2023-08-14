@@ -8,6 +8,7 @@ namespace TalentoBecario.Models.Entity
     public class Formador 
     {
         public string Id { get; set; }
+        public string Matricula { get; set; }
         public string Nombre { get; set; }
         public string Email { get; set; }
         public string EmailInst { get; set; }

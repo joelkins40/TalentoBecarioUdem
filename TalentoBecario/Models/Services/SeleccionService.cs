@@ -28,7 +28,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = conn;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_ALUMNOS_BY_CODE";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_ALUMNOS_BY_CODE";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
                   
@@ -48,7 +48,7 @@ namespace TalentoBecario.Models.Services
                             {
                                 alumnos.Add(new Alumno
                                 {
-                                    pidm = (lector.IsDBNull(0) ? "" : lector.GetString(0)),
+                                    pidm = (lector.IsDBNull(0) ? "0" : lector.GetString(0)),
                                     matricula = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                     nombre = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
@@ -82,7 +82,7 @@ namespace TalentoBecario.Models.Services
             return alumnos;
         }
 
-        public static Alumno ObtieneDatosAlumno(string id)
+        public static Alumno ObtieneDatosAlumno(string pidm)
         {
             Alumno item = new Alumno();
 
@@ -93,12 +93,12 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = conn;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_INFO_ALUMNO_BY_PIDM";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_INFO_ALUMNO_BY_PIDM";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
-                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Varchar2)
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                         {
-                            Value = id,
+                            Value = pidm,
                             Direction = System.Data.ParameterDirection.Input
                         });
                       
@@ -118,7 +118,7 @@ namespace TalentoBecario.Models.Services
                             {
                                 item=new Alumno
                                 {
-                                    pidm = (lector.IsDBNull(0) ? "" : lector.GetString(0)),
+                                    pidm = (lector.IsDBNull(0) ? "0" : lector.GetString(0)),
                                     matricula = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
                                     nombre = (lector.IsDBNull(2) ? "" : lector.GetString(2)),
                                     nivel = (lector.IsDBNull(3) ? "" : lector.GetString(3)),
@@ -128,6 +128,7 @@ namespace TalentoBecario.Models.Services
                                     horas = (lector.IsDBNull(7) ? "" : lector.GetString(7)),
                                     formador = new Formador()
                                     {
+                                        Id="0",
                                         Nombre = "Sin Formador"
                                     },
                                     EmailInst = (lector.IsDBNull(8) ? "" : lector.GetString(8)),

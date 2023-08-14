@@ -9,6 +9,7 @@ using static TalentoBecario.Models.Services.FormadorService;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class FormadoresController : Controller
     {
         public ActionResult Index()

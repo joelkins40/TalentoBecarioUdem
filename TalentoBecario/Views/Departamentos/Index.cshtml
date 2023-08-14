@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">departamentos</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Departamentos</a></li>
 
         </ol>
     </div>
@@ -90,7 +90,7 @@
 
 
 
-                    $.post("@Url.Action("ConsultarDepartamento","ConsultarAlumnosFormador")", { id: id}, function (datas) {
+                    $.post("@Url.Action("ConsultarDepartamento","Departamentos")", { id: id}, function (datas) {
 
                         if (datas.Id == null) {
                             alert("El Registro No Existe")

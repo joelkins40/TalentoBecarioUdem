@@ -8,6 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class FormadorController : Controller
     {
         public ActionResult Index()
@@ -31,7 +32,7 @@ namespace TalentoBecario.Controllers
         }
 
         [HttpPost]
-        public User SearchByPidm(int pidm)
+        public User SearchByPidm(string pidm)
         {
             var user = StudentService.FillUser(pidm);
             user.IsEmployee = StudentService.UserIsEmployee(pidm).Result.Trim();

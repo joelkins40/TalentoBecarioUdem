@@ -16,7 +16,7 @@ namespace TalentoBecario.Models.Services
     {
         private static readonly string _conString = ConfigurationManager.ConnectionStrings["BANNER"].ConnectionString;
 
-        public static async Task<string> ObtenerMatricula(int pidm)
+        public static async Task<string> ObtenerMatricula(string pidm)
         {
             string matricula = "";
             try
@@ -122,7 +122,7 @@ namespace TalentoBecario.Models.Services
         /// <summary>
         /// Consulta los valores de nombre completo, nombre, genero, matricula y los almacena en el cache de la sesión.
         /// </summary>
-        public static User FillUser(int pidm)
+        public static User FillUser(string pidm)
         {
             User user = new User();
             try
@@ -175,11 +175,11 @@ namespace TalentoBecario.Models.Services
         /// </summary>
         /// <param name="matricula">Matrículoa del alumno.</param>
         /// <returns>Pidm del alumno. -1 cuando la matricula no existe.</returns>
-        public static int GetPidm(string matricula)
+        public static string GetPidm(string matricula)
         {
             try
             {
-                int pidm = -1;
+                string pidm = "";
                 using (var connection = new OracleConnection(_conString))
                 {
                     OracleCommand command = new OracleCommand("SZ_BFQ_REGISTRATION.f_obtener_pidm", connection)
@@ -201,17 +201,17 @@ namespace TalentoBecario.Models.Services
                     connection.Open();
 
                     int ejecucion = command.ExecuteNonQuery();
-                    pidm = Convert.ToInt32(command.Parameters["salida"]?.Value.ToString());
+                    pidm = Convert.ToString(command.Parameters["salida"]?.Value.ToString());
                 }
                 return pidm;
             }
             catch (Exception ex)
             {
-                return -1;
+                return "";
             }
         }
 
-        public static async Task<string> UserIsEmployee(int pidm)
+        public static async Task<string> UserIsEmployee(string pidm)
         {
             string matricula = "";
             try

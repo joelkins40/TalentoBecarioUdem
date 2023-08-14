@@ -8,6 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class SeleccionController : Controller
     {
         public ActionResult Index()
@@ -25,6 +26,7 @@ namespace TalentoBecario.Controllers
         {
            string idFormador= Convert.ToString(Session["matricula"]);
             String message="";
+
            Alumno itemAlumno = AlumnoService.ConsultarAlumno(matricula);
            
             if (itemAlumno.matricula == null)

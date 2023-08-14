@@ -8,6 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class OfertasController : Controller
     {
         public ActionResult Index()
@@ -24,7 +25,7 @@ namespace TalentoBecario.Controllers
             string user = Convert.ToString(Session["matricula"]);
 
             solicitud.alumno = AlumnoService.ConsultarAlumno(user);
-            int itemSolicitudExistente = SolicitudesService.ConsultarSiExisteSolicitud(solicitud.alumno.id,solicitud.proyecto.id).Capacity;
+            int itemSolicitudExistente = SolicitudesService.ConsultarSiExisteSolicitud(solicitud.alumno.pidm, solicitud.proyecto.id).Capacity;
             if (itemSolicitudExistente == 0)
             {
 

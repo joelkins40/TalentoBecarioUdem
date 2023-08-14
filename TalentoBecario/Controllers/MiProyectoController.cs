@@ -8,6 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class MiProyectoController : Controller
     {
         public ActionResult Index()
@@ -17,7 +18,7 @@ namespace TalentoBecario.Controllers
             ViewBag.mensaje = ComunicadosService.ConsultarComunicado(0, 1);
             Proyecto itemValor = new Proyecto();
             Alumno alumno = AlumnoService.ConsultarAlumno(matricula);
-            foreach (Solicitud item in  SolicitudesService.consultarSolicitudesAlumno(alumno.id))
+            foreach (Solicitud item in  SolicitudesService.consultarSolicitudesAlumno(alumno.pidm))
             {
                 if (item.estatus.Equals("Asignado"))
                 {
@@ -28,33 +29,18 @@ namespace TalentoBecario.Controllers
             if (itemValor.id == 0)
 
             {
-                ViewBag.formador = alumno.formador;
+                ViewBag.formador = FormadorService.HomologarFormador(alumno.formador); ;
                 
                  }
             else
             {
-                ViewBag.formador =   FormadorService.HomologarFormador(itemValor.formador.Id);
+                ViewBag.formador =   FormadorService.HomologarFormador(itemValor.formador);
             }
            
             return View("index", itemValor);
         }
 
-        [HttpPost]
-        public JsonResult SaveHabilidad(Habilidad habilidad)
-        {
-            string message = "";
-
-            if (habilidad.Id == 0)
-            {
-                message= HabilidadesService.guardarHabilidad(habilidad);
-            }
-            else
-            {
-                message= HabilidadesService.ActualizarHabilidad(habilidad);
-            }
-
-            return Json(message, JsonRequestBehavior.AllowGet);
-        }
+      
 
         [HttpPost]
         public JsonResult ConsultarHabilidad(int id)

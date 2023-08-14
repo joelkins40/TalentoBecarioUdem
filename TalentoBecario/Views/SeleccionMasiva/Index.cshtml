@@ -81,19 +81,19 @@
                                 <tbody>
                                     @foreach (var item in ViewBag.listAlumnos)
                                     {
-                                        <tr>
-                                            <td><strong>@item.matricula</strong></td>
-                                            <td>@item.nombre</td>
-                                            <td>@item.nivel</td>
-                                            <td>@item.programa</td>
-                                            <td>Matutino</td>
-                                            <td>@item.formador.Nombre</td>
-                                            <td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i> Activo</div></td>
+                                    <tr>
+                                        <td><strong>@item.matricula</strong></td>
+                                        <td>@item.nombre</td>
+                                        <td>@item.nivel</td>
+                                        <td>@item.programa</td>
+                                        <td>Matutino</td>
+                                        <td>@item.formador.Nombre</td>
+                                        <td><div class="d-flex align-items-center"><i class="fa fa-circle @(item.formador.Nombre.Equals("Sin Formador") ?  "text-warning" :"text-success")   me-1"></i>@(item.formador.Nombre.Equals("Sin Formador") ? "Activo" : "Asignado") </div></td>
 
-                                            <td class="text-center">
-                                                <input class="form-check-input" type="checkbox" value="" id="@item.matricula" name="check[]" id="flexCheckDefault">
-                                            </td>
-                                        </tr>
+                                        <td class="text-center">
+                                            <input class="form-check-input" type="checkbox" value="@item.pidm" id="@item.pidm" name="check[]" id="flexCheckDefault">
+                                        </td>
+                                    </tr>
                                     }
 
                                 </tbody>
@@ -194,7 +194,7 @@
                                     var myTable = $('#lista').dataTable();
 
 
-                                    myTable.$("#" + item.matricula, { "page": "all" }).prop('checked', true);
+                                    myTable.$("#" + item.pidm, { "page": "all" }).prop('checked', true);
                                     $("#descripcion").val(item.formador.Nombre);
 
                                 });
@@ -218,7 +218,8 @@ var rowcollection = myTable.$("input[type=checkbox]:checked", {"page": "all"});
         var checkedBoxes = rowcollection.each(function () {
             var row = $(this).parents('tr');
 
-                         listAlumnos.push({
+            listAlumnos.push({
+                             'pidm': row.find("td:eq(7) input").val(),
                              'matricula': row.find("td:eq(0)").text(),
                              'nombre': row.find("td:eq(1)").text(),
                              'nivel': row.find("td:eq(2)").text(),
@@ -249,8 +250,8 @@ var rowcollection = myTable.$("input[type=checkbox]:checked", {"page": "all"});
                     data: alumno,
                     success: function (results) {
                         alert(results);
-                      window.location.href = '/SeleccionMasiva';
-                      
+                     
+                       window.location.href = '/SeleccionMasiva';
                    
                     }
                     })

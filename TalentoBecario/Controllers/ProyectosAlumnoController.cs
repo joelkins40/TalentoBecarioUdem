@@ -7,6 +7,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class ProyectosAlumnoController : Controller
     {
         public ActionResult Index()
@@ -14,7 +15,7 @@ namespace TalentoBecario.Controllers
             ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
             string matricula = Convert.ToString(Session["matricula"]);
 
-            ViewBag.listProyectos=SolicitudesService.consultarSolicitudesAlumno(AlumnoService.ConsultarAlumno(matricula).id);
+            ViewBag.listProyectos=SolicitudesService.consultarSolicitudesAlumno(AlumnoService.ConsultarAlumno(matricula).pidm);
             return View();
         }
 

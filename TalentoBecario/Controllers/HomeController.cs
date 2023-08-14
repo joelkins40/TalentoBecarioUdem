@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using TalentoBecario.Models.Entity;
 using TalentoBecario.Models.Services;
+using System.Web.Security;
 
 namespace TalentoBecario.Controllers
 {
@@ -12,6 +13,7 @@ namespace TalentoBecario.Controllers
     {
         public ActionResult Index()
         {
+            FormsAuthentication.SignOut();
             return View();
         }
 
@@ -34,17 +36,21 @@ namespace TalentoBecario.Controllers
         {
             string username = Request.Params["username"];
             string pass = Request.Params["pass"];
+            string recuerdame = Request.Params["remember-me"];
+            bool persitente = recuerdame == "Y";
 
-            if(username == "Admin" && pass == "Admin")
+            if (username == "Admin" && pass == "Admin")
             {
+                FormsAuthentication.SetAuthCookie(username, persitente);
                 return RedirectToAction("Index", "Habilidades");
+
             }
 
             bool valida = StudentService.ValidaCredenciales(username, pass);
             if (!valida)
             {
-           //     ViewBag.ErrorLogin = "Cuenta o contraseña incorrecta";
-           //     return RedirectToAction("Index", "Home");
+                ViewBag.ErrorLogin = "Cuenta o contraseña incorrecta";
+                return RedirectToAction("Index", "Home");
             }
 
             var pidmResult = StudentService.GetPidm(username);
@@ -55,18 +61,21 @@ namespace TalentoBecario.Controllers
 
             if (isEmployee.Result.Trim() == "Y")
             {
-                Session["matricula"] = username;
                 Formador consulting= FormadorService.verificarFormador(new Formador(){
-                    Id = Convert.ToString(username) }, pidmResult);
+                    Id = pidmResult
+                } );
+                FormsAuthentication.SetAuthCookie(pidmResult, persitente);
+                Session["matricula"] = pidmResult;
+
                 Session["nombreUser"] = consulting.Nombre;
-                return RedirectToAction("Index", "Proyectos");
+                return RedirectToAction("Index", "MisAlumnos");
             }else 
             if (isEmployee.Result.Trim() == "N")
             {
-               Alumno AlumnoConsulting= AlumnoService.ConsultarAlumno(username);
-                if (AlumnoConsulting.id == 0)
+               Alumno AlumnoConsulting= AlumnoService.ConsultarAlumno(pidmResult);
+                if (AlumnoConsulting.pidm == null)
                 {
-                    AlumnoConsulting = SeleccionService.ObtieneDatosAlumno(username);
+                    AlumnoConsulting = SeleccionService.ObtieneDatosAlumno(pidmResult);
                     if (AlumnoConsulting.pidm == null)
                     {
                         return RedirectToAction("Index", "Home");
@@ -80,10 +89,13 @@ namespace TalentoBecario.Controllers
                     }
                    
                 }
-               
-                Session["matricula"] = username;
+                FormsAuthentication.SetAuthCookie(pidmResult, persitente);
+
+                Session["matricula"] = pidmResult;
                 Session["nombreUser"] = AlumnoConsulting.nombre;
+              
                 return RedirectToAction("Index", "MiProyecto");
+
             }
 
             return RedirectToAction("Index", "Home");

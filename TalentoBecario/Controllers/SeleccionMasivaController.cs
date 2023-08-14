@@ -8,6 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class SeleccionMasivaController : Controller
     {
         public ActionResult Index()
@@ -21,18 +22,21 @@ namespace TalentoBecario.Controllers
         public JsonResult SaveAlumno(Alumno alumno)
         {
             string message;
-            AlumnoService.ActualizarFormador(alumno.formador.Id, "000000");
+            alumno.formador.Id = StudentService.GetPidm(alumno.formador.Id);
+            AlumnoService.ActualizarFormador(alumno.formador.Id, 0);
             foreach (Alumno item in alumno.listAlumnos){
                 Alumno itemAlumno = item;
-                itemAlumno = AlumnoService.ConsultarAlumno(item.matricula);
-                if (itemAlumno.matricula == null)
+               
+                itemAlumno = AlumnoService.ConsultarAlumno(item.pidm);
+                if (itemAlumno.pidm == null)
 
                 {
-                    message = AlumnoService.guardarAlumno(item);
+                    item.formador.Id = alumno.formador.Id;
+                      message = AlumnoService.guardarAlumno(item);
                 }
                 else
                 {
-                    itemAlumno.formador.Id = item.formador.Id;
+                    itemAlumno.formador.Id = alumno.formador.Id;
                     message = AlumnoService.ActualizarAlumno(itemAlumno);
                 }
             }
@@ -46,8 +50,10 @@ namespace TalentoBecario.Controllers
         public JsonResult ConsultarAlumnosFormador(string id)
         {
             List<Alumno> formadores = new List<Alumno>();
-            Formador formadorBuscar = FormadorService.ConsultarFormador(id);
-            Dictionary<string, dynamic> _formador = FormadorService.ConsultarUsuario(formadorBuscar.Id);
+            string pidmResult = StudentService.GetPidm(id);
+
+            Formador formadorBuscar = FormadorService.ConsultarFormador(pidmResult);
+            Dictionary<string, dynamic> _formador = FormadorService.ConsultarUsuario(id);
 
             if (_formador.Count() <= 0 || _formador["Estatus"] != "A")
             {
@@ -58,7 +64,7 @@ namespace TalentoBecario.Controllers
 
             if (formadorBuscar.Id == null)
             {
-                formadorBuscar = FormadorService.ConsultarFormadorExternos(id);
+                formadorBuscar = FormadorService.ConsultarFormadorExternos(pidmResult);
                 if (formadorBuscar.Nombre != null)
                 {
                     FormadorService.guardarFormador(formadorBuscar);
@@ -73,7 +79,7 @@ namespace TalentoBecario.Controllers
             }
             else
             {
-                formadores = AlumnoService.ConsultarAlumnosPorFormador(id);
+                formadores = AlumnoService.ConsultarAlumnosPorFormador(pidmResult, formadorBuscar);
                 if (formadores.Count == 0)
                 {
                     
@@ -81,6 +87,7 @@ namespace TalentoBecario.Controllers
                 }
                 else
                 {
+
                     return Json(formadores, JsonRequestBehavior.AllowGet);
 
                 }
@@ -91,7 +98,7 @@ namespace TalentoBecario.Controllers
         {
 
 
-            return Json(AlumnoService.ConsultarAlumnosPorFormador(id), JsonRequestBehavior.AllowGet);
+            return Json(AlumnoService.ConsultarAlumnosPorFormador(id,null), JsonRequestBehavior.AllowGet);
         }
 
 

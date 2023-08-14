@@ -159,6 +159,9 @@
     <Compile Include="Controllers\FormadoresController.cs" />
     <Compile Include="Controllers\FormadorController.cs" />
     <Compile Include="Controllers\DepartamentosController.cs" />
+    <Compile Include="Controllers\ComunicadosController.cs" />
+    <Compile Include="Controllers\MisAlumnosController.cs" />
+    <Compile Include="Controllers\MiProyectoController.cs" />
     <Compile Include="Controllers\ProyectosAlumnoController.cs" />
     <Compile Include="Controllers\PerfilController.cs" />
     <Compile Include="Controllers\OfertasController.cs" />
@@ -173,6 +176,7 @@
     </Compile>
     <Compile Include="Models\Entity\Alumno.cs" />
     <Compile Include="Models\Entity\AreaInteres.cs" />
+    <Compile Include="Models\Entity\Comunicado.cs" />
     <Compile Include="Models\Entity\Solicitud.cs" />
     <Compile Include="Models\Entity\Formador.cs" />
     <Compile Include="Models\Entity\Departamento.cs" />
@@ -181,6 +185,7 @@
     <Compile Include="Models\Entity\User.cs" />
     <Compile Include="Models\Services\AlumnoService.cs" />
     <Compile Include="Models\Services\FormadorService.cs" />
+    <Compile Include="Models\Services\ComunicadosService.cs" />
     <Compile Include="Models\Services\SolicitudesService.cs" />
     <Compile Include="Models\Services\SeleccionService.cs" />
     <Compile Include="Models\Services\ProyectoService.cs" />
@@ -230,6 +235,7 @@
     <Content Include="Content\img\login-bg.jpg" />
     <Content Include="Content\img\logo-white.png" />
     <Content Include="Content\img\udem-logotipo-principal.png" />
+    <Content Include="Content\img\welcom-card.svg" />
     <Content Include="Content\js\custom.js" />
     <Content Include="Content\js\custom.min.js" />
     <Content Include="Content\js\dashboard\analytics.js" />
@@ -446,6 +452,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />
@@ -489,6 +496,9 @@
     <Content Include="Views\Formadores\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutAdminApp.cshtml" />
     <Content Include="Views\Shared\_LayoutFormadorApp.cshtml" />
+    <Content Include="Views\MiProyecto\Index.cshtml" />
+    <Content Include="Views\Comunicados\Index.cshtml" />
+    <Content Include="Views\MisAlumnos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

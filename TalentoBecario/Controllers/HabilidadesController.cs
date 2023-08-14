@@ -8,6 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class HabilidadesController : Controller
     {
         public ActionResult Index()
@@ -32,11 +33,11 @@ namespace TalentoBecario.Controllers
 
             if (habilidad.Id == 0)
             {
-                message= HabilidadesService.guardarHabilidad(habilidad);
+                message= HabilidadesService.guardarHabilidad(habilidad,"Admin");
             }
             else
             {
-                message= HabilidadesService.ActualizarHabilidad(habilidad);
+                message= HabilidadesService.ActualizarHabilidad(habilidad, "Admin");
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);

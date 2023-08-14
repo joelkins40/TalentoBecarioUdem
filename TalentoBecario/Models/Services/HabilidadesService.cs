@@ -29,7 +29,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_HABILIDADES";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_HABILIDADES";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
@@ -59,7 +59,7 @@ namespace TalentoBecario.Models.Services
                                 {
                              
                                     Id= lector.GetInt32(0),
-                                    Descripcion = lector.GetString(1),
+                                    Descripcion = lector.GetString(2),
 
 
 
@@ -103,7 +103,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_HABILIDAD";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_HABILIDAD";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
@@ -124,7 +124,7 @@ namespace TalentoBecario.Models.Services
                                 habilidad=new Habilidad()
                                 {
                                     Id = lector.GetInt32(0),
-                                    Descripcion = lector.GetString(1)
+                                    Descripcion = lector.GetString(2)
                                 };
                             }
                         }
@@ -143,7 +143,7 @@ namespace TalentoBecario.Models.Services
 
         }
 
-        public static List<Habilidad> ConsultarHabilidadesProyectoAlumno(int idProyecto,int tipo)
+        public static List<Habilidad> ConsultarHabilidadesProyectoAlumno(string idProyecto,int tipo)
         {
             List<Habilidad> habilidades = new List<Habilidad>();
             try
@@ -153,7 +153,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_RH_BY_PROJECT_AND_TYPE";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_RH_BY_PROJECT_AND_TYPE";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("P_IdEntidad", OracleDbType.Int16)
@@ -199,7 +199,7 @@ namespace TalentoBecario.Models.Services
 
         }
 
-        public static String guardarHabilidad(Habilidad registro)
+        public static String guardarHabilidad(Habilidad registro,string user)
         {
             try
             {
@@ -208,13 +208,18 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_HAB";
+                        comando.CommandText = "SZ_BGQ_WTB.F_UDEM_ADD_HAB";
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.BindByName = true;
 
-                        comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                        comando.Parameters.Add(new OracleParameter("P_Desc", OracleDbType.Varchar2)
                         {
                             Value = registro.Descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_User", OracleDbType.Varchar2)
+                        {
+                            Value = user,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
@@ -243,7 +248,7 @@ namespace TalentoBecario.Models.Services
 
         }
 
-        public static String RelacionarHabilidadProyectoAlumno(int habilidad,int identidad, int tipo)
+        public static String RelacionarHabilidadProyectoAlumno(int habilidad,string identidad, int tipo,string user)
         {
             try
             {
@@ -252,7 +257,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_RHAB";
+                        comando.CommandText = "SZ_BGQ_WTB.F_UDEM_ADD_RHAB";
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.BindByName = true;
 
@@ -266,9 +271,14 @@ namespace TalentoBecario.Models.Services
                             Value = identidad,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("P_Tipo", OracleDbType.Int16)
+                        comando.Parameters.Add(new OracleParameter("P_Tipo", OracleDbType.Varchar2)
                         {
                             Value = tipo,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_User", OracleDbType.Varchar2)
+                        {
+                            Value = user,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
@@ -295,7 +305,7 @@ namespace TalentoBecario.Models.Services
             return "Registro Ingresado Con Éxito";
 
         }
-        public static String ActualizarHabilidad(Habilidad registro)
+        public static String ActualizarHabilidad(Habilidad registro,string user)
         {
             try
             {
@@ -304,7 +314,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_HAB";
+                        comando.CommandText = "SZ_BGQ_WTB.F_UDEM_UPDATE_HAB";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
 
@@ -313,9 +323,14 @@ namespace TalentoBecario.Models.Services
                             Value = registro.Id,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                        comando.Parameters.Add(new OracleParameter("P_Desc", OracleDbType.Varchar2)
                         {
                             Value = registro.Descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_User", OracleDbType.Varchar2)
+                        {
+                            Value = user,
                             Direction = System.Data.ParameterDirection.Input
                         });
                         comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2, 400)
@@ -342,7 +357,7 @@ namespace TalentoBecario.Models.Services
             return "Registro Actualizado Con Éxito";
 
         }
-        public static String eliminarHabilidadesRelacion(int registro,int tipo)
+        public static String eliminarHabilidadesRelacion(string registro,int tipo)
         {
             try
             {
@@ -351,7 +366,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_DELETE_RHAB";
+                        comando.CommandText = "SZ_BGQ_WTB.F_UDEM_DELETE_RHAB";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
 
@@ -399,7 +414,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_HAB";
+                        comando.CommandText = "SZ_BGQ_WTB.F_UDEM_DELETE_HAB";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
 
@@ -430,7 +445,7 @@ namespace TalentoBecario.Models.Services
             {
                 Console.WriteLine(ex.Message);
             }
-            return "Registro Actualizado Con Éxito";
+            return "Registro Eliminado Con Éxito";
 
         }
         

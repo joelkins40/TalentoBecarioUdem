@@ -28,7 +28,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_RTB.F_GET_FORMADORES";
+                            comando.CommandText = "SZ_BGA_RTB.F_GET_FORMADORES";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
                             comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
@@ -101,7 +101,7 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_ALL_EMPLOYEES";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_ALL_EMPLOYEES";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
                         comando.Parameters.Add(new OracleParameter("V_SALIDA", OracleDbType.RefCursor)
@@ -161,10 +161,10 @@ namespace TalentoBecario.Models.Services
             return formadores;
 
         }
-        public static Formador HomologarFormador(string id)
+        public static Formador HomologarFormador(Formador formador)
         {
-            Formador formador = new Formador();
-            formador = ConsultarFormadorExternos(id);
+           
+           // formador = ConsultarFormadorExternos(1);
             return ConsultarFormadorDatos(formador);
 
         }
@@ -178,10 +178,10 @@ namespace TalentoBecario.Models.Services
                     using (OracleCommand comando = new OracleCommand())
                     {
                         comando.Connection = cnx;
-                        comando.CommandText = "SZ_BMA_RTB.F_GET_EMPLOYEE";
+                        comando.CommandText = "SZ_BGA_RTB.F_GET_EMPLOYEE";
                         comando.CommandType = System.Data.CommandType.StoredProcedure;
                         comando.BindByName = true;
-                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Varchar2)
+                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                         {
                             Value = id,
                             Direction = System.Data.ParameterDirection.Input
@@ -199,7 +199,7 @@ namespace TalentoBecario.Models.Services
                                 formador = new Formador()
                                 {
                                    
-                                    Id = lector.IsDBNull(1) ? "000000" : lector.GetString(1),
+                                    Id = lector.IsDBNull(1) ? "000000" : lector.GetString(0),
                                     Nombre = lector.GetString(2),
                                     Departamento=lector.GetString(7),
                                     Direccion = lector.GetString(8),
@@ -231,10 +231,10 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_RTB.F_GET_FORMADOR";
+                            comando.CommandText = "SZ_BGA_RTB.F_GET_FORMADOR";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
-                            comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Varchar2)
+                            comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
                             {
                                 Value = id,
                                 Direction = System.Data.ParameterDirection.Input
@@ -251,8 +251,10 @@ namespace TalentoBecario.Models.Services
                                 {
                                     formador = new Formador()
                                     {
-                                        Id = lector.GetString(0),
-                                        Nombre = lector.GetString(1),
+                                        Id = (lector.IsDBNull(0) ? "0" : lector.GetString(0)),
+
+                                        Matricula = (lector.IsDBNull(1) ? "" : lector.GetString(1)),
+                                        Nombre = (lector.IsDBNull(2) ? "Sin Formador" : lector.GetString(2)),
 
                                     };
                                 }
@@ -272,12 +274,12 @@ namespace TalentoBecario.Models.Services
 
             }
 
-        public static Formador verificarFormador(Formador registro,int pidm)
+        public static Formador verificarFormador(Formador registro)
         {
           Formador  registroConsulta = ConsultarFormador(registro.Id);
             if(registroConsulta == null || registroConsulta.Id == null)
             {
-                var user = StudentService.FillUser(pidm);
+                var user = StudentService.FillUser(registro.Id);
                 registro.Nombre = user.FullName;
                 guardarFormador(registro);
                 return registro;
@@ -297,19 +299,19 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_FORM";
+                            comando.CommandText = "SZ_BGQ_WTB.F_UDEM_ADD_FORM";
                             comando.CommandType = CommandType.StoredProcedure;
                             comando.BindByName = true;
 
 
-                        comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Varchar2)
+                        comando.Parameters.Add(new OracleParameter("P_Pidm", OracleDbType.Int16)
                         {
                             Value = registro.Id,
                             Direction = System.Data.ParameterDirection.Input
                         });
-                        comando.Parameters.Add(new OracleParameter("P_Nombre", OracleDbType.Varchar2)
+                        comando.Parameters.Add(new OracleParameter("P_User", OracleDbType.Varchar2)
                             {
-                                Value = registro.Nombre,
+                                Value = "Admin",
                                 Direction = System.Data.ParameterDirection.Input
                             });
                             comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
@@ -346,7 +348,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_FORM";
+                            comando.CommandText = "SZ_BGQ_WTB.F_UDEM_UPDATE_FORM";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
 
@@ -394,7 +396,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_DELETE_DEPA";
+                            comando.CommandText = "SZ_BGQ_WTB.F_UDEM_DELETE_DEPA";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
 
@@ -475,7 +477,7 @@ namespace TalentoBecario.Models.Services
 
             using (var conn = new OracleConnection(_conPeopleSoftString))
             {
-                var command = new OracleCommand("SELECT * FROM sysadm.PS_UDEM_RHPS_VW WHERE ALTER_EMPLID = '" + formador.Id + "'", conn);
+                var command = new OracleCommand("SELECT * FROM sysadm.PS_UDEM_RHPS_VW WHERE ALTER_EMPLID = '" + formador.Matricula + "'", conn);
                 //command.Parameters.Add("@Matricula", matricula);
 
                 conn.Open();

@@ -8,6 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class PerfilController : Controller
     {
         public ActionResult Index()
@@ -35,15 +36,15 @@ namespace TalentoBecario.Controllers
         {
             string message = "";
             Alumno consultingAlumno = new Alumno();
-            consultingAlumno = AlumnoService.ConsultarAlumno(alumno.matricula);
+            consultingAlumno = AlumnoService.ConsultarAlumno(alumno.pidm);
 
-            if (consultingAlumno.id == null)
+            if (consultingAlumno.pidm == null)
             {
                 
 
                 AlumnoService.guardarAlumno(alumno);
                 
-                alumno = AlumnoService.ConsultarAlumno(alumno.matricula);
+                alumno = AlumnoService.ConsultarAlumno(alumno.pidm);
             }
             consultingAlumno.listHabilidades = alumno.listHabilidades;
             consultingAlumno.listAreaInteres = alumno.listAreaInteres;

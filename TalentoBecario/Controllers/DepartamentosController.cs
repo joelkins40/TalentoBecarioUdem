@@ -9,6 +9,7 @@ using static TalentoBecario.Models.Services.DepartamentoService;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class DepartamentosController : Controller
     {
         public ActionResult Index()

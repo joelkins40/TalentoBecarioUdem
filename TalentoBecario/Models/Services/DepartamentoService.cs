@@ -27,7 +27,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_RTB.F_GET_DEPARTAMENTOS";
+                            comando.CommandText = "SZ_BGA_RTB.F_GET_DEPARTAMENTOS";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
                             comando.Parameters.Add(new OracleParameter("salida", OracleDbType.RefCursor)
@@ -57,7 +57,7 @@ namespace TalentoBecario.Models.Services
                                     {
 
                                         Id = lector.GetInt32(0),
-                                        Descripcion = lector.GetString(1),
+                                        Descripcion = lector.GetString(2),
 
 
 
@@ -102,7 +102,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_RTB.F_GET_DEPARTAMENTO";
+                            comando.CommandText = "SZ_BGA_RTB.F_GET_DEPARTAMENTO";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
                             comando.Parameters.Add(new OracleParameter("P_Id", OracleDbType.Int16)
@@ -123,7 +123,7 @@ namespace TalentoBecario.Models.Services
                                     departamento = new Departamento()
                                     {
                                         Id = lector.GetInt32(0),
-                                        Descripcion = lector.GetString(1)
+                                        Descripcion = lector.GetString(2)
                                     };
                                 }
                             }
@@ -150,16 +150,21 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_ADD_DEPA";
+                            comando.CommandText = "SZ_BGQ_WTB.F_UDEM_ADD_DEPA";
                             comando.CommandType = CommandType.StoredProcedure;
                             comando.BindByName = true;
 
-                            comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
+                            comando.Parameters.Add(new OracleParameter("P_Desc", OracleDbType.Varchar2)
                             {
                                 Value = registro.Descripcion,
                                 Direction = System.Data.ParameterDirection.Input
                             });
-                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
+                        comando.Parameters.Add(new OracleParameter("P_User", OracleDbType.Varchar2)
+                        {
+                            Value = "Admin",
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
                             {
                                 Direction = ParameterDirection.ReturnValue
                             });
@@ -193,7 +198,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_UPDATE_DEPA";
+                            comando.CommandText = "SZ_BGQ_WTB.F_UDEM_UPDATE_DEPA";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
 
@@ -202,12 +207,17 @@ namespace TalentoBecario.Models.Services
                                 Value = registro.Id,
                                 Direction = System.Data.ParameterDirection.Input
                             });
-                            comando.Parameters.Add(new OracleParameter("P_Descripcion", OracleDbType.Varchar2)
-                            {
-                                Value = registro.Descripcion,
-                                Direction = System.Data.ParameterDirection.Input
-                            });
-                            comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
+                        comando.Parameters.Add(new OracleParameter("P_Desc", OracleDbType.Varchar2)
+                        {
+                            Value = registro.Descripcion,
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("P_User", OracleDbType.Varchar2)
+                        {
+                            Value = "Admin",
+                            Direction = System.Data.ParameterDirection.Input
+                        });
+                        comando.Parameters.Add(new OracleParameter("V_Salida", OracleDbType.Varchar2,400)
                             {
                                 Direction = ParameterDirection.ReturnValue
                             });
@@ -241,7 +251,7 @@ namespace TalentoBecario.Models.Services
                         using (OracleCommand comando = new OracleCommand())
                         {
                             comando.Connection = cnx;
-                            comando.CommandText = "SZ_BMA_WTB.F_UDEM_DELETE_DEPA";
+                            comando.CommandText = "SZ_BGQ_WTB.F_UDEM_DELETE_DEPA";
                             comando.CommandType = System.Data.CommandType.StoredProcedure;
                             comando.BindByName = true;
 
@@ -272,7 +282,7 @@ namespace TalentoBecario.Models.Services
                 {
                     Console.WriteLine(ex.Message);
                 }
-                return "Registro Actualizado Con Éxito";
+                return "Registro Eliminado Con Éxito";
 
             }
 

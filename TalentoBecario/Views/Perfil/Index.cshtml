@@ -80,7 +80,7 @@
                                     <select name="habilidades" class="form-select" id="multiple-select-field2" data-placeholder="" multiple>
                                         @foreach (var item in ViewBag.listHabilidades)
                                         {
-                                            <option @if (ViewBag.alumno.listAreaInteres != null) { foreach (var hab in ViewBag.alumno.listHabilidades) { @(hab.Id.Equals(item.Id) ? "selected" : "") } } value="@item.Id">@item.Descripcion</option>
+                                            <option @if (ViewBag.alumno.listHabilidades != null) { foreach (var hab in ViewBag.alumno.listHabilidades) { @(hab.Id.Equals(item.Id) ? "selected" : "") } } value="@item.Id">@item.Descripcion</option>
                                         }
                                     </select>
                                     <span id="err-hab" style="color: red; display: none;">Debes seleccionar al menos una habilidad</span>
@@ -90,7 +90,7 @@
                             <div class="mb-3">
 
                             </div>
-                            <button type="submit" class="btn btn-primary" onclick="guardarRegister()">Guardar</button>
+                            <button type="submit" class="btn btn-primary" onclick="guardarRegister(@ViewBag.alumno.pidm)">Guardar</button>
                         </form>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
 <script>
 
 
-    function guardarRegister() {
+    function guardarRegister(pidm) {
         let description = $('#matricula').val();
        
         
@@ -128,7 +128,7 @@
 
         var habilidad = JSON.stringify(
         {
-        'matricula': $('#matricula').val(),
+        'pidm': pidm,
         'listHabilidades': habilidades,
         'listAreaInteres':intereses
 
@@ -141,7 +141,7 @@
         traditional: true,
         data: habilidad,
         success: function (results) {
-        alert(results);
+        alert('Los datos han sido actualizados');
         window.location.href = '/Perfil';
         }
         })

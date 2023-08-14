@@ -8,6 +8,7 @@ using TalentoBecario.Models.Services;
 
 namespace TalentoBecario.Controllers
 {
+    [Authorize]
     public class MisAlumnosController : Controller
     {
         public ActionResult Index()
@@ -15,30 +16,14 @@ namespace TalentoBecario.Controllers
             ViewBag.NameUser = Convert.ToString(Session["nombreUser"]);
             string matricula = Convert.ToString(Session["matricula"]);
             
-            ViewBag.listAlumnos = AlumnoService.ConsultarAlumnosPorFormador(matricula);
+            ViewBag.listAlumnos = AlumnoService.ConsultarAlumnosPorFormador(matricula,null);
 
 
            
             return View();
         }
 
-        [HttpPost]
-        public JsonResult SaveHabilidad(Habilidad habilidad)
-        {
-            string message = "";
-
-            if (habilidad.Id == 0)
-            {
-                message= HabilidadesService.guardarHabilidad(habilidad);
-            }
-            else
-            {
-                message= HabilidadesService.ActualizarHabilidad(habilidad);
-            }
-
-            return Json(message, JsonRequestBehavior.AllowGet);
-        }
-
+       
         [HttpPost]
         public JsonResult ConsultarAlumno(string matricula)
         {

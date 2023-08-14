@@ -10,6 +10,7 @@ namespace TalentoBecario.Controllers
 {
     public class InteresesController : Controller
     {
+        [Authorize]
         public ActionResult Index()
         {
             AreaInteres areaInteres = new AreaInteres();
